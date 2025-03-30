@@ -31,12 +31,16 @@ function NavigationBar() {
     cursor: 'pointer'
   }
 
+  const spanStyle = {
+    color: '#4CAF50', // Green color for the span text
+  }
+
   return (
     <Navbar fixed="top" expand="lg" style={navbarstyle}>
       <Container>
         <Navbar.Brand onClick={() => navigate('/')} style={brandStyle}>
           <img src='./logo.png' alt="Reusemart Logo" style={logo} />
-          <h1 style={font}>Reusemart</h1>
+          <h1 style={font}>Reuse<span style={spanStyle}>mart</span></h1>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">

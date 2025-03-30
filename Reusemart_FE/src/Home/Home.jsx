@@ -2,13 +2,19 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import './Home.css';
 import NavigationBar from '../Navbar/NavigationBar.jsx';
+import { Helmet } from 'react-helmet';
 
 function Home() {
   const navigate = useNavigate();
 
   return (
     <>
-    
+    <div>
+    <Helmet>
+        <title>Home - Reusemart</title>
+    </Helmet>
+    </div>
+
     <div className='home-container'>
       <img src="./background.jpg"/>
       <div className="home-content">
