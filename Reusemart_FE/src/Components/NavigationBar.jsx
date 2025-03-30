@@ -1,14 +1,15 @@
 import { Navbar, Container, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 function NavigationBar() {
-  const navigate = useNavigate();
   const navbarstyle = {
-    backgroundColor: 'rgba(7, 77, 19, 0.8)',
-    borderBottom: '3px solid rgba(255, 255, 255, 1)',
+    backgroundColor: 'rgba(42, 149, 33, 0.8)',
+    borderBottom: '3px solid',
+    borderImage: 'linear-gradient(to right, #2a9521, #a0ff9a, #ffffff) 1',
     boxShadow: '0 2px 4px hsla(0, 0.00%, 0.00%, 0.10)'
-  }
+  };
   
   const font = {
     color: 'white',
@@ -32,20 +33,31 @@ function NavigationBar() {
   }
 
   const spanStyle = {
-    color: '#4CAF50', // Green color for the span text
+    color: 'rgb(217, 255, 0)',
   }
+
+  const spanStyle2 = {
+    color: 'rgb(85, 255, 34)',
+  }
+
 
   return (
     <Navbar fixed="top" expand="lg" style={navbarstyle}>
       <Container>
-        <Navbar.Brand onClick={() => navigate('/')} style={brandStyle}>
-          <img src='./logo.png' alt="Reusemart Logo" style={logo} />
-          <h1 style={font}>Reuse<span style={spanStyle}>mart</span></h1>
-        </Navbar.Brand>
+        <a href="/">
+          <Navbar.Brand style={brandStyle}>
+            <img src='./logo.png' alt="Reusemart Logo" style={logo} />
+            <h1 style={font}><span style={spanStyle2}>Re</span>use<span style={spanStyle}>mart</span></h1>
+          </Navbar.Brand>
+        </a>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
-          <Button variant="outline-light" className="me-2" onClick={() => navigate('/login')}>Login</Button>
-          <Button variant="light" onClick={() => navigate('/register')}>Register</Button>
+          <a href="/login">
+            <Button variant="outline-light" className="me-2">Login</Button>
+          </a>
+          <a href="/register">
+            <Button variant="light" onClick={() => navigate('/register')}>Register</Button>
+          </a>
         </Navbar.Collapse>
       </Container>
     </Navbar>

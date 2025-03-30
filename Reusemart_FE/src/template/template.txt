@@ -1,0 +1,30 @@
+pakai ini klo mau background sama navbarnya tinggal sesuaikan nama dan importnya
+
+import NavigationBar from "../Components/NavigationBar";
+import '../Home/Home.css';
+import './ProductHome.css';
+import { Helmet } from "react-helmet";
+
+
+function ProductHome() {
+    return(
+        <>
+         <div>
+            <Helmet>
+                <title>Products - Reusemart</title>
+            </Helmet>
+        </div>
+
+        <NavigationBar/>
+
+        <div className='home-container'>
+            <img img className='background-image' src="./background.jpg"/>
+            <div className="product-content">
+
+            </div>
+        </div>
+        </>
+    )
+}
+
+export default ProductHome;
