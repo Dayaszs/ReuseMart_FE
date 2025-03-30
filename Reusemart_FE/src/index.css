@@ -12,3 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+button{
+  box-shadow: 0 2px 4px hsla(0, 0.00%, 0.00%, 0.30);
+}

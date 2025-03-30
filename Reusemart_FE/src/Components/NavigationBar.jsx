@@ -8,7 +8,7 @@ function NavigationBar() {
     backgroundColor: 'rgba(42, 149, 33, 0.8)',
     borderBottom: '3px solid',
     borderImage: 'linear-gradient(to right, #2a9521, #a0ff9a, #ffffff) 1',
-    boxShadow: '0 2px 4px hsla(0, 0.00%, 0.00%, 0.10)'
+    boxShadow: '0 2px 4px hsla(0, 0.00%, 0.00%, 0.40)'
   };
   
   const font = {
