@@ -1,0 +1,34 @@
+.home-content {
+    background-color: rgba(11, 85, 1, 0.8);
+    padding: 2rem;
+    border-radius: 10px;
+    display: flex;              
+    flex-direction: column;   
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 1;
+    color: white;
+}
+
+.home-container {
+    position: fixed;  /* Changed from relative to fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.home-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
