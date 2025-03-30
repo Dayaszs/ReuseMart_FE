@@ -9,12 +9,12 @@
     flex-direction: column;   
     z-index: 1;
     color: white;
-    border: solid 2px #ebebeb;
+    border: solid 2px hsla(0, 0%, 92%, 0.836);
 }
 
 .header-font{
     background-color: rgb(25, 102, 6);
     padding: 10px;
     border-radius: 10px;
-    border: solid 2px #ebebeb;
+    border: solid 2px hsla(0, 0%, 92%, 0.836);
 }

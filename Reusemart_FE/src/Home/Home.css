@@ -8,6 +8,7 @@
     text-align: center;
     z-index: 1;
     color: white;
+    border: solid 2px hsla(0, 0%, 92%, 0.836);
 }
 
 .home-container {
@@ -24,7 +25,6 @@
 }
 
  
-
 .background-image {
     position: absolute;
     top: 0;
@@ -57,4 +57,5 @@
     z-index: 1;
     color: white;
     width: 30rem;
+    border: solid 2px hsla(0, 0%, 92%, 0.836);
 }
