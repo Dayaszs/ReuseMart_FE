@@ -56,7 +56,7 @@ function NavigationBar() {
             <Button variant="outline-light" className="me-2">Login</Button>
           </a>
           <a href="/register">
-            <Button variant="light" onClick={() => navigate('/register')}>Register</Button>
+            <Button variant="light">Register</Button>
           </a>
         </Navbar.Collapse>
       </Container>
