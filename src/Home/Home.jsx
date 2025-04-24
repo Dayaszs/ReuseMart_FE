@@ -10,30 +10,30 @@ function Home() {
 
   return (
     <>
-    <div>
-    <Helmet>
-        <title>Home - Reusemart</title>
-    </Helmet>
-    </div>
-
-    <div className='home-container'>
-      <img className='background-image' src="./background.jpg"/>
-      <div className='logo-home'>
-        <img style={{ maxWidth: '25%' }} src="./logo.png"/>
+      <div>
+        <Helmet>
+          <title>Home - Reusemart</title>
+        </Helmet>
       </div>
-         <div className="home-content">
-       <h1>Selamat datang di Reusemart!</h1>
+
+      <div className='home-container'>
+        <img className='background-image' src="./background.jpg" />
+        <div className='logo-home'>
+          <img style={{ maxWidth: '25%' }} src="./logo.png" />
+        </div>
+        <div className="home-content">
+          <h1 className='text-4xl text-red-600 font-bold'>Selamat datang di Reusemart!</h1>
 
           <h5 className='text-center'>Visi & Misi</h5>
-        
+
           <a href="/products">
             <Button variant="success">
-            Lihat Produk &#8594;
+              Lihat Produk &#8594;
             </Button>
           </a>
+        </div>
       </div>
-    </div>
-    <NavigationBar/>
+      <NavigationBar />
     </>
   );
 }
