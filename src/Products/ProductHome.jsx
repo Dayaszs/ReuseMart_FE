@@ -32,7 +32,7 @@ function ProductHome() {
             <div className="product-content">
                 
                 <h5 className="text-start header-font mb-3">Categories</h5>
-                <h5 className="text-start header-font mb-3">Products</h5>
+                <h5 className="text-start header-font mb-3 mt-3">Products</h5>
             </div>
         </div>
         </>
