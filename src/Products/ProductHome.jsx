@@ -1,9 +1,10 @@
 import NavigationBar from "../Components/NavigationBar";
-import '../Home/Home.css';
-import './ProductHome.css';
+// import '../Home/Home.css';
+// import './ProductHome.css';
 import { Helmet } from "react-helmet";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+// import Button from 'react-bootstrap/Button';
+// import Form from 'react-bootstrap/Form';
+import { Button } from "@/components/ui/button"
 
 
 function ProductHome() {
@@ -14,8 +15,9 @@ function ProductHome() {
                 <title>Products - Reusemart</title>
             </Helmet>
         </div>
+        
 
-        <NavigationBar/>
+        {/* <NavigationBar/>
 
         <div className='product-container'>
             <img img className='background-image' src="./background.jpg"/>
@@ -24,7 +26,7 @@ function ProductHome() {
                         <Form.Group className="mb-3 text-start d-flex" controlId="search">
                             <Form.Control type="text" placeholder="Cari Barang" className="me-2 header-font" />
                             <Button variant="success" type="submit">
-                            Search
+                                Search
                             </Button>
                         </Form.Group>
                     </Form>
@@ -34,7 +36,7 @@ function ProductHome() {
                 <h5 className="text-start header-font mb-3">Categories</h5>
                 <h5 className="text-start header-font mb-3 mt-3">Products</h5>
             </div>
-        </div>
+        </div> */}
         </>
     )
 }

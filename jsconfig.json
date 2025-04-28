@@ -1,0 +1,13 @@
+//search engine utk plugin shadcn 
+{
+    "files": [],
+    "references": [
+      
+    ],
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"]
+      }
+    }
+}
