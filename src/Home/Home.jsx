@@ -22,7 +22,7 @@ function Home() {
           <img style={{ maxWidth: '25%' }} src="./logo.png" />
         </div>
         <div className="home-content">
-          <h1 className='text-4xl text-red-600 font-bold'>Selamat datang di Reusemart!</h1>
+          <h1>Selamat datang di Reusemart!</h1>
 
           <h5 className='text-center'>Visi & Misi</h5>
 

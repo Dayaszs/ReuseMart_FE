@@ -1,5 +1,5 @@
 import { Navbar, Container, Button } from 'react-bootstrap';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,7 +44,7 @@ function NavigationBar() {
   return (
     <Navbar fixed="top" expand="lg" style={navbarstyle}>
       <Container>
-        <a href="/">
+        <a href="/" className='text-decoration-none'>
           <Navbar.Brand style={brandStyle}>
             <img src='./logo.png' alt="Reusemart Logo" style={logo} />
             <h1 style={font}><span style={spanStyle2}>Re</span>use<span style={spanStyle}>mart</span></h1>
