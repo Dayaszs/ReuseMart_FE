@@ -1,7 +1,4 @@
 import NavigationBar from "../Components/NavigationBar";
-import './Home.css';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { Helmet } from "react-helmet";
 
 function Register() {

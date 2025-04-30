@@ -1,44 +1,93 @@
+import React, { useState } from "react";
 import NavigationBar from "../Components/NavigationBar";
-import './Home.css';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { Helmet } from "react-helmet";
+import { Card, Label, TextInput, Button } from "flowbite-react";
+import axios from "axios";
+import api from "../routes/api";
 
 function Login() {
-    
-    
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+
+        try {
+            const response = await axios.post(`${api}/login`, {
+                email,
+                password,
+            });
+
+            localStorage.setItem("token", response.data.token);
+
+            alert("Login successful");
+        } catch (err) {
+            if (err.response && err.response.status === 401) {
+                setError("Email atau password salah.");
+            } else {
+                setError("Terjadi kesalahan saat login.");
+            }
+        }
+    };
+
     return (
         <>
-            <div>
-                <Helmet>
-                    <title>Login - Reusemart</title>
-                </Helmet>
-            </div>
+            <Helmet>
+                <title>Login - Reusemart</title>
+            </Helmet>
 
-            <NavigationBar/>
-            <div className="home-container">
-                <img className='background-image' src="./background.jpg"/>
-                    <div className='logo-home'>
-                        <img style={{ maxWidth: '25%' }} src="./logo.png"/>
-                    </div>
-                <div className="login-content">
-                    <h2 className="mb-5">Login</h2>
-                    <Form className="w-100">
-                        <Form.Group className="mb-3 text-start"  controlId="email">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Masukkan email" />
-                        </Form.Group>
+            <NavigationBar />
 
-                        <Form.Group className="mb-3 text-start" controlId="password">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Masukkan password" />
-                        </Form.Group>
-                     
-                        <Button variant="success" type="submit">
+            <div
+                className="min-h-screen bg-cover bg-center flex flex-col items-center p-4"
+                style={{ backgroundImage: 'url(./background.jpg)' }}
+            >
+                <div className="my-6">
+                    <img className="mx-auto" style={{ maxWidth: '25%' }} src="./logo.png" alt="Logo" />
+                </div>
+
+                <Card className="w-full max-w-md bg-white/90 backdrop-blur-md">
+                    <h2 className="mb-5 text-center text-2xl font-semibold">Login</h2>
+
+                    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                        <div>
+                            <Label htmlFor="email" value="Email address" />
+                            <TextInput
+                                id="email"
+                                type="email"
+                                placeholder="Masukkan email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="password" value="Password" />
+                            <TextInput
+                                id="password"
+                                type="password"
+                                placeholder="Masukkan password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+
+                        {error && (
+                            <div className="text-red-600 text-sm text-center">
+                                {error}
+                            </div>
+                        )}
+
+                        <Button type="submit" color="green" className='mt-10 text-1xl'>
                             Login
                         </Button>
-                    </Form>
-                </div>
+                    </form>
+                </Card>
             </div>
         </>
     );

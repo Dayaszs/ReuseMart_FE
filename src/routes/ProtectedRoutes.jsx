@@ -1,20 +1,51 @@
-import { useNavigate, Outlet } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import api from './api';
+import { Spinner } from "flowbite-react";
 
-const ProtectedRoutes = ({ children }) => {
-    const navigate = useNavigate();
-    const [token, setToken] = useState("");
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const [userRole, setUserRole] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const tokenDariSS = sessionStorage.getItem("token");
-        setToken(tokenDariSS);
 
-        if (!tokenDariSS) {
-            navigate("/");
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setLoading(false);
+          return;
         }
-    }, [navigate]);
 
-    return token && (children ? children : <Outlet />)
+        const response = await axios.get(`${api}/cekrole`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUserRole(response.data.role);
+      } catch (error) {
+        console.error('Error fetching user role:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserRole();
+  }, []);
+
+  if (loading) {
+    return <Spinner color="success" aria-label="Success spinner example" />
+  }
+
+  if (!userRole || !allowedRoles.includes(userRole)) {
+    window.alert(`Anda tidak memiliki izin untuk mengakses halaman ini!`);
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
 };
 
-export default ProtectedRoutes; 
+export default ProtectedRoute;
