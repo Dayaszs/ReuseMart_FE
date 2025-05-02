@@ -3,6 +3,7 @@ import Register from '/src/Home/Register.jsx';
 import Home from '/src/Home/Home.jsx';
 import Login from '/src/Home/Login.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
+import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 
@@ -32,9 +33,17 @@ const router = createBrowserRouter([
             {
                 path: "/products",
                 element: (
-                    <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
+                    // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
                         <ProductHome />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/products/detail/:id",
+                element: (
+                    // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
+                        <DetailProduct />
+                    // </ProtectedRoute>
                 ),
             },
         ],
