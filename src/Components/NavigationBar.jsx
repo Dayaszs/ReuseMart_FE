@@ -61,12 +61,17 @@ function NavigationBar() {
         <NavbarToggle />
         <NavbarCollapse className="justify-end">
           {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors"
-            >
-              Logout
-            </button>
+            <>
+              <Link to="/profile">
+              <button>Profile</button>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors"
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <>
               <Link to="/login" className="mr-2">
