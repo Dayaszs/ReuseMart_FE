@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import AppRouter from "./routes";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import Home from './Home/Home';
 

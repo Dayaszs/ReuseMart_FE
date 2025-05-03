@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
 
+
 function NavigationBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
