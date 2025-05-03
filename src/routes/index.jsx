@@ -3,7 +3,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthLayout from "../layouts/AuthLayout.jsx";
 import StoreLayout from "../layouts/StoreLayout.jsx";
 import Login from '/src/Home/Login.jsx';
-import Profile from '/src/Home/Profile.jsx';
+
+import Profile from '/src/Profile/Profile.jsx';
+import DetailPemesanan from '/src/Profile/DetailPemesanan.jsx';
 
 import Register from '/src/Home/Register.jsx';
 import Home from '/src/Home/Home.jsx';
@@ -11,6 +13,7 @@ import ProductHome from '/src/Products/ProductHome.jsx';
 import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
+
 
 const router = createBrowserRouter([
     {
@@ -68,6 +71,14 @@ const router = createBrowserRouter([
                     <Profile />
                     // </ProtectedRoute>
                 ),
+            },
+            {
+                path: "/profile/pemesanan/:id",
+                element: (
+                    // <ProtectedRoute allowedRoles={["Pembeli"]}>
+                    <DetailPemesanan />
+                    // </ProtectedRoute>
+                )
             },
             {
                 path: "/products/detail/:id",
