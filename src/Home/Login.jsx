@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { Card, Label, TextInput, Button } from "flowbite-react";
 import axios from "axios";
 import api from "../routes/api";
+import { redirect } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -23,6 +24,7 @@ function Login() {
             localStorage.setItem("token", response.data.token);
 
             alert("Login successful");
+            redirect("/");
         } catch (err) {
             if (err.response && err.response.status === 401) {
                 setError("Email atau password salah.");

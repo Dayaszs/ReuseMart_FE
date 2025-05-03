@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthLayout from "../layouts/AuthLayout.jsx";
 import StoreLayout from "../layouts/StoreLayout.jsx";
 import Login from '/src/Home/Login.jsx';
+import Profile from '/src/Home/Profile.jsx';
 
 import Register from '/src/Home/Register.jsx';
 import Home from '/src/Home/Home.jsx';
@@ -60,7 +61,14 @@ const router = createBrowserRouter([
                     // </ProtectedRoute>
                 ),
             },
-
+            {
+                path: "/profile",
+                element: (
+                    // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
+                    <Profile />
+                    // </ProtectedRoute>
+                ),
+            },
             {
                 path: "/products/detail/:id",
                 element: (
