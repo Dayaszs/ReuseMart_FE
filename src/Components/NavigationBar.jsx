@@ -1,66 +1,89 @@
-import { Navbar, Container, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { 
+  Navbar,
+  NavbarBrand,
+  NavbarToggle,
+  NavbarCollapse 
+} from "flowbite-react";
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import api from '../routes/api';
+
 
 function NavigationBar() {
-  const navbarstyle = {
-    backgroundColor: 'rgba(42, 149, 33, 0.8)',
-    borderBottom: '3px solid',
-    borderImage: 'linear-gradient(to right, #2a9521, #a0ff9a, #ffffff) 1',
-    boxShadow: '0 2px 4px hsla(0, 0.00%, 0.00%, 0.40)'
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = async () => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (confirmLogout) {
+      try {
+        await axios.post(`${api}/logout`, {}, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+      } catch (error) {
+        console.error("Logout failed", error);
+      } finally {
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+        navigate("/");
+      }
+    }
   };
-  
-  const font = {
-    color: 'white',
-    fontSize: '40px',
-    fontWeight: 'bold',
-    margin: 0,
-    display: 'flex',
-    alignItems: 'center'
-  }
-
-  const logo = {
-    width: '50px',
-    height: '50px',
-    marginRight: '10px'
-  }
-
-  const brandStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer'
-  }
-
-  const spanStyle = {
-    color: 'rgb(217, 255, 0)',
-  }
-
-  const spanStyle2 = {
-    color: 'rgb(85, 255, 34)',
-  }
-
 
   return (
-    <Navbar fixed="top" expand="lg" style={navbarstyle}>
-      <Container>
-        <a href="/" className='text-decoration-none'>
-          <Navbar.Brand style={brandStyle}>
-            <img src='./logo.png' alt="Reusemart Logo" style={logo} />
-            <h1 style={font}><span style={spanStyle2}>Re</span>use<span style={spanStyle}>mart</span></h1>
-          </Navbar.Brand>
-        </a>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse className="justify-content-end">
-          <a href="/login">
-            <Button variant="outline-light" className="me-2">Login</Button>
-          </a>
-          <a href="/register">
-            <Button variant="light">Register</Button>
-          </a>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <div className="relative">
+      <Navbar 
+        fixed="top" 
+        expand="lg" 
+        className="bg-green-600/80 shadow-md"
+      >
+        <NavbarBrand as={Link} to="/" className="flex items-center cursor-pointer">
+          <img 
+            src='./logo.png' 
+            alt="Reusemart Logo" 
+            className="w-12 h-12 mr-2.5" 
+          />
+          <h1 className="text-white text-4xl font-bold flex items-center m-0">
+            <span className="text-green-300">Re</span>
+            <span>use</span>
+            <span className="text-yellow-300">mart</span>
+          </h1>
+        </NavbarBrand>
+        <NavbarToggle />
+        <NavbarCollapse className="justify-end">
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className="mr-2">
+                <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
+                  Login
+                </button>
+              </Link>
+              <Link to="/register">
+                <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition-colors">
+                  Register
+                </button>
+              </Link>
+            </>
+          )}
+        </NavbarCollapse>
+      </Navbar>
+    </div>
   );
 }
 

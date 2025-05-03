@@ -1,10 +1,11 @@
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import MainLayout from "../layouts/MainLayout";
 import Register from '/src/Home/Register.jsx';
 import Home from '/src/Home/Home.jsx';
 import Login from '/src/Home/Login.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
+import DetailProduct from '/src/Products/DetailProduct.jsx';
+import ProtectedRoute from './ProtectedRoutes.jsx';
+import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 
 const router = createBrowserRouter([
     {
@@ -19,7 +20,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/login",
-                element: <Login />,
+                element: (
+                    <RedirectIfLoggedIn>
+                        <Login />
+                    </RedirectIfLoggedIn>
+                ),
             },
             {
                 path: "/register",
@@ -27,7 +32,19 @@ const router = createBrowserRouter([
             },
             {
                 path: "/products",
-                element: <ProductHome />,
+                element: (
+                    // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
+                        <ProductHome />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/products/detail/:id",
+                element: (
+                    // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
+                        <DetailProduct />
+                    // </ProtectedRoute>
+                ),
             },
         ],
     },
@@ -36,8 +53,6 @@ const router = createBrowserRouter([
 const AppRouter = () => {
     return (
         <>
-            {/* <Toaster position="top-center" /> */}
-            {/* <Toaster position="top-center" richColors /> */}
             <RouterProvider router={router} />
         </>
     );
