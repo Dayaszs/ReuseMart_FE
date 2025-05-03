@@ -106,7 +106,12 @@ const Profile = () => {
                                 </p>
 
                                 <p><span className="font-medium">Metode Pengambilan:</span> {item.metode_pengambilan}</p>
-                                <p><span className="font-medium">Ongkos Kirim:</span> {item.ongkos_kirim ?? 'Tidak ada'}</p>
+                                <p>
+                                    <span className="font-medium">Ongkos Kirim:</span>{' '}
+                                    {item.ongkos_kirim !== null
+                                        ? `Rp ${parseInt(item.ongkos_kirim).toLocaleString('id-ID')}`
+                                        : 'Tidak ada'}
+                                </p>
                                 <p><span className="font-medium">Biaya Total:</span> Rp {parseInt(item.biaya_total).toLocaleString('id-ID')}</p>
                             </div>
                         </Card>
