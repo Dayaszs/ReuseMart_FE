@@ -16,7 +16,6 @@ function Home() {
         </Helmet>
       </div>
     
-      <NavigationBar/>
       <div className='@container relative'>
         <div className='w-full h-screen flex flex-col items-center justify-center bg-[url("./background.jpg")] bg-cover bg-center bg-no-repeat'>
           <img 
@@ -61,7 +60,6 @@ function Home() {
               berkualitas.</p>
             </div>
           </div>
-          <FooterBar/>
         </div>
       </div>
     </>

@@ -86,8 +86,6 @@ function ProductHome() {
                 <title>Products - Reusemart</title>
             </Helmet>
         </div>
-        
-        <NavigationBar/>
 
         <div className="@container relative">
             <div className='w-full h-auto flex flex-col items-center p-16 bg-[url("./background.jpg")] bg-cover bg-center bg-no-repeat bg-fixed'>
@@ -117,7 +115,6 @@ function ProductHome() {
             </div>
         </div>
 
-        <FooterBar/>
         </>
     )
 }

@@ -12,7 +12,6 @@ function Register() {
                 </Helmet>
             </div>
 
-            <NavigationBar/>
             <div className="home-container">
                 <img className='background-image' src="./background.jpg"/>
                 <div className='logo-home'>

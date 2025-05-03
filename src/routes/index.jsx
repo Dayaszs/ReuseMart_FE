@@ -31,6 +31,7 @@ const router = createBrowserRouter([
         ],
     },
     {
+        element: <StoreLayout />,
         children: [
             {
                 path: "/",
