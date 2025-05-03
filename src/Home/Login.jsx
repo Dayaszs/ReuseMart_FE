@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import NavigationBar from "../Components/NavigationBar";
 import { Helmet } from "react-helmet";
 import { Card, Label, TextInput, Button } from "flowbite-react";
 import axios from "axios";
@@ -39,14 +38,12 @@ function Login() {
                 <title>Login - Reusemart</title>
             </Helmet>
 
-            <NavigationBar />
-
             <div
-                className="min-h-screen bg-cover bg-center flex flex-col items-center p-4"
+                className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center"
                 style={{ backgroundImage: 'url(./background.jpg)' }}
             >
                 <div className="my-6">
-                    <img className="mx-auto" style={{ maxWidth: '25%' }} src="./logo.png" alt="Logo" />
+                    <img className="mx-auto" style={{ maxWidth: '30%' }} src="./logo.png" alt="Logo" />
                 </div>
 
                 <Card className="w-full max-w-md bg-white/90 backdrop-blur-md">
