@@ -32,6 +32,10 @@ const router = createBrowserRouter([
                     </RedirectIfLoggedIn>
                 ),
             },
+            {
+                path: "/register",
+                element: <Register />,
+            },
         ],
     },
     {
@@ -40,20 +44,6 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <Home />,
-            },
-
-            // {
-            //     path: "/login",
-            //     element: (
-            //         <RedirectIfLoggedIn>
-            //             <Login />
-            //         </RedirectIfLoggedIn>
-            //     ),
-            // },
-
-            {
-                path: "/register",
-                element: <Register />,
             },
 
             {

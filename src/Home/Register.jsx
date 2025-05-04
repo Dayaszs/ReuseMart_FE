@@ -1,54 +1,232 @@
-import NavigationBar from "../Components/NavigationBar";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
+import { Card, Button } from "flowbite-react";
+import { SignUpPembeli, SignUpOrganisasi } from "../api/services/auth";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
-    
-    
+    const navigate = useNavigate();
+    const [isPembeli, setIsPembeli] = useState(true);
+    const [error, setError] = useState("");
+    const [isDisabled, setIsDisabled] = useState(true);
+    const [dataPembeli, setDataPembeli] = useState({
+        nama_pembeli: "",
+        no_telp: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+    });
+    const [dataOrganisasi, setDataOrganisasi] = useState({
+        nama: "",
+        alamat: "",
+        no_telp: "",
+        email: "",
+        password: "",
+    });
+
+    const handleChangePembeli = (event) => {
+        setDataPembeli({ ...dataPembeli, [event.target.name]: event.target.value });
+        console.log(dataPembeli);
+    };
+    const handleChangeOrganisasi = (event) => {
+        setDataOrganisasi({ ...dataOrganisasi, [event.target.name]: event.target.value });
+        console.log(dataOrganisasi);
+    };
+
+    const handleCheck = (e) => {
+        let isChecked = e.target.checked;
+        if (isChecked) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    };
+
+    const Register = (event) => {
+        event.preventDefault();
+        setError("");
+
+        if (isPembeli) {
+            SignUpPembeli(dataPembeli)
+                .then((res) => {
+                    alert("Berhasil register akun.");
+                    console.log("Berhasil register pembeli.");
+                    navigate("/login");
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                    setError(err.message);
+                });
+        } else {
+            const formData = new FormData();
+            formData.append("nama", dataOrganisasi.nama);
+            formData.append("alamat", dataOrganisasi.alamat);
+            formData.append("no_telp", dataOrganisasi.no_telp);
+            formData.append("email", dataOrganisasi.email);
+            formData.append("password", dataOrganisasi.password);
+            if (dataOrganisasi.dokumen) {
+                formData.append("profile_picture", dataOrganisasi.dokumen);
+            }
+
+            SignUpOrganisasi(formData)
+                .then((res) => {
+                    alert("Berhasil register akun.");
+                    console.log("Berhasil register organisasi.");
+                    navigate("/login");
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                    setError(err.message);
+                });
+        }
+
+    };
+
     return (
         <>
-            <div>
-                <Helmet>
-                    <title>Register - Reusemart</title>
-                </Helmet>
-            </div>
+            <Helmet>
+                <title>Register - Reusemart</title>
+            </Helmet>
 
-            <div className="home-container">
-                <img className='background-image' src="./background.jpg"/>
-                <div className='logo-home'>
-                    <img style={{ maxWidth: '25%' }} src="./logo.png"/>
+            <div
+                className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center"
+                style={{ backgroundImage: 'url(./background.jpg)' }}
+            >
+                <div className="my-6">
+                    <img className="mx-auto" style={{ maxWidth: '25%' }} src="./logo.png" alt="Logo" />
                 </div>
-                <div className="login-content">
-                    <h2 className="mb-5">Register</h2>
-                    <Form className="w-100">
-                        <Form.Group className="mb-3 text-start"  controlId="nama">
-                            <Form.Label>Nama</Form.Label>
-                            <Form.Control type="text" placeholder="Masukkan nama" />
-                        </Form.Group>
-                        
-                        <Form.Group className="mb-3 text-start"  controlId="email">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Masukkan email" />
-                        </Form.Group>
 
-                        <Form.Group className="mb-3 text-start" controlId="password">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Masukkan password" />
-                        </Form.Group>
+                <Card className="w-full max-w-md bg-white/90 backdrop-blur-md">
+                    <h2 className="mb-2 text-center text-2xl font-semibold">Daftar Akun Baru</h2>
 
-                        <Form.Group className="mb-3 text-start"  controlId="notelp">
-                            <Form.Label>Nomor Telepon</Form.Label>
-                            <Form.Control type="text" placeholder="Masukkan Nomor Telepon" />
-                        </Form.Group>
+                    <div className="flex gap-6">
+                        <div className="flex items-center">
+                            <input
+                                type="radio"
+                                id="pembeli"
+                                name="userType"
+                                checked={isPembeli}
+                                onChange={() => setIsPembeli(true)}
+                                className="appearance-none w-4 h-4 border-2 border-gray-400 rounded-full checked:border-green-500 checked:bg-green-500"
+                            />
+                            <label htmlFor="pembeli" className="ml-2 text-sm font-medium text-gray-900">Pembeli</label>
+                        </div>
+                        <div className="flex items-center">
+                            <input
+                                type="radio"
+                                id="organisasi"
+                                name="userType"
+                                checked={!isPembeli}
+                                onChange={() => setIsPembeli(false)}
+                                className="appearance-none w-4 h-4 border-2 border-gray-400 rounded-full checked:border-green-500 checked:bg-green-500"
+                            />
+                            <label htmlFor="organisasi" className="ml-2 text-sm font-medium text-gray-900">Organisasi</label>
+                        </div>
+                    </div>
 
-                        <Form.Group className="mb-3 text-start" controlId="formBasicCheckbox">
-                            <Form.Check type="checkbox" label="Register sebagai organisasi" />
-                        </Form.Group>
-                     
-                        <Button variant="success" type="submit">
-                            Register
+                    <form onSubmit={Register} className="flex flex-col gap-4">
+                        {isPembeli ? (
+                            <>
+                                <div className="grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <label htmlFor="nama" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                                        <input type="text" id="nama" name="nama_pembeli" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Adit tolongin dit" required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Telepon</label>
+                                        <input type="text" id="phone" name="no_telp" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: 0812-3456-7890" required />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Email</label>
+                                    <input type="email" id="email" name="email" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: reusemart@gmail.com" required />
+                                </div>
+                                <div>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                                    <input type="password" id="password" name="password" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                </div>
+                                <div>
+                                    <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Konfirmasi password</label>
+                                    <input type="password" id="confirm_password" name="password_confirmation" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                </div>
+                                <div className="flex items-start">
+                                    <div className="flex items-center h-5">
+                                        <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300" onChange={handleCheck} required />
+                                    </div>
+                                    <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900">Saya setuju dengan syarat dan ketentuan.</label>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <label htmlFor="nama" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Organisasi</label>
+                                        <input type="text" id="nama" name="nama" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Adit tolongin dit" required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Telepon</label>
+                                        <input type="text" id="phone" name="no_telp" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: 0812-3456-7890" required />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Organisasi</label>
+                                    <input type="text" id="address" name="alamat" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: reusemart@gmail.com" required />
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Email</label>
+                                    <input type="email" id="email" name="email" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                </div>
+                                <div>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                                    <input type="password" id="password" name="password" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                </div>
+                                <div>
+                                    <label
+                                        htmlFor="file_input"
+                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >
+                                        Unggah Logo Organisasi
+                                    </label>
+                                    <input
+                                        id="file_input"
+                                        type="file"
+                                        name="dokumen"
+                                        accept=".jpg,.jpeg,.png"
+                                        onChange={(e) =>
+                                            setDataOrganisasi({ ...dataOrganisasi, dokumen: e.target.files[0] })
+                                        }
+                                        className="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600 transition"
+                                    />
+                                </div>
+
+                                <div className="flex items-start">
+                                    <div className="flex items-center h-5">
+                                        <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300" onChange={handleCheck} required />
+                                    </div>
+                                    <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900">Saya setuju dengan syarat dan ketentuan.</label>
+                                </div>
+                            </>
+                        )}
+
+
+                        {error && (
+                            <div className="text-red-600 text-sm font-medium text-center">
+                                {error}
+                            </div>
+                        )}
+
+                        <Button type="submit" color="green" className='mt-2 text-1xl w-full' disabled={isDisabled}>
+                            Buat Akun
                         </Button>
-                    </Form>
-                </div>
+
+                        <p className="text-sm text-center item">
+                            Sudah punya akun?{" "}
+                            <Link to="/login">
+                                <span className="text-green-600 hover:underline">Login disini</span>
+                            </Link>
+                        </p>
+                    </form>
+                </Card>
             </div>
         </>
     );
