@@ -3,9 +3,10 @@ import { Helmet } from "react-helmet";
 import { Card, Label, TextInput, Button } from "flowbite-react";
 import axios from "axios";
 import api from "../routes/api";
-import { redirect } from "react-router-dom";
+import { redirect, Link, useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -24,7 +25,7 @@ function Login() {
             localStorage.setItem("token", response.data.token);
 
             alert("Login successful");
-            redirect("/");
+            navigate("/");
         } catch (err) {
             if (err.response && err.response.status === 401) {
                 setError("Email atau password salah.");
@@ -45,7 +46,7 @@ function Login() {
                 style={{ backgroundImage: 'url(./background.jpg)' }}
             >
                 <div className="my-6">
-                    <img className="mx-auto" style={{ maxWidth: '30%' }} src="./logo.png" alt="Logo" />
+                    <img className="mx-auto" style={{ maxWidth: '25%' }} src="./logo.png" alt="Logo" />
                 </div>
 
                 <Card className="w-full max-w-md bg-white/90 backdrop-blur-md">
@@ -74,6 +75,11 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+                            <div className="text-right mt-1">
+                                <a href="/forgot-password">
+                                    <span className="text-sm text-green-600 hover:underline">Lupa Password</span>
+                                </a>
+                            </div>
                         </div>
 
                         {error && (
@@ -85,6 +91,14 @@ function Login() {
                         <Button type="submit" color="green" className='mt-10 text-1xl'>
                             Login
                         </Button>
+
+                        <p className="text-sm text-center item">
+                            Belum punya akun?{" "}
+                            <Link to="/register">
+                                <span className="text-green-600 hover:underline">Daftar disini</span>
+                            </Link>
+                        </p>
+
                     </form>
                 </Card>
             </div>

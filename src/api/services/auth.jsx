@@ -11,7 +11,12 @@ const SignUpPembeli = async (data) => {
 
 const SignUpOrganisasi = async (data) => {
   try {
-    const response = await useAxios.post("/register/organisasi", data);
+    const response = await useAxios.post("/register/organisasi", data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     return response.data;
   } catch (error) {
     throw error.response.data;
