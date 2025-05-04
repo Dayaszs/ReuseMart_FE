@@ -76,19 +76,19 @@ function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <div className="text-right mt-1">
-                                <a href="/forgot-password">
+                                <Link to="/forgot-password">
                                     <span className="text-sm text-green-600 hover:underline">Lupa Password</span>
-                                </a>
+                                </Link>
                             </div>
                         </div>
 
                         {error && (
-                            <div className="text-red-600 text-sm text-center">
+                            <div className="text-red-600 text-sm font-medium text-center">
                                 {error}
                             </div>
                         )}
 
-                        <Button type="submit" color="green" className='mt-10 text-1xl'>
+                        <Button type="submit" color="green" className='mt-6 text-1xl'>
                             Login
                         </Button>
 

@@ -2,12 +2,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import AuthLayout from "../layouts/AuthLayout.jsx";
 import StoreLayout from "../layouts/StoreLayout.jsx";
+
 import Login from '/src/Home/Login.jsx';
+import Register from '/src/Home/Register.jsx';
+import ForgotPassword from "@/Home/ForgotPassword.jsx";
 
 import Profile from '/src/Profile/Profile.jsx';
 import DetailPemesanan from '/src/Profile/DetailPemesanan.jsx';
 
-import Register from '/src/Home/Register.jsx';
 import Home from '/src/Home/Home.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
 import DetailProduct from '/src/Products/DetailProduct.jsx';
@@ -35,6 +37,10 @@ const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <Register />,
+            },
+            {
+                path: "/forgot-password",
+                element: <ForgotPassword />,
             },
         ],
     },
