@@ -6,6 +6,7 @@ import StoreLayout from "../layouts/StoreLayout.jsx";
 import Login from '/src/Home/Login.jsx';
 import Register from '/src/Home/Register.jsx';
 import ForgotPassword from "@/Home/ForgotPassword.jsx";
+import ResetPassword from "@/Home/ResetPassword.jsx";
 
 import Profile from '/src/Profile/Profile.jsx';
 import DetailPemesanan from '/src/Profile/DetailPemesanan.jsx';
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
             {
                 path: "/forgot-password",
                 element: <ForgotPassword />,
+            },
+            {
+                path: "/reset-password",
+                element: <ResetPassword />,
             },
         ],
     },
