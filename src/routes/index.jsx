@@ -8,7 +8,7 @@ import Register from '/src/Home/Register.jsx';
 import ForgotPassword from "@/Home/ForgotPassword.jsx";
 import ResetPassword from "@/Home/ResetPassword.jsx";
 
-import Profile from '/src/Profile/Profile.jsx';
+import PembeliProfile from '/src/Profile/PembeliProfile.jsx';
 import DetailPemesanan from '/src/Profile/DetailPemesanan.jsx';
 
 import Home from '/src/Home/Home.jsx';
@@ -66,10 +66,10 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/profile",
+                path: "/pembeli/profile",
                 element: (
                     // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
-                    <Profile />
+                    <PembeliProfile />
                     // </ProtectedRoute>
                 ),
             },

@@ -20,6 +20,7 @@
     "clsx": "^2.1.1",
     "flowbite-react": "^0.11.7",
     "helmet": "^8.1.0",
+    "install": "^0.13.0",
     "lucide-react": "^0.503.0",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.9",
