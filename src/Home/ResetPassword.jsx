@@ -1,20 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Card, Button } from "flowbite-react";
-import { SendResetLink } from "../api/services/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { UpdatePassword } from "../api/services/auth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { HiCheckCircle } from "react-icons/hi";
 
 
-function ForgotPassword() {
+function ResetPassword() {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+
+    const token = queryParams.get("token");
+    const type = queryParams.get("type");
+
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
-        email: "",
+        token: token,
+        type: type,
+        password: "",
+        password_confirmation: "",
     });
+    const [countdown, setCountdown] = useState(10);
+
+    useEffect(() => {
+        if (success) {
+            const timer = setInterval(() => {
+                setCountdown((prev) => prev - 1);
+            }, 1000);
+
+            const redirectTimeout = setTimeout(() => {
+                navigate("/login");
+            }, 10000);
+
+            return () => {
+                clearInterval(timer);
+                clearTimeout(redirectTimeout);
+            };
+        }
+    }, [success]);
 
     const handleChange = (event) => {
         setData({ ...data, [event.target.name]: event.target.value });
@@ -27,9 +54,11 @@ function ForgotPassword() {
         setSuccess("");
         setLoading(true);
 
-        SendResetLink(data)
+        console.log(data);
+
+        UpdatePassword(data)
             .then((res) => {
-                console.log("Berhasil rmengirim link.");
+                console.log("Berhasil mengupdate password.");
                 setSuccess(true);
             })
             .catch((err) => {
@@ -45,7 +74,7 @@ function ForgotPassword() {
     return (
         <>
             <Helmet>
-                <title>Forgot Password - Reusemart</title>
+                <title>Reset Password - Reusemart</title>
             </Helmet>
 
             <div
@@ -61,25 +90,33 @@ function ForgotPassword() {
                     {success ? (
                         <>
                             <div className="flex flex-col items-center justify-center gap-4 py-8 px-4 text-center">
-                                <HiCheckCircle className="text-green-500 text-[80px] animate-bounce" />
-                                <h3 className="text-xl font-semibold text-gray-800">Tautan Berhasil Dikirim</h3>
+                                <h3 className="text-xl font-semibold text-gray-800">
+                                    Password Anda Berhasil Diubah
+                                </h3>
                                 <p className="text-sm text-gray-600">
-                                    Silakan cek email Anda untuk reset password.
+                                    Anda akan diarahkan ke halaman login dalam {countdown} detik...
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                    Jika tidak diarahkan otomatis, klik <Link to="/login"><span className="text-green-600 hover:underline">disini</span></Link>.
                                 </p>
                             </div>
                         </>
                     ) : (
                         <>
-                            <h2 className="mb-2 text-center text-2xl font-semibold">Lupa Password</h2>
+                            <h2 className="mb-2 text-center text-2xl font-semibold">Ubah Password</h2>
 
                             <p className="text-sm text-gray-600 text-center">
-                                Masukkan email Anda untuk menerima tautan reset password.
+                                Masukkan password baru Anda untuk mengubah password.
                             </p>
 
                             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                                 <div>
-                                    {/* <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Email</label> */}
-                                    <input type="email" id="email" name="email" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: reusemart@gmail.com" required />
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                                    <input type="password" id="password" name="password" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                </div>
+                                <div>
+                                    <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Konfirmasi password</label>
+                                    <input type="password" id="confirm_password" name="password_confirmation" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
                                 </div>
 
                                 {error && (
@@ -97,17 +134,9 @@ function ForgotPassword() {
                                     {loading ? (
                                         <PulseLoader size={8} color="#ffffff" />
                                     ) : (
-                                        "Kirim Link"
+                                        "Kirim"
                                     )}
                                 </Button>
-
-
-                                <p className="text-sm text-center">
-                                    Sudah ingat password?{" "}
-                                    <Link to="/login">
-                                        <span className="text-green-600 hover:underline">Login Disini</span>
-                                    </Link>
-                                </p>
                             </form>
                         </>
                     )}
@@ -117,4 +146,4 @@ function ForgotPassword() {
     );
 }
 
-export default ForgotPassword;
+export default ResetPassword;

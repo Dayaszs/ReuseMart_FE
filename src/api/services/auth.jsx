@@ -41,4 +41,13 @@ const SendResetLink = async (data) => {
   }
 };
 
-export { SignUpPembeli, SignUpOrganisasi, Login, SendResetLink };
+const UpdatePassword = async (data) => {
+  try {
+    const response = await useAxios.post("/reset-password", data);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export { SignUpPembeli, SignUpOrganisasi, Login, SendResetLink, UpdatePassword };
