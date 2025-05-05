@@ -8,8 +8,8 @@ import Register from '/src/Home/Register.jsx';
 import ForgotPassword from "@/Home/ForgotPassword.jsx";
 import ResetPassword from "@/Home/ResetPassword.jsx";
 
-import PembeliProfile from '/src/Profile/PembeliProfile.jsx';
-import DetailPemesanan from '/src/Profile/DetailPemesanan.jsx';
+import PembeliProfile from '/src/ProfilePembeli/PembeliProfile.jsx';
+import DetailPemesanan from '/src/ProfilePembeli/DetailPemesanan.jsx';
 
 import CSDash from '/src/Dashboard/CSDash.jsx';
 
@@ -82,6 +82,14 @@ const router = createBrowserRouter([
                         <DetailPemesanan />
                     </ProtectedRoute>
                 )
+            },
+            {
+                path: "/organisasi/profile",
+                element: (
+                    <ProtectedRoute allowedRoles={["Pembeli"]}>
+                        <PembeliProfile />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "/cs/dashboard",

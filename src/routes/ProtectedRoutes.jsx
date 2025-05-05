@@ -7,8 +7,7 @@ import { PulseLoader } from 'react-spinners';
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
-
-
+  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -36,12 +35,18 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     fetchUserRole();
   }, []);
 
+  useEffect(() => {
+    if (!loading && userRole && !allowedRoles.includes(userRole)) {
+      window.alert('Anda tidak memiliki izin untuk mengakses halaman ini!');
+      setUnauthorized(true);
+    }
+  }, [loading, userRole, allowedRoles]);
+
   if (loading) {
-    return <PulseLoader size={8} color="#ffffff" />
+    return <PulseLoader size={8} color="#ffffff" />;
   }
 
-  if (!userRole || !allowedRoles.includes(userRole)) {
-    window.alert(`Anda tidak memiliki izin untuk mengakses halaman ini!`);
+  if (unauthorized || (!userRole && !loading)) {
     return <Navigate to="/" replace />;
   }
 

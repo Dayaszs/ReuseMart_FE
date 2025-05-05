@@ -1,49 +1,66 @@
 import React, { useState } from "react";
-import { Modal, Button, Alert } from "flowbite-react";
+import { Modal, ModalBody, ModalHeader, Button, } from "flowbite-react";
 import { PulseLoader } from "react-spinners";
 import api from "../../routes/api";
 import axios from "axios";
 
-const HapusPenitipModal = ({show, onClose }) => {
+const HapusPenitipModal = ({ show, onClose, penitipData }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
-        setSuccess(false);
 
         try {
-            // Simulate API call to delete penitip
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            setSuccess(true);
-            onClose(); // Close the modal after successful deletion
+            const token = localStorage.getItem("token");
+            await axios.delete(`${api}/cs/deletepenitip/${penitipData.id_penitip}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            onClose();
+            window.alert("Penitip berhasil dihapus");
+            window.location.reload();
         } catch (err) {
-            setError("Failed to delete penitip. Please try again.");
+            setError("Gagal Menghapus Penitip");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <Modal dismissible show={show} onClose={onClose}>
-            <Modal.Header>Hapus Penitip</Modal.Header>
-            <Modal.Body>
-                {error && <Alert color="red">{error}</Alert>}
-                {success && <Alert color="green">Penitip berhasil dihapus!</Alert>}
+        <Modal dismissible show={show} onClose={onClose} className="modal-backdrop">
+            <ModalHeader>Hapus Penitip</ModalHeader>
+            <ModalBody>
                 <form onSubmit={handleSubmit}>
-                    <p>Apakah Anda yakin ingin menghapus penitip ini?</p>
-                    <div className="flex justify-end mt-4">
-                        <Button type="button" onClick={onClose} className="mr-2">Batal</Button>
-                        <Button type="submit" disabled={loading} color="red">
-                            {loading ? "Menghapus..." : "Hapus"}
+                    <p>Apakah Anda yakin ingin menghapus penitip <strong>{penitipData?.nama_penitip}</strong>?</p>
+                    {error && <p className="text-red-600 font-semibold mt-2">{error}</p>}
+                    <div className="flex justify-end gap-2 mt-4">
+
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            className="bg-red-500 hover:bg-red-600 text-white"
+                        >
+                            {loading ? <PulseLoader size={8} color="#ffffff" /> : 'Hapus'}
                         </Button>
+                        <Button
+                            type="button"
+                            onClick={onClose}
+                            className="bg-gray-700 hover:bg-gray-600 text-white"
+                        >
+                            Batal
+                        </Button>
+                        
                     </div>
                 </form>
-            </Modal.Body>
+            </ModalBody>
         </Modal>
     );
 };
+
 export default HapusPenitipModal;

@@ -4,17 +4,15 @@ import {
     Button, Label, TextInput, FileInput
 } from 'flowbite-react';
 import api from '../../routes/api';
-import storage from '../../routes/storage';
 import { PulseLoader } from 'react-spinners';
 import axios from 'axios';
 
-const EditPenitipModal = ({ show, onClose, penitipData }) => {
+const TambahPenitipModal = ({ show, onClose, }) => {
     const [email, setEmail] = useState("");
     const [namaPenitip, setNamaPenitip] = useState("");
     const [noKTP, setNoKTP] = useState("");
     const [noTelp, setNoTelp] = useState("");
-    const [saldo, setSaldo] = useState("");
-    const [poin, setPoin] = useState(0);
+    const [password, setPassword] = useState("");
     const [fotoKTP, setFotoKTP] = useState("");
     const [fotoFile, setFotoFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -23,22 +21,13 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
     useEffect(() => {
         if (!show) {
             setError("");
-            setFotoKTP(penitipData.foto_ktp ? `${storage}${penitipData.foto_ktp}` : "");
-        }
+            setFotoKTP(`https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png`);        }
     }, [show]);
 
     useEffect(() => {
-        if (penitipData) {
-            setEmail(penitipData.email || "");
-            setNamaPenitip(penitipData.nama_penitip || "");
-            setNoKTP(penitipData.no_ktp || "");
-            setNoTelp(penitipData.no_telp || "");
-            setSaldo(penitipData.saldo || "");
-            setPoin(penitipData.poin || 0);
-            setFotoKTP(penitipData.foto_ktp ? `${storage}${penitipData.foto_ktp}` : "");
-            setFotoFile(null);
-        }
-    }, [penitipData]);
+        setFotoKTP(`https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png`);
+        setFotoFile(null);
+    },[]);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -63,14 +52,13 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             formData.append('nama_penitip', namaPenitip);
             formData.append('no_ktp', noKTP);
             formData.append('no_telp', noTelp);
-            formData.append('saldo', saldo);
-            formData.append('poin', poin);
+            formData.append('password', password);
             if (fotoFile) {
                 formData.append('foto_ktp', fotoFile);
             }
 
             const token = localStorage.getItem('token');
-            const response = await axios.post(`${api}/cs/editpenitip/${penitipData.id_penitip}`, formData, {
+            const response = await axios.post(`${api}/cs/addpenitip`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -78,7 +66,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             });
 
             onClose();
-            window.alert("Penitip berhasil diedit");
+            window.alert("Penitip berhasil ditambah");
             window.location.reload();
         } catch (error) {
             setError(error. response.data.message);
@@ -90,7 +78,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
     return (
         <Modal dismissible show={show} onClose={onClose} className='modal-backdrop'>
             <ModalHeader>
-                Edit Penitip <strong>{penitipData?.nama_penitip}</strong>
+               Tambah Penitip
             </ModalHeader>
             <ModalBody>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -113,6 +101,17 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    
+                    <div>
+                        <Label htmlFor="password">Password Penitip</Label>
+                        <TextInput
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
@@ -150,28 +149,6 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                         />
                     </div>
 
-                    <div>
-                        <Label htmlFor="saldo">Saldo</Label>
-                        <TextInput
-                            id="saldo"
-                            type="number"
-                            step="0.01"
-                            value={saldo}
-                            onChange={(e) => setSaldo(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="poin">Poin</Label>
-                        <TextInput
-                            id="poin"
-                            type="number"
-                            value={poin}
-                            onChange={(e) => setPoin(Number(e.target.value))}
-                            required
-                        />
-                    </div>
 
                     {error && <p className="text-red-600 font-semibold">{error}</p>}
 
@@ -182,7 +159,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                             disabled={loading}
                             className="bg-green-500 hover:bg-green-600 text-white"
                         >
-                            {loading ? <PulseLoader size={8} color="#ffffff" /> : 'Simpan'}
+                            {loading ? <PulseLoader size={8} color="#ffffff" /> : 'Tambah'}
                         </Button>
 
                         <Button
@@ -201,4 +178,4 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
     );
 };
 
-export default EditPenitipModal;
+export default TambahPenitipModal;

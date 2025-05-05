@@ -4,6 +4,8 @@ import axios from 'axios';
 import api from '../routes/api';
 import { PulseLoader } from 'react-spinners';
 import EditPenitipModal from '@/Components/modals/EditPenitipModal';
+import HapusPenitipModal from '@/Components/modals/HapusPenitipModal';
+import TambahPenitipModal from '@/Components/modals/TambahPenitipModal';
 
 const CSDash = () => {
     const [penitip, setPenitip] = useState(null);
@@ -12,6 +14,10 @@ const CSDash = () => {
 
     const [selectedPenitip, setSelectedPenitip] = useState(null);
     const [showModalEdit, setShowModalEdit] = useState(false);
+
+    const [showModalHapus, setShowModalHapus] = useState(false);
+
+    const [showModalTambah, setShowModalTambah] = useState(false);
 
     useEffect(() => {
         const fetchPenitip = async () => {
@@ -65,6 +71,14 @@ const CSDash = () => {
                     />
                 </div>
 
+                <div className='mb-4'>
+                    <Button 
+                        onClick={() => setShowModalTambah(true)}
+                        className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'>
+                        Tambah Penitip
+                    </Button>
+                </div>
+
                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {filteredPenitip?.map((item, index) => (
@@ -95,14 +109,20 @@ const CSDash = () => {
                                     <Button 
                                         className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
                                         onClick={() => {
-                                            setSelectedPenitip(item);  // 🔧 Set selected penitip here
+                                            setSelectedPenitip(item); 
                                             setShowModalEdit(true);
                                         }}
                                     >
                                         Edit
                                     </Button>
 
-                                    <Button className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'>
+                                    <Button 
+                                        className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'
+                                        onClick={() => {
+                                            setSelectedPenitip(item);
+                                            setShowModalHapus(true);      
+                                        }}
+                                    >
                                         Delete
                                     </Button>
                                 </div>
@@ -115,6 +135,15 @@ const CSDash = () => {
                 show={showModalEdit}
                 onClose={() => setShowModalEdit(false)}
                 penitipData={selectedPenitip}
+            />
+            <HapusPenitipModal
+                show={showModalHapus}
+                onClose={() => setShowModalHapus(false)}
+                penitipData={selectedPenitip}
+            />
+            <TambahPenitipModal
+                show={showModalTambah}
+                onClose={() => setShowModalTambah(false)}
             />
         </Card>
 

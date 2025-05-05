@@ -103,6 +103,14 @@ function NavigationBar() {
                 </Link>
               )}
 
+              {userRole === 'Organisasi' && (
+                <Link to="/organisasi/profile" className="mr-2">
+                  <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
+                    Profile
+                  </button>
+                </Link>
+              )}
+
               <button
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors"

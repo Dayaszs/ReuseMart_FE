@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
-import { Spinner, Card } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { useParams } from "react-router-dom";
 import { PulseLoader } from 'react-spinners';
 

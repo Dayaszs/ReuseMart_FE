@@ -6,7 +6,6 @@ import { Card, Pagination } from "flowbite-react";
 import { PulseLoader } from 'react-spinners';
 
 const PembeliProfile = () => {
-    const [userRole, setUserRole] = useState(null);
     const [user, setUser] = useState(null);
     const [pemesanan, setPemesanan] = useState(null);
     const [loading, setLoading] = useState(true);
