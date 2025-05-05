@@ -16,12 +16,22 @@ import ProductHome from '/src/Products/ProductHome.jsx';
 import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
-
+import DashboardLayout from "@/Dashboard/DashboardLayout.jsx";
+import OrganisasiList from "@/Dashboard/OrganisasiList.jsx";
 
 const router = createBrowserRouter([
     {
         path: "*",
         element: <div>Routes Not Found!</div>
+    },
+    {
+        element: <DashboardLayout />,
+        children: [
+            {
+                path: "/dashboard/organisasi",
+                element: <OrganisasiList />,
+            },
+        ],
     },
     {
         // Auth Layout -> Tidak ada navbar
