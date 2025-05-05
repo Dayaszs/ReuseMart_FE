@@ -23,7 +23,6 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
     useEffect(() => {
         if (!show) {
             setError("");
-            setFotoKTP(penitipData.foto_ktp ? `${storage}${penitipData.foto_ktp}` : "");
         }
     }, [show]);
 

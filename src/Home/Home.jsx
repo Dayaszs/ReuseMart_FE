@@ -17,10 +17,10 @@ function Home() {
       </div>
     
       <div className='@container relative'>
-        <div className='w-full h-screen flex flex-col items-center justify-center bg-[url("./background.jpg")] bg-cover bg-center bg-no-repeat'>
+        <div className='w-full h-screen flex flex-col items-center justify-center bg-[url("/background.jpg")] bg-cover bg-center bg-no-repeat'>
           <img 
             style={{ maxWidth: '15%', minWidth: '100px' }} 
-            src="./logo.png" 
+            src="/logo.png" 
             alt="Reusemart Logo"
           />
           <p className='text-white mt-6 text-6xl font-bold drop-shadow-lg'>

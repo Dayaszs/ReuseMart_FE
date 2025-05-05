@@ -6,11 +6,12 @@ const StoreLayout = () => {
   return (
     <div>
       <Header />
-      <Outlet />
+          <Outlet />
       <Footer />
     </div>
   );
 };
+
 
 
 export default StoreLayout;

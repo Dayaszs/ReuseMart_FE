@@ -88,12 +88,9 @@ function Register() {
                 <title>Register - Reusemart</title>
             </Helmet>
 
-            <div
-                className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center"
-                style={{ backgroundImage: 'url(./background.jpg)' }}
-            >
+            <div className='w-full h-screen flex flex-col items-center justify-center bg-[url("/background.jpg")] bg-cover bg-center bg-no-repeat'>
                 <div className="my-6">
-                    <img className="mx-auto" style={{ maxWidth: '25%' }} src="./logo.png" alt="Logo" />
+                    <img className="mx-auto" style={{ maxWidth: '25%' }} src="/logo.png" alt="Logo" />
                 </div>
 
                 <Card className="w-full max-w-md bg-white/90 backdrop-blur-md">
