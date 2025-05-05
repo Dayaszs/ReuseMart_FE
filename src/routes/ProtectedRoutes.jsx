@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from './api';
-import { Spinner } from "flowbite-react";
+import { PulseLoader } from 'react-spinners';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const [userRole, setUserRole] = useState(null);
@@ -37,7 +37,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }, []);
 
   if (loading) {
-    return <Spinner color="success" aria-label="Success spinner example" />
+    return <PulseLoader size={8} color="#ffffff" />
   }
 
   if (!userRole || !allowedRoles.includes(userRole)) {

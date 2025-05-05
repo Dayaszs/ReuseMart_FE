@@ -4,16 +4,19 @@ import { Card, Label, TextInput, Button } from "flowbite-react";
 import axios from "axios";
 import api from "../routes/api";
 import { redirect, Link, useNavigate } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
 
 function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState();
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         setError("");
 
         try {
@@ -26,14 +29,14 @@ function Login() {
 
             alert("Login successful");
             navigate("/");
-        } catch (err) {
+        } catch (error) {
             if (err.response && err.response.status === 401) {
                 setError("Email atau password salah.");
-            } else {
-                setError("Terjadi kesalahan saat login.");
-            }
+            } 
+        } finally {
+            setLoading(false);
         }
-    };
+};
 
     return (
         <>
@@ -54,7 +57,7 @@ function Login() {
 
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                         <div>
-                            <Label htmlFor="email" value="Email address" />
+                            <Label htmlFor="email" className="mb-2 block">Email</Label>
                             <TextInput
                                 id="email"
                                 type="email"
@@ -66,7 +69,7 @@ function Login() {
                         </div>
 
                         <div>
-                            <Label htmlFor="password" value="Password" />
+                            <Label htmlFor="passwor" className="mb-2 block">Password</Label>
                             <TextInput
                                 id="password"
                                 type="password"
@@ -88,9 +91,17 @@ function Login() {
                             </div>
                         )}
 
-                        <Button type="submit" color="green" className='mt-6 text-1xl'>
+                        {loading ? (
+                            <Button type="submit" color="green" className='mt-6 text-1xl'>
+                               <PulseLoader size={8} color="#ffffff" />
+                            </Button>
+                            
+                        ) : (
+                            <Button type="submit" color="green" className='mt-6 text-1xl'>
                             Login
-                        </Button>
+                            </Button>
+                        )}
+                        
 
                         <p className="text-sm text-center item">
                             Belum punya akun?{" "}
