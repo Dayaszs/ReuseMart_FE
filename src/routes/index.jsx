@@ -11,14 +11,16 @@ import ResetPassword from "@/Home/ResetPassword.jsx";
 import PembeliProfile from '/src/ProfilePembeli/PembeliProfile.jsx';
 import DetailPemesanan from '/src/ProfilePembeli/DetailPemesanan.jsx';
 
-import CSDash from '/src/Dashboard/CSDash.jsx';
+import OrganisasiProfile from '/src/ProfileOrganisasi/OrganisasiProfile.jsx';
+
+import CSDash from '@/DashboardCS/CSDash.jsx';
 
 import Home from '/src/Home/Home.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
 import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
-import OrganisasiList from "@/Dashboard/OrganisasiList.jsx";
+import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
 
 
 const router = createBrowserRouter([
@@ -87,8 +89,8 @@ const router = createBrowserRouter([
             {
                 path: "/organisasi/profile",
                 element: (
-                    <ProtectedRoute allowedRoles={["Pembeli"]}>
-                        <PembeliProfile />
+                    <ProtectedRoute allowedRoles={["Organisasi"]}>
+                        <OrganisasiProfile />
                     </ProtectedRoute>
                 ),
             },

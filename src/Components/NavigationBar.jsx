@@ -14,6 +14,7 @@ import { Home ,Menu, Building2} from 'lucide-react';
 function NavigationBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [nama, setNama] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,6 +33,11 @@ function NavigationBar() {
             },
           });
           setUserRole(response.data.role);
+
+          if(response.data.nama!=null){
+            setNama(response.data.nama);
+          }
+            
         } catch (error) {
           console.error("Failed to fetch user role", error);
         } finally {
@@ -86,7 +92,7 @@ function NavigationBar() {
               <span className="text-yellow-300">mart</span>
             </h1>
         </div>
-        <nav className="flex-1 px-4 py-6  space-y-2">
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
           <Link
             to="/"
             className={`flex items-center gap-2 py-2 px-4 rounded ${
@@ -115,7 +121,7 @@ function NavigationBar() {
                 isActive("/cs/dashboard") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
               }`}
             >
-              Dashboard
+              Dashboard & List Penitip
             </Link>
           )}
 
@@ -140,6 +146,14 @@ function NavigationBar() {
               <Building2 size={18} />
               <span>List Organisasi</span>
             </Link>
+          )}
+
+          {isLoggedIn && userRole && (
+            <div className="px-4 py-3 border-t border-green-500 bg-green-700 text-sm text-gray-200">
+              Logged in as: <span className="font-semibold">
+                {nama} {userRole !== 'Pembeli' ? `(${userRole})` : ''}
+              </span>
+            </div>
           )}
 
         </nav>
@@ -196,7 +210,7 @@ function NavigationBar() {
               {userRole === 'Customer Service' && (
                 <Link to="/cs/dashboard" className="mr-2">
                   <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
-                    Dashboard
+                    Dashboard & List Penitip
                   </button>
                 </Link>
               )}
