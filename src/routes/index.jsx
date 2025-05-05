@@ -11,6 +11,8 @@ import ResetPassword from "@/Home/ResetPassword.jsx";
 import PembeliProfile from '/src/Profile/PembeliProfile.jsx';
 import DetailPemesanan from '/src/Profile/DetailPemesanan.jsx';
 
+import CSDash from '/src/Dashboard/CSDash.jsx';
+
 import Home from '/src/Home/Home.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
 import DetailProduct from '/src/Products/DetailProduct.jsx';
@@ -68,17 +70,25 @@ const router = createBrowserRouter([
             {
                 path: "/pembeli/profile",
                 element: (
-                    // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
-                    <PembeliProfile />
-                    // </ProtectedRoute>
+                    <ProtectedRoute allowedRoles={["Pembeli"]}>
+                        <PembeliProfile />
+                    </ProtectedRoute>
                 ),
             },
             {
-                path: "/profile/pemesanan/:id",
+                path: "/pembeli/profile/pemesanan/:id",
                 element: (
-                    // <ProtectedRoute allowedRoles={["Pembeli"]}>
-                    <DetailPemesanan />
-                    // </ProtectedRoute>
+                    <ProtectedRoute allowedRoles={["Pembeli"]}>
+                        <DetailPemesanan />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "/cs/dashboard",
+                element: (
+                    <ProtectedRoute allowedRoles={["Customer Service"]}>
+                        <CSDash/>
+                    </ProtectedRoute>
                 )
             },
             {

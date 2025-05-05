@@ -55,15 +55,15 @@ const DetailPemesanan = () => {
               <span
                   className={`text-xl font-bold px-2 py-1 rounded 
                   ${
-                      pemesanan.status === 'selesai'
+                      pemesanan.status === 'Selesai'
                       ? 'bg-green-100 text-green-700'
-                      : pemesanan.status === 'disiapkan'
+                      : pemesanan.status === 'Disiapkan'
                       ? 'bg-yellow-100 text-yellow-700'
-                      : pemesanan.status === 'dikirim'
+                      : pemesanan.status === 'Dikirim'
                       ? 'bg-blue-100 text-blue-700'
-                      : pemesanan.status === 'pending'
+                      : pemesanan.status === 'Pending'
                       ? 'bg-orange-100 text-orange-700'
-                      : pemesanan.status === 'hangus'
+                      : pemesanan.status === 'Hangus'
                       ? 'bg-red-100 text-red-700'
                       : 'bg-gray-100 text-gray-700'
                   }

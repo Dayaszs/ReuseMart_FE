@@ -134,3 +134,7 @@ a {
 body {
   font-family: 'Montserrat', sans-serif;
 }
+
+.modal-backdrop {
+  background-color: rgba(0, 255, 0, 0.014) !important;
+}

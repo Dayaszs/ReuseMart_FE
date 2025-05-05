@@ -57,7 +57,7 @@ function Login() {
 
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                         <div>
-                            <Label htmlFor="email" value="Email address" />
+                            <Label htmlFor="email" className="mb-2 block">Email</Label>
                             <TextInput
                                 id="email"
                                 type="email"
@@ -69,7 +69,7 @@ function Login() {
                         </div>
 
                         <div>
-                            <Label htmlFor="password" value="Password" />
+                            <Label htmlFor="passwor" className="mb-2 block">Password</Label>
                             <TextInput
                                 id="password"
                                 type="password"

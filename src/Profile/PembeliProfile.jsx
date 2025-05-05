@@ -72,22 +72,22 @@ const PembeliProfile = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {pemesanan?.data?.map((item, index) => (
-                            <Link to={`/profile/pemesanan/${item.id_pemesanan}`} key={index} className="no-underline">
+                            <Link to={`/pembeli/profile/pemesanan/${item.id_pemesanan}`} key={index} className="no-underline">
                                 <Card className="p-2 shadow-md cursor-pointer min-h-[100px]">
                                     <div className="flex justify-between items-start mb-2">
                                         <h3 className="text-lg font-semibold">ID Pemesanan: {item.id_pemesanan}</h3>
                                         <span
                                             className={`text-m font-semibold px-2 py-1 rounded 
                                             ${
-                                                item.status === 'selesai'
+                                                item.status === 'Selesai'
                                                     ? 'bg-green-100 text-green-700'
-                                                    : item.status === 'disiapkan'
+                                                    : item.status === 'Disiapkan'
                                                     ? 'bg-yellow-100 text-yellow-700'
-                                                    : item.status === 'dikirim'
+                                                    : item.status === 'Dikirim'
                                                     ? 'bg-blue-100 text-blue-700'
-                                                    : item.status === 'pending'
+                                                    : item.status === 'Pending'
                                                     ? 'bg-orange-100 text-orange-700'
-                                                    : item.status === 'hangus'
+                                                    : item.status === 'Hangus'
                                                     ? 'bg-red-100 text-red-700'
                                                     : 'bg-gray-100 text-gray-700'
                                             }`}
