@@ -21,23 +21,23 @@ function FooterBar() {
                         <p className='text-2xl font-semibold'>Kontak kami</p>
                         <div className='mt-5'>
                             <div className='flex'>
-                                <img src="./whatsapp.png" style={{maxWidth : '5%'}}/>
+                                <img src="/whatsapp.png" style={{maxWidth : '5%'}}/>
                                 <p className='ms-3'>+62 9852 9910</p>
                             </div>
                             <div className='flex mt-3'>
-                                <img src="./instagram.png" style={{maxWidth : '5%'}}/>
+                                <img src="/instagram.png" style={{maxWidth : '5%'}}/>
                                 <a href="https://www.instagram.com/dhiaz.l/?hl=en" className='ms-3'>
                                     <p className=''>reusemart_id</p>
                                 </a>
                             </div>
                             <div className='flex mt-3'>
-                                <img src="./facebook.png" style={{maxWidth : '5%'}}/>
+                                <img src="/facebook.png" style={{maxWidth : '5%'}}/>
                                 <a href="https://www.facebook.com" className='ms-3'>
                                     <p className=''>reusemart_id</p>
                                 </a>
                             </div>
                             <div className='flex mt-3'>
-                                <img src="./tik-tok.png" style={{maxWidth : '5%'}}/>
+                                <img src="/tik-tok.png" style={{maxWidth : '5%'}}/>
                                 <a href="https://www.tiktok.com" className='ms-3'>
                                     <p className=''>reusemart_id</p>
                                 </a>
