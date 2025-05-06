@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Card, Label, TextInput, Button } from "flowbite-react";
+import { Card, Label, TextInput, Button, Toast, ToastToggle } from "flowbite-react";
 import axios from "axios";
 import api from "../routes/api";
 import { redirect, Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
+import { Check } from 'lucide-react';
 
 function Login() {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState();
+    const [showToast, setShowToast] = useState(false);
 
 
     const handleSubmit = async (e) => {
@@ -27,12 +29,16 @@ function Login() {
 
             localStorage.setItem("token", response.data.token);
 
-            alert("Login successful");
-            navigate("/");
+            setShowToast(true);
+            setTimeout(() => {
+                setShowToast(false);
+                navigate("/");
+            }, 2000);
+
         } catch (error) {
-            if (err.response && err.response.status === 401) {
-                setError("Email atau password salah.");
-            } 
+            
+            setError(error.response?.data?.message);
+            
         } finally {
             setLoading(false);
         }
@@ -110,6 +116,17 @@ function Login() {
                     </form>
                 </Card>
             </div>
+
+            {showToast && (
+                    <div className="fixed top-5 right-5 z-100">
+                        <Toast className="bg-green-500 text-white">
+                            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500">
+                                <Check color="#00b315" />
+                            </div>
+                            <div className="ml-3 text-sm font-normal">Login Berhasil!</div>
+                        </Toast>
+                    </div>
+            )}
         </>
     );
 }

@@ -94,7 +94,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             <ModalBody>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     <div>
-                        <Label htmlFor="foto-ktp">Foto KTP</Label>
+                        <Label htmlFor="foto-ktp">Foto KTP Ukuran Max 2MB</Label>
                         {fotoKTP && (
                             <img
                                 src={fotoKTP}

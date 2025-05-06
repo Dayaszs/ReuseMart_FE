@@ -2,15 +2,17 @@ import {
   Navbar,
   NavbarBrand,
   NavbarToggle,
-  NavbarCollapse
+  NavbarCollapse,
+  Toast,
 } from "flowbite-react";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
 import { PulseLoader } from 'react-spinners';
-import { Home, Menu, Building2 } from 'lucide-react';
+import { Home, Menu, Building2, Check } from 'lucide-react';
 import { MdPassword } from "react-icons/md";
+
 
 function NavigationBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,6 +22,8 @@ function NavigationBar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [showToast, setShowToast] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -60,12 +64,23 @@ function NavigationBar() {
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }
         });
+
+        console.log("Setting showToast to true");
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+          navigate("/login");
+        }, 2000);
+
       } catch (error) {
         console.error("Logout failed", error);
       } finally {
+
+       
+
         localStorage.removeItem("token");
         setIsLoggedIn(false);
-        navigate("/");
+
       }
     }
   };
@@ -265,7 +280,18 @@ function NavigationBar() {
           )}
         </NavbarCollapse>
       </Navbar>
-    </div>
+
+      {showToast && (
+        <div className="fixed top-5 right-5 z-100">
+            <Toast className="bg-green-500 text-white">
+                <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500">
+                    <Check color="#00b315" />
+                </div>
+                <div className="ml-3 text-sm font-normal">Logout Berhasil!</div>
+            </Toast>
+        </div>
+      )}
+    </div>   
   );
 }
 

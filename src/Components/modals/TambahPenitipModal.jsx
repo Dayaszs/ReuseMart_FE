@@ -21,7 +21,14 @@ const TambahPenitipModal = ({ show, onClose, }) => {
     useEffect(() => {
         if (!show) {
             setError("");
-            setFotoKTP(`https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png`);        }
+            setFotoKTP(`https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png`); 
+            setFotoFile(null);
+            setEmail("");
+            setNamaPenitip("");
+            setNoKTP("");
+            setNoTelp("");
+            setPassword("");      
+         }
     }, [show]);
 
     useEffect(() => {
@@ -69,7 +76,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
             window.alert("Penitip berhasil ditambah");
             window.location.reload();
         } catch (error) {
-            setError(error. response.data.message);
+            setError(error.response.data.message);
         } finally {
             setLoading(false);
         }
@@ -83,7 +90,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
             <ModalBody>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     <div>
-                        <Label htmlFor="foto-ktp">Foto KTP</Label>
+                        <Label htmlFor="foto-ktp">Foto KTP Ukuran Max 2MB</Label>
                         {fotoKTP && (
                             <img
                                 src={fotoKTP}
