@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import AuthLayout from "../layouts/AuthLayout.jsx";
 import StoreLayout from "../layouts/StoreLayout.jsx";
+import DashboardLayout from "../layouts/MainLayout.jsx";
 
 import Login from '/src/Home/Login.jsx';
 import Register from '/src/Home/Register.jsx';
@@ -95,20 +96,25 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/cs/dashboard",
-                element: (
-                    <ProtectedRoute allowedRoles={["Customer Service"]}>
-                        <CSDash/>
-                    </ProtectedRoute>
-                )
-            },
-            {
                 path: "/products/detail/:id",
                 element: (
                     // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
                     <DetailProduct />
                     // </ProtectedRoute>
                 ),
+            },
+        ],
+    },
+    {
+        element: <DashboardLayout />,
+        children: [
+            {
+                path: "/cs/dashboard",
+                element: (
+                    <ProtectedRoute allowedRoles={["Customer Service"]}>
+                        <CSDash />
+                    </ProtectedRoute>
+                )
             },
             {
                 path: "admin/dashboard/organisasi",
@@ -119,7 +125,7 @@ const router = createBrowserRouter([
                 )
             }
         ],
-    },
+    }
 ]);
 
 const AppRouter = () => {

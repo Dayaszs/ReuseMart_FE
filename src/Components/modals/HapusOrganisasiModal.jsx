@@ -26,7 +26,7 @@ const HapusOrganisasiModal = ({ show, onClose, deleteOrganisasi, organisasiId })
             setSuccess(true);
             setTimeout(() => {
                 onClose();
-            }, 1000);
+            }, 1500);
         } catch (err) {
             setError(err.message || "Failed to delete organisasi. Please try again.");
         } finally {
@@ -39,24 +39,29 @@ const HapusOrganisasiModal = ({ show, onClose, deleteOrganisasi, organisasiId })
             <ModalHeader>Hapus Organisasi</ModalHeader>
             <ModalBody>
                 {error && <Alert color="red">{error}</Alert>}
-                {success && <Alert color="green">Organisasi berhasil dihapus!</Alert>}
-                <form onSubmit={handleSubmit}>
-                    <p>Apakah Anda yakin ingin menghapus organisasi ini?</p>
-                    <div className="flex justify-end mt-4">
-                        <Button type="button" onClick={onClose} className="mr-2">
-                            Batal
-                        </Button>
-                        <Button type="submit" disabled={loading} color="red">
-                            {loading ? (
-                                <>
-                                    <PulseLoader size={6} color="#fff" className="ml-2" />
-                                </>
-                            ) : (
-                                "Hapus"
-                            )}
-                        </Button>
-                    </div>
-                </form>
+                {success
+                    ? (
+                        <Alert color="green">Organisasi berhasil dihapus!</Alert>
+                    ) : (
+                        <form onSubmit={handleSubmit}>
+                            <p>Apakah Anda yakin ingin menghapus organisasi ini?</p>
+                            <div className="flex justify-end mt-4">
+                                <Button type="button" onClick={onClose} className="mr-2">
+                                    Batal
+                                </Button>
+                                <Button type="submit" disabled={loading} color="red">
+                                    {loading ? (
+                                        <>
+                                            <PulseLoader size={6} color="#fff" className="ml-2" />
+                                        </>
+                                    ) : (
+                                        "Hapus"
+                                    )}
+                                </Button>
+                            </div>
+                        </form>
+                    )}
+
             </ModalBody>
         </Modal>
     );

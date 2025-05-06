@@ -1,17 +1,17 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { GetOrganisasi, DeleteOrganisasi } from '@/api/services/organisasi';
+import { GetOrganisasi, DeleteOrganisasi, UpdateOrganisasi } from '@/api/services/organisasi';
 import { getProfilePicture } from '@/api';
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import HapusOrganisasiModal from '../Components/modals/HapusOrganisasiModal';
+import EditOrganisasiModal from '../Components/modals/EditOrganisasiModal';
 
 const OrganisasiList = () => {
     const [organisasi, setOrganisasi] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState("");
 
     const [searchTerm, setSearchTerm] = useState("");
@@ -22,8 +22,17 @@ const OrganisasiList = () => {
     const [total, setTotal] = useState(0);
     const [perPage, setPerPage] = useState(10);
 
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [organisasiData, setOrganisasiData] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+
+    const handlePageClick = (page) => {
+        if (page >= 1 && page <= lastPage && page !== currentPage) {
+            setCurrentPage(page);
+            fetchOrganisasi(page);
+        }
+    };
 
     const fetchOrganisasi = (page = 1, search = "") => {
         setIsLoading(true);
@@ -40,23 +49,35 @@ const OrganisasiList = () => {
             .finally(() => setIsLoading(false));
     };
 
+    const updateOrganisasi = (id, data) => {
+        UpdateOrganisasi(id, data)
+            .then((response) => {
+                fetchOrganisasi(currentPage, debouncedSearch);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
 
-    const handlePageClick = (page) => {
-        if (page >= 1 && page <= lastPage && page !== currentPage) {
-            setCurrentPage(page);
-            fetchOrganisasi(page);
-        }
+    const openEditModal = (data) => {
+        console.log(data);
+        setOrganisasiData(data);
+        setShowEditModal(true);
+    };
+
+    const closeEditModal = () => {
+        setOrganisasiData(null);
+        setShowEditModal(false);
     };
 
     const deleteOrganisasi = (id) => {
-        setIsPending(true);
-        DeleteOrganisasi(id).then((response) => {
-            setIsPending(false);
-            fetchOrganisasi(currentPage, debouncedSearch);
-        }).catch((err) => {
-            console.log(err);
-            setIsPending(false);
-        })
+        DeleteOrganisasi(id)
+            .then((response) => {
+                fetchOrganisasi(currentPage, debouncedSearch);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     const openDeleteModal = (id) => {
@@ -79,7 +100,6 @@ const OrganisasiList = () => {
     }, [searchTerm]);
 
     useEffect(() => {
-        console.log(debouncedSearch);
         fetchOrganisasi(currentPage, debouncedSearch);
     }, [currentPage, debouncedSearch]);
 
@@ -156,6 +176,7 @@ const OrganisasiList = () => {
                                             <div className="flex justify-start items-center gap-2">
                                                 {/* Modal Edit */}
                                                 <button
+                                                    onClick={() => openEditModal(item)}
                                                     className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                                                     type="button"
                                                 >
@@ -178,12 +199,20 @@ const OrganisasiList = () => {
                         )}
                 </tbody>
             </table>
+
+            <EditOrganisasiModal
+                show={showEditModal}
+                onClose={closeEditModal}
+                updateOrganisasi={updateOrganisasi}
+                organisasiData={organisasiData}
+            />
             <HapusOrganisasiModal
                 show={showDeleteModal}
                 onClose={closeDeleteModal}
                 deleteOrganisasi={deleteOrganisasi}
                 organisasiId={deleteId}
             />
+
 
             {/* Pagination untuk Penanda Halaman */}
             <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
