@@ -60,7 +60,6 @@ const OrganisasiList = () => {
     }
 
     const openEditModal = (data) => {
-        console.log(data);
         setOrganisasiData(data);
         setShowEditModal(true);
     };

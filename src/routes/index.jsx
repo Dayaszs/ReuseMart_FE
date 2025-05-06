@@ -22,6 +22,7 @@ import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
+import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 
 
 const router = createBrowserRouter([
@@ -121,6 +122,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Admin"]}>
                         <OrganisasiList />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "admin/dashboard/reset-pass",
+                element: (
+                    <ProtectedRoute allowedRoles={["Admin"]}>
+                        <ResetPasswordPegawai />
                     </ProtectedRoute>
                 )
             }
