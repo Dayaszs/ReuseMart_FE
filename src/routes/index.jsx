@@ -13,6 +13,7 @@ import PembeliProfile from '/src/ProfilePembeli/PembeliProfile.jsx';
 import DetailPemesanan from '/src/ProfilePembeli/DetailPemesanan.jsx';
 
 import OrganisasiProfile from '/src/ProfileOrganisasi/OrganisasiProfile.jsx';
+import PenitipProfile from "@/ProfilePenitip/PenitipProfile.jsx";
 
 import CSDash from '@/DashboardCS/CSDash.jsx';
 
@@ -93,6 +94,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Organisasi"]}>
                         <OrganisasiProfile />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/penitip/profile",
+                element: (
+                    <ProtectedRoute allowedRoles={["Penitip"]}>
+                        <PenitipProfile />
                     </ProtectedRoute>
                 ),
             },
