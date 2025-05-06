@@ -6,7 +6,7 @@ function FooterBar() {
 
     return ( 
         <>
-            <div className="w-full h-1/5 bg-[#66d22f] p-15">
+            <div className="w-full h-auto bg-[#66d22f] p-15 ">
                 <div className='grid grid-cols-3 grid-rows-1 gap-8'>
                     <div className='p-8'>
                         <p className='text-2xl font-semibold'>Bergabung bersama kami</p>
