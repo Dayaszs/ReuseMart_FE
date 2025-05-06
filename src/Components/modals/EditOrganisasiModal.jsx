@@ -62,12 +62,6 @@ const EditOrganisasiModal = ({ show, onClose, organisasiData, updateOrganisasi }
                 formData.append('profile_picture', fotoFile);
             }
 
-            // debugging
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-            
-
             await updateOrganisasi(organisasiData.id_organisasi, formData);
             onClose();
         } catch (error) {
