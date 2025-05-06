@@ -8,7 +8,6 @@ const GetOrganisasi = async (page = 1, search = "") => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         throw error.response.data;
@@ -31,4 +30,18 @@ const DeleteOrganisasi = async (id) => {
     }
 };
 
-export { GetOrganisasi, DeleteOrganisasi };
+const UpdateOrganisasi = async (id, data) => {
+    try {
+        const response = await useAxios.post(`/admin/organisasi/${id}`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error.response.data;
+    }
+};
+
+export { GetOrganisasi, DeleteOrganisasi, UpdateOrganisasi };
