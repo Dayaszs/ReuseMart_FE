@@ -1,17 +1,15 @@
-// import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Header from "../Components/NavigationBar";
 
-// import Header from '../components/Header';
-// import Footer from '../components/Footer';
-
-// const MainLayout = () => {
-//   return (
-//     <div>
-//       <Header routes={routes} />
-//       <Outlet />
-//       <Footer />
-//     </div>
-//   );
-// };
+const DashboardLayout = () => {
+    return (
+        <div>
+            <Header />
+            <Outlet />
+        </div>
+    );
+};
 
 
-// export default MainLayout;
+
+export default DashboardLayout;
