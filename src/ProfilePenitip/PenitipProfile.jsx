@@ -5,9 +5,11 @@ import { Badge } from "flowbite-react";
 import { LuAward, LuCircleUserRound } from "react-icons/lu";
 import { FaStar } from "react-icons/fa";
 import { PulseLoader } from 'react-spinners';
+import { Card } from 'flowbite-react';
+
 import ProfileInfoCard from '@/Components/ProfileInfoCard';
 import StatistikPenitipCard from '@/Components/StatistikPenitipCard';
-import { Card } from 'flowbite-react';
+import ListPenjualanCard from '@/Components/ListPenjualanCard';
 
 const PenitipProfile = () => {
     const [penitip, setPenitip] = useState(null);
@@ -38,7 +40,9 @@ const PenitipProfile = () => {
 
     const openTransaksiCard = () => {
         setIsTransaksi(true);
-        setIsAlamat(false);
+    }
+    const closeTransaksiCard = () => {
+        setIsTransaksi(false);
     }
 
     useEffect(() => {
@@ -55,7 +59,7 @@ const PenitipProfile = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="container px-4 py-8 mx-auto max-w-4xl">
             <div className="flex flex-col gap-6">
 
                 {/* Profile Pic, Avg Rating, Badge */}
@@ -88,8 +92,7 @@ const PenitipProfile = () => {
                         no_telp={penitip.no_telp}
                         email={penitip.email} />
                     {isTransaksi ? (
-                        // <TransaksiCard />
-                        <></>
+                        <ListPenjualanCard onCloseTransaksi={closeTransaksiCard} />
                     ) : (
                         <StatistikPenitipCard
                             rating={typeof penitip.rating === 'number' ? penitip.rating.toFixed(1) : '0.0'}

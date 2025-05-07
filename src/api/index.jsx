@@ -5,9 +5,9 @@ export const getProfilePicture = (url_gambar) => {
     return `${BASE_URL}/storage/profile/${url_gambar}`;
 }
 
-// export const getGambarProduk = (url_gambar) => {
-// jadinya satu kolom banyak link kah??
-// }
+export const getGambarBarang = (url_gambar) => {
+    return `${BASE_URL}/storage/barang/${url_gambar}`;
+}
 
 const useAxios = axios.create({
     baseURL: `${BASE_URL}/api`,
