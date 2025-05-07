@@ -14,6 +14,7 @@ const PenitipProfile = () => {
     const [inisial, setInisial] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isTransaksi, setIsTransaksi] = useState(false);
 
     const getInisial = (name) => {
         if (!name) return null;
@@ -34,6 +35,11 @@ const PenitipProfile = () => {
             })
             .finally(() => setIsLoading(false));
     };
+
+    const openTransaksiCard = () => {
+        setIsTransaksi(true);
+        setIsAlamat(false);
+    }
 
     useEffect(() => {
         setError("");
@@ -81,12 +87,18 @@ const PenitipProfile = () => {
                         nama={penitip.nama_penitip}
                         no_telp={penitip.no_telp}
                         email={penitip.email} />
-                    <StatistikPenitipCard
-                        rating={typeof penitip.rating === 'number' ? penitip.rating.toFixed(1) : '0.0'}
-                        isTopSeller={penitip.is_top_seller}
-                        poin={penitip.poin}
-                        saldo={penitip.saldo}
-                    />
+                    {isTransaksi ? (
+                        // <TransaksiCard />
+                        <></>
+                    ) : (
+                        <StatistikPenitipCard
+                            rating={typeof penitip.rating === 'number' ? penitip.rating.toFixed(1) : '0.0'}
+                            isTopSeller={penitip.is_top_seller}
+                            poin={penitip.poin}
+                            saldo={penitip.saldo}
+                            onOpenTransaksi={openTransaksiCard}
+                        />
+                    )}
                 </div>
             </div>
         </div>
