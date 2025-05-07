@@ -151,7 +151,7 @@ const DetailPenjualanModal = ({ show, onClose, id }) => {
                                                         <p className='flex items-center justify-start ms-6'>
                                                             <span>:</span>
                                                             <span className='ms-6 font-medium text-black'>
-                                                            {(() => {
+                                                                {(() => {
                                                                     try {
                                                                         if (!pemesanan.tanggal_selesai) {
                                                                             return "-";
@@ -202,12 +202,12 @@ const DetailPenjualanModal = ({ show, onClose, id }) => {
                                                         <p className='flex items-center justify-start ms-6'>
                                                             <span>:</span>
                                                             <span className='ms-6 font-medium text-black'>
-                                                            {(() => {
+                                                                {(() => {
                                                                     try {
-                                                                        if (!pemesanan.tanggal_selesai) {
+                                                                        if (!pemesanan.tanggal_jadwal) {
                                                                             return "-";
                                                                         }
-                                                                        const date = new Date(pemesanan.tanggal_selesai.replace(' ', 'T'));
+                                                                        const date = new Date(pemesanan.tanggal_jadwal.replace(' ', 'T'));
                                                                         if (isNaN(date.getTime())) {
                                                                             throw new Error('Invalid date');
                                                                         }
@@ -228,7 +228,27 @@ const DetailPenjualanModal = ({ show, onClose, id }) => {
                                                         <p className='flex items-center justify-start ms-6'>
                                                             <span>:</span>
                                                             <span className='ms-6 font-medium text-black'>
-                                                                {/* {pemesanan.tanggal_selesai ? : "-"} */}
+                                                                {(() => {
+                                                                    try {
+                                                                        if (!pemesanan.tanggal_selesai) {
+                                                                            return "-";
+                                                                        }
+                                                                        const date = new Date(pemesanan.tanggal_selesai.replace(' ', 'T'));
+                                                                        if (isNaN(date.getTime())) {
+                                                                            throw new Error('Invalid date');
+                                                                        }
+                                                                        return new Intl.DateTimeFormat('id-ID', {
+                                                                            day: 'numeric',
+                                                                            month: 'long',
+                                                                            year: 'numeric',
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit',
+                                                                            hour12: false
+                                                                        }).format(date) + ' WIB';
+                                                                    } catch (error) {
+                                                                        return '';
+                                                                    }
+                                                                })()}
                                                             </span>
                                                         </p>
                                                     </div>
