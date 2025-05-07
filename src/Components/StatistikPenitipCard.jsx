@@ -3,7 +3,7 @@ import { Card, Button } from "flowbite-react";
 import { FaRegStar } from "react-icons/fa";
 import { LuAward, LuCircleDollarSign, LuMapPin, LuList } from "react-icons/lu";
 
-const StatistikPenitipCard = ({ rating, isTopSeller, poin, saldo }) => {
+const StatistikPenitipCard = ({ rating, isTopSeller, poin, saldo, onOpenTransaksi }) => {
     const formatRupiah = (number) => {
         return (
             'Rp' +
@@ -45,24 +45,24 @@ const StatistikPenitipCard = ({ rating, isTopSeller, poin, saldo }) => {
                 <div className="mt-4">
                     <div className="bg-[#F2FDF6] p-6 rounded-lg mb-4">
                         <h3 className="text-lg font-medium mb-2">Saldo Anda</h3>
-                        <p className="text-3xl font-bold text-green-500">{formatRupiah(saldo)}</p>
+                        <p className="text-3xl font-bold text-green-500">{`Rp${parseInt(saldo).toLocaleString('id-ID')}`}</p>
                         <p className="text-sm text-muted-foreground mt-1">Dapat ditarik</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Button
+                        {/* <Button
                             className="flex items-center justify-center gap-2 py-6 rounded-sm"
                             color="light"
-                        // onClick={handleViewAddresses}
+                        onClick={onOpenAlamat}
                         >
                             <LuMapPin className="h-5 w-5" />
                             <span className="text-base">Lihat Daftar Alamat</span>
-                        </Button>
+                        </Button> */}
 
                         <Button
                             className="flex items-center justify-center gap-2 py-6 rounded-sm"
                             color="light"
-                        // onClick={handleViewTransactions}
+                            onClick={onOpenTransaksi}
                         >
                             <LuList className="h-5 w-5" />
                             <span className="text-base">Lihat Riwayat Penjualan</span>
