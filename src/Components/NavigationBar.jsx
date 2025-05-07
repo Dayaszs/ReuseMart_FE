@@ -24,6 +24,8 @@ function NavigationBar() {
   const location = useLocation();
   const [showToast, setShowToast] = useState(false);
 
+  const [loadingLogout, setLoadingLogout] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -58,6 +60,7 @@ function NavigationBar() {
   const handleLogout = async () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
+      setLoadingLogout(true);
       try {
         await axios.post(`${api}/logout`, {}, {
           headers: {
@@ -65,7 +68,7 @@ function NavigationBar() {
           }
         });
 
-        console.log("Setting showToast to true");
+ 
         setShowToast(true);
         setTimeout(() => {
           setShowToast(false);
@@ -77,7 +80,7 @@ function NavigationBar() {
       } finally {
 
        
-
+        setLoadingLogout(false);
         localStorage.removeItem("token");
         setIsLoggedIn(false);
 
@@ -89,6 +92,7 @@ function NavigationBar() {
 
   return (
     <div className="relative">
+      {!['Pembeli', 'Organisasi', 'Penitip'].includes(userRole) && (
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-green-600 text-white transform transition-transform duration-300 ease-in-out z-40 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
@@ -147,7 +151,6 @@ function NavigationBar() {
             </Link>
           )}
 
-          {/* List Halaman Sidebar Admin */}
           {userRole === 'Admin' && (
             <>
               <Link
@@ -180,9 +183,10 @@ function NavigationBar() {
 
         </nav>
       </div>
+      )}
 
 
-      {sidebarOpen && (
+      {sidebarOpen && !['Pembeli', 'Organisasi', 'Penitip'].includes(userRole) && (
         <div
           onClick={() => setSidebarOpen(false)}
           className="fixed inset-0 bg-black/30 z-30"
@@ -197,12 +201,15 @@ function NavigationBar() {
       >
         <div className="flex items-center gap-3">
 
+        {!['Pembeli', 'Organisasi', 'Penitip'].includes(userRole) && (
           <button
             className="text-white mr-3 focus:outline-none"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             <Menu size={28} />
           </button>
+        )}
+
           <NavbarBrand as={Link} to="/" className="flex items-center cursor-pointer">
             <img
               src='/logo.png'
@@ -261,7 +268,7 @@ function NavigationBar() {
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors"
               >
-                Logout
+                {loadingLogout ? <PulseLoader size={8} color="#ffffff" /> : 'Logout'}
               </button>
             </>
           ) : (
