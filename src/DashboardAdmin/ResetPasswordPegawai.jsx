@@ -1,7 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from "react";
 import { ShowPegawai, ResetPassword } from '@/api/services/pegawai';
-import { getProfilePicture } from '@/api';
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -141,7 +140,6 @@ const ResetPasswordPegawai = () => {
                                         <tr key={item.id_pegawai} className="bg-white border-b dark:bg-gray-800 border-gray-200">
                                             <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                                                 {/* Beri placeholder pegawai */}
-                                                {/* <img className="w-10 h-10 rounded-full" src={getProfilePicture(item.url_gambar)} alt="Profil Pegawai" /> */}
                                                 <div className="ps-3">
                                                     <div className="text-base font-semibold">{item.nama}</div>
                                                     <div className="font-normal text-gray-500">{item.email}</div>
