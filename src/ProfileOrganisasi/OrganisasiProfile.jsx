@@ -6,8 +6,9 @@ import { Card, Pagination, Button } from "flowbite-react";
 import { PulseLoader } from 'react-spinners';
 import TambahRequestDonasiModal from '@/Components/modals/TambahRequestDonasiModal';
 import HapusRequestDonasiModal from '@/Components/modals/HapusRequestDonasiModal';
+import EditRequestDonasiModal from '@/Components/modals/EditRequestDonasiModal';
 
-const PembeliProfile = () => {
+const OrganisasiProfile = () => {
     const [user, setUser] = useState(null);
     const [requestDonasi, setRequestDonasi] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -79,7 +80,7 @@ const PembeliProfile = () => {
                         <h2 className="text-lg font-semibold mb-4">Daftar Request Donasi:</h2>
                         <input
                         type="text"
-                        placeholder="Cari nama atau ID..."
+                        placeholder="Cari request donasi..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="border border-gray-300 rounded-md px-3 py-1 w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -119,16 +120,18 @@ const PembeliProfile = () => {
                                 <div className="flex flex-wrap items-center justify-between mt-4 mb-4">
                                     <p><span className="font-medium">Deskripsi Request:</span> {item.deskripsi}</p>
                                     <div className='flex flex-row gap-2'>
-                                        <Button 
-                                            className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
-                                            onClick={() => {
-                                                setSelectedRequest(item); 
-                                                setShowModalEdit(true);
-                                            }}
-                                        >
-                                            Edit
-                                        </Button>
-
+                                        {item.status !== 'Selesai' && (
+                                            <Button 
+                                                className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
+                                                onClick={() => {
+                                                    setSelectedRequest(item); 
+                                                    setShowModalEdit(true);
+                                                }}
+                                            >
+                                                Edit
+                                            </Button>
+                                        )}
+                                        
                                         <Button 
                                             className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'
                                             onClick={() => {
@@ -158,9 +161,14 @@ const PembeliProfile = () => {
                     organisasiID={user.id_organisasi}
                     onClose={() => setShowModalTambah(false)}
                 />
-                 <HapusRequestDonasiModal
+                <HapusRequestDonasiModal
                     show={showModalHapus}
                     onClose={() => setShowModalHapus(false)}
+                    requestDonasi={selectedRequest}
+                />
+                <EditRequestDonasiModal
+                    show={showModalEdit}
+                    onClose={() => setShowModalEdit(false)}
                     requestDonasi={selectedRequest}
                 />
 
@@ -169,4 +177,4 @@ const PembeliProfile = () => {
  
 };
 
-export default PembeliProfile;
+export default OrganisasiProfile;

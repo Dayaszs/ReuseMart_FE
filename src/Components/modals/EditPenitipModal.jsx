@@ -102,7 +102,8 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                                 className="w-60 h-60 object-contain mb-2 mx-auto"
                             />
                         )}
-                        <FileInput id="foto-ktp" accept="image/*" onChange={handleImageChange} />
+                        <FileInput id="foto-ktp" accept="image/*" onChange={handleImageChange} 
+                        className='className="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600 transition"'/>
                     </div>
 
                     <div>
