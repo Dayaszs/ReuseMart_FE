@@ -49,7 +49,7 @@ const StatistikPenitipCard = ({ rating, isTopSeller, poin, saldo, onOpenTransaks
                         <p className="text-sm text-muted-foreground mt-1">Dapat ditarik</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1">
                         {/* <Button
                             className="flex items-center justify-center gap-2 py-6 rounded-sm"
                             color="light"
