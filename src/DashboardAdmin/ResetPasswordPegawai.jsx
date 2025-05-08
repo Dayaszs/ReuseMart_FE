@@ -127,53 +127,50 @@ const ResetPasswordPegawai = () => {
                                     </div>
                                 </td>
                             </tr>
-                        ) : (
-                            <> {pegawai?.length === 0
-                                ? (
-                                    <tr>
-                                        <td colSpan={5} className="text-center py-6 font-medium text-gray-500">
-                                            Pegawai tidak ditemukan.
+                        ) : pegawai?.length === 0
+                            ? (
+                                <tr>
+                                    <td colSpan={5} className="text-center py-6 font-medium text-gray-500">
+                                        Pegawai tidak ditemukan.
+                                    </td>
+                                </tr>
+                            ) : (
+                                pegawai?.map((item) => (
+                                    <tr key={item.id_pegawai} className="bg-white border-b dark:bg-gray-800 border-gray-200">
+                                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
+                                            {/* Beri placeholder pegawai */}
+                                            <div className="ps-3">
+                                                <div className="text-base font-semibold">{item.nama}</div>
+                                                <div className="font-normal text-gray-500">{item.email}</div>
+                                            </div>
+                                        </th>
+                                        <td className="px-6 py-4 text-center">
+                                            {item.jabatan.nama_jabatan}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            {item.no_telp}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            {new Date(item.tanggal_lahir).toLocaleDateString('id-ID', {
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric',
+                                            })}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex justify-center items-center">
+                                                <button
+                                                    onClick={() => resetPassword(item.id_pegawai, item.email)}
+                                                    className="p-2 bg-green-600 hover:bg-green-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300 w-50"
+                                                    type="button"
+                                                >
+                                                    Reset
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
-                                ) : (
-                                    pegawai?.map((item) => (
-                                        <tr key={item.id_pegawai} className="bg-white border-b dark:bg-gray-800 border-gray-200">
-                                            <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                                                {/* Beri placeholder pegawai */}
-                                                <div className="ps-3">
-                                                    <div className="text-base font-semibold">{item.nama}</div>
-                                                    <div className="font-normal text-gray-500">{item.email}</div>
-                                                </div>
-                                            </th>
-                                            <td className="px-6 py-4 text-center">
-                                                {item.jabatan.nama_jabatan}
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                {item.no_telp}
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                {new Date(item.tanggal_lahir).toLocaleDateString('id-ID', {
-                                                    day: 'numeric',
-                                                    month: 'long',
-                                                    year: 'numeric',
-                                                })}
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <div className="flex justify-center items-center">
-                                                    <button
-                                                        onClick={() => resetPassword(item.id_pegawai, item.email)}
-                                                        className="p-2 bg-green-600 hover:bg-green-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300 w-50"
-                                                        type="button"
-                                                    >
-                                                        Reset
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </>
-                        )}
+                                ))
+                            )}
                 </tbody>
             </table>
         </div>
