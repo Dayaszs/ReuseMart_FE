@@ -49,7 +49,7 @@ const PembeliProfile = () => {
 
     if (loading) {
         return (
-            <Card className="w-full h-full bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
+            <Card className="w-full min-h-screen bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
                 <PulseLoader size={15} color="#61d52c" />
             </Card>
         );
