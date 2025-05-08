@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Card, Button } from "flowbite-react";
-import { SendResetLink } from "../api/services/auth";
+import { SendResetLink } from "../api/services/apiAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { HiCheckCircle } from "react-icons/hi";

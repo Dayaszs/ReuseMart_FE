@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal, ModalHeader, ModalBody } from 'flowbite-react'
-import { GetDetailBarangTerjual } from '@/api/services/penitip'
+import { GetDetailBarangTerjual } from '@/api/services/apiPenitip'
 import { useState, useEffect } from 'react'
 import { getGambarBarang } from '@/api'
 import { FaStar } from "react-icons/fa";

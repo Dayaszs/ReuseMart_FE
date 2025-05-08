@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { ShowPegawai, ResetPassword } from '@/api/services/pegawai';
+import { ShowPegawai, ResetPassword } from '@/api/services/apiPegawai';
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Badge } from "flowbite-react";
-import { GetBarangTerjual } from '@/api/services/penitip';
+import { GetBarangTerjual } from '@/api/services/apiPenitip';
 import { PulseLoader } from 'react-spinners';
 import { LuArrowLeft } from "react-icons/lu";
 import { getGambarBarang } from '@/api';

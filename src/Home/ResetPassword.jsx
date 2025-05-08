@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Card, Button } from "flowbite-react";
-import { UpdatePassword } from "../api/services/auth";
+import { UpdatePassword } from "../api/services/apiAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { HiCheckCircle } from "react-icons/hi";

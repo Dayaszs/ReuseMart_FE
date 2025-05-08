@@ -3,7 +3,7 @@ import { Card, Button, Badge } from "flowbite-react";
 import { LuPlus } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { GetAlamat } from '@/api/services/alamat';
+import { GetAlamat } from '@/api/services/apiAlamat';
 import { PulseLoader } from 'react-spinners';
 
 const ListAlamatCard = () => {
@@ -25,8 +25,8 @@ const ListAlamatCard = () => {
                 console.error(err.message || "Gagal mengambil data.");
             })
             .finally(() => setIsLoading(false));
-        
-            console.log(alamat);
+
+        console.log(alamat);
     };
 
     const filteredAlamat = alamat.filter((item) =>

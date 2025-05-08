@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Card, Button } from "flowbite-react";
-import { SignUpPembeli, SignUpOrganisasi } from "../api/services/auth";
+import { SignUpPembeli, SignUpOrganisasi } from "../api/services/apiAuth";
 import { Link, useNavigate } from "react-router-dom";
 
 function Register() {

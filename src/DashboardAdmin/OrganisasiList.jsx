@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { GetOrganisasi, DeleteOrganisasi, UpdateOrganisasi } from '@/api/services/organisasi';
+import { GetOrganisasi, DeleteOrganisasi, UpdateOrganisasi } from '@/api/services/apiOrganisasi';
 import { getProfilePictureOrganisasi } from '@/api';
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
