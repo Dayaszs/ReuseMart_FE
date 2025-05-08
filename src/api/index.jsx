@@ -5,6 +5,10 @@ export const getProfilePictureOrganisasi = (url_gambar) => {
     return `${BASE_URL}/storage/profile/organisasi/${url_gambar}`;
 }
 
+export const getProfilePicturePembeli = (url_gambar) => {
+    return `${BASE_URL}/storage/profile/pembeli/${url_gambar}`;
+}
+
 export const getGambarBarang = (url_gambar) => {
     return `${BASE_URL}/storage/barang/${url_gambar}`;
 }

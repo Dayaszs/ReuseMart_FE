@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ThemeProvider } from "flowbite-react";
+import flowbiteTheme from "@/lib/theme/flowbiteTheme.js";
 
 import AuthLayout from "../layouts/AuthLayout.jsx";
 import StoreLayout from "../layouts/StoreLayout.jsx";
@@ -149,7 +151,9 @@ const router = createBrowserRouter([
 const AppRouter = () => {
     return (
         <>
-            <RouterProvider router={router} />
+            <ThemeProvider theme={flowbiteTheme}>
+                <RouterProvider router={router} />
+            </ThemeProvider>
         </>
     );
 };
