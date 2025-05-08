@@ -11,6 +11,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
     const [email, setEmail] = useState("");
     const [namaPenitip, setNamaPenitip] = useState("");
     const [noKTP, setNoKTP] = useState("");
+    const [alamat, setAlamat] = useState("");
     const [noTelp, setNoTelp] = useState("");
     const [password, setPassword] = useState("");
     const [fotoKTP, setFotoKTP] = useState("");
@@ -21,20 +22,21 @@ const TambahPenitipModal = ({ show, onClose, }) => {
     useEffect(() => {
         if (!show) {
             setError("");
-            setFotoKTP(`https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png`); 
+            setFotoKTP(`https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png`);
             setFotoFile(null);
             setEmail("");
             setNamaPenitip("");
             setNoKTP("");
+            setAlamat("");
             setNoTelp("");
-            setPassword("");      
-         }
+            setPassword("");
+        }
     }, [show]);
 
     useEffect(() => {
         setFotoKTP(`https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png`);
         setFotoFile(null);
-    },[]);
+    }, []);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -58,6 +60,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
             formData.append('email', email);
             formData.append('nama_penitip', namaPenitip);
             formData.append('no_ktp', noKTP);
+            formData.append('alamat', alamat);
             formData.append('no_telp', noTelp);
             formData.append('password', password);
             if (fotoFile) {
@@ -85,7 +88,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
     return (
         <Modal dismissible show={show} onClose={onClose} className='modal-backdrop'>
             <ModalHeader>
-               Tambah Penitip
+                Tambah Penitip
             </ModalHeader>
             <ModalBody>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -98,7 +101,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
                                 className="w-60 h-60 object-contain mb-2 mx-auto"
                             />
                         )}
-                        <FileInput id="foto-ktp" accept="image/*" onChange={handleImageChange} 
+                        <FileInput id="foto-ktp" accept="image/*" onChange={handleImageChange}
                             className="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600 transition"
                         />
                     </div>
@@ -113,7 +116,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
                             required
                         />
                     </div>
-                    
+
                     <div>
                         <Label htmlFor="password">Password Penitip</Label>
                         <TextInput
@@ -143,6 +146,17 @@ const TambahPenitipModal = ({ show, onClose, }) => {
                             type="text"
                             value={noKTP}
                             onChange={(e) => setNoKTP(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="alamat">Alamat</Label>
+                        <TextInput
+                            id="alamat"
+                            type="text"
+                            value={alamat}
+                            onChange={(e) => setAlamat(e.target.value)}
                             required
                         />
                     </div>
@@ -179,7 +193,7 @@ const TambahPenitipModal = ({ show, onClose, }) => {
                             Batal
                         </Button>
 
-                        
+
                     </div>
                 </form>
             </ModalBody>

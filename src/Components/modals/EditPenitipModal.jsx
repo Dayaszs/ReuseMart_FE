@@ -12,6 +12,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
     const [email, setEmail] = useState("");
     const [namaPenitip, setNamaPenitip] = useState("");
     const [noKTP, setNoKTP] = useState("");
+    const [alamat, setAlamat] = useState("");
     const [noTelp, setNoTelp] = useState("");
     const [saldo, setSaldo] = useState("");
     const [poin, setPoin] = useState(0);
@@ -31,6 +32,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             setEmail(penitipData.email || "");
             setNamaPenitip(penitipData.nama_penitip || "");
             setNoKTP(penitipData.no_ktp || "");
+            setAlamat(penitipData.alamat || "");
             setNoTelp(penitipData.no_telp || "");
             setSaldo(penitipData.saldo || "");
             setPoin(penitipData.poin || 0);
@@ -61,6 +63,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             formData.append('email', email);
             formData.append('nama_penitip', namaPenitip);
             formData.append('no_ktp', noKTP);
+            formData.append('alamat', alamat);
             formData.append('no_telp', noTelp);
             formData.append('saldo', saldo);
             formData.append('poin', poin);
@@ -80,7 +83,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             window.alert("Penitip berhasil diedit");
             window.location.reload();
         } catch (error) {
-            setError(error. response.data.message);
+            setError(error.response.data.message);
         } finally {
             setLoading(false);
         }
@@ -102,8 +105,8 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                                 className="w-60 h-60 object-contain mb-2 mx-auto"
                             />
                         )}
-                        <FileInput id="foto-ktp" accept="image/*" onChange={handleImageChange} 
-                        className='className="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600 transition"'/>
+                        <FileInput id="foto-ktp" accept="image/*" onChange={handleImageChange}
+                            className='className="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600 transition"' />
                     </div>
 
                     <div>
@@ -135,6 +138,17 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                             type="text"
                             value={noKTP}
                             onChange={(e) => setNoKTP(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="alamat">Alamat</Label>
+                        <TextInput
+                            id="alamat"
+                            type="text"
+                            value={alamat}
+                            onChange={(e) => setAlamat(e.target.value)}
                             required
                         />
                     </div>
@@ -193,7 +207,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                             Batal
                         </Button>
 
-                        
+
                     </div>
                 </form>
             </ModalBody>

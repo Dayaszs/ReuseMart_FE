@@ -63,7 +63,7 @@ const CSDash = () => {
                 <h1 className="text-2xl font-bold">Customer Service Dashboard</h1>
                 <p className="text-gray-600">Selamat Datang di Customer Service Dashboard</p>
 
-            
+
                 <div className="flex flex-wrap items-center justify-between mt-4 mb-4">
                     <h1 className="text-2xl font-bold">List Penitip</h1>
                     <input
@@ -76,78 +76,80 @@ const CSDash = () => {
                 </div>
 
                 <div className='mb-4'>
-                    <Button 
+                    <Button
                         onClick={() => setShowModalTambah(true)}
                         className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'>
                         Tambah Penitip
                     </Button>
                 </div>
 
-                {loadingPenitip ? 
+                {loadingPenitip ?
                     <Card className="w-full h-full bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
                         <PulseLoader size={15} color="#61d52c" />
                     </Card>
-                :
-                
-                (
-               
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {penitip?.map((item, index) => (
-                            <Card
-                                key={index}
-                                className="p-2 shadow-md min-h-[100px] mb-2"
-                            >
-                                <div className="flex flex-wrap items-center justify-between mt-4 mb-4">
-                                    <div>
-                                        <h3 className="text-lg font-semibold">
-                                            {item.id_penitip} - {item.nama_penitip} - Poin {item.poin}
-                                        </h3>
-                                        <div className="grid grid-cols-[auto_1fr] gap-x-2 text-md">
-                                            <span>Email</span>
-                                            <span>: {item.email}</span>
-                                            <span>No. KTP</span>
-                                            <span>: {item.no_ktp}</span>
-                                            <span>No. Telepon</span>
-                                            <span>: {item.no_telp}</span>
-                                            <span>Avg Rating</span>
-                                            <span>: {item.avg_rating}</span>
-                                            <span>Saldo</span>
-                                            <span>: Rp {parseInt(item.saldo).toLocaleString('id-ID')}</span>
+                    :
+
+                    (
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {penitip?.map((item, index) => (
+                                <Card
+                                    key={index}
+                                    className="p-2 shadow-md min-h-[100px] mb-2"
+                                >
+                                    <div className="flex flex-wrap items-center justify-between mt-4 mb-4">
+                                        <div>
+                                            <h3 className="text-lg font-semibold">
+                                                {item.id_penitip} - {item.nama_penitip} - Poin {item.poin}
+                                            </h3>
+                                            <div className="grid grid-cols-[auto_1fr] gap-x-2 text-md">
+                                                <span>Email</span>
+                                                <span>: {item.email}</span>
+                                                <span>No. KTP</span>
+                                                <span>: {item.no_ktp}</span>
+                                                <span>Alamat</span>
+                                                <span>: {item.alamat}</span>
+                                                <span>No. Telepon</span>
+                                                <span>: {item.no_telp}</span>
+                                                <span>Avg Rating</span>
+                                                <span>: {item.avg_rating}</span>
+                                                <span>Saldo</span>
+                                                <span>: Rp {parseInt(item.saldo).toLocaleString('id-ID')}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className='flex flex-row gap-2'>
+                                            <Button
+                                                className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
+                                                onClick={() => {
+                                                    setSelectedPenitip(item);
+                                                    setShowModalEdit(true);
+                                                }}
+                                            >
+                                                Edit
+                                            </Button>
+
+                                            <Button
+                                                className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'
+                                                onClick={() => {
+                                                    setSelectedPenitip(item);
+                                                    setShowModalHapus(true);
+                                                }}
+                                            >
+                                                Delete
+                                            </Button>
                                         </div>
                                     </div>
-
-                                    <div className='flex flex-row gap-2'>
-                                        <Button 
-                                            className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
-                                            onClick={() => {
-                                                setSelectedPenitip(item); 
-                                                setShowModalEdit(true);
-                                            }}
-                                        >
-                                            Edit
-                                        </Button>
-
-                                        <Button 
-                                            className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'
-                                            onClick={() => {
-                                                setSelectedPenitip(item);
-                                                setShowModalHapus(true);      
-                                            }}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
-                                </div>
-                            </Card>
-                        ))} 
-                    </div>
-                )}
+                                </Card>
+                            ))}
+                        </div>
+                    )}
                 <div className="flex justify-center mt-6">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={lastPage}
-                            onPageChange={onPageChange}
-                        />
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={lastPage}
+                        onPageChange={onPageChange}
+                    />
                 </div>
             </div>
             <EditPenitipModal
@@ -166,7 +168,7 @@ const CSDash = () => {
             />
         </Card>
 
-        
+
     );
 }
 
