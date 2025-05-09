@@ -42,6 +42,32 @@ function Register() {
         }
     };
 
+    const openPembeliForm = () => {
+        setIsPembeli(true);
+        setIsDisabled(true);
+        setDataPembeli({
+            nama_pembeli: "",
+            no_telp: "",
+            email: "",
+            password: "",
+            password_confirmation: "",
+        });
+        setError("");
+    }
+
+    const openOrganisasiForm = () => {
+        setIsPembeli(false);
+        setIsDisabled(true);
+        setDataOrganisasi({
+            nama: "",
+            alamat: "",
+            no_telp: "",
+            email: "",
+            password: "",
+        });
+        setError("");
+    }
+
     const Register = (event) => {
         event.preventDefault();
         setError("");
@@ -103,7 +129,7 @@ function Register() {
                                 id="pembeli"
                                 name="userType"
                                 checked={isPembeli}
-                                onChange={() => setIsPembeli(true)}
+                                onChange={() => openPembeliForm()}
                                 className="appearance-none w-4 h-4 border-2 border-gray-400 rounded-full checked:border-green-500 checked:bg-green-500"
                             />
                             <label htmlFor="pembeli" className="ml-2 text-sm font-medium text-gray-900">Pembeli</label>
@@ -114,7 +140,7 @@ function Register() {
                                 id="organisasi"
                                 name="userType"
                                 checked={!isPembeli}
-                                onChange={() => setIsPembeli(false)}
+                                onChange={() => openOrganisasiForm()}
                                 className="appearance-none w-4 h-4 border-2 border-gray-400 rounded-full checked:border-green-500 checked:bg-green-500"
                             />
                             <label htmlFor="organisasi" className="ml-2 text-sm font-medium text-gray-900">Organisasi</label>
@@ -127,24 +153,24 @@ function Register() {
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div>
                                         <label htmlFor="nama" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
-                                        <input type="text" id="nama" name="nama_pembeli" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Adit tolongin dit" required />
+                                        <input type="text" id="nama" name="nama_pembeli" onChange={handleChangePembeli} value={dataPembeli.nama_pembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Adit tolongin dit" required />
                                     </div>
                                     <div>
                                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Telepon</label>
-                                        <input type="text" id="phone" name="no_telp" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: 0812-3456-7890" required />
+                                        <input type="text" id="phone" name="no_telp" onChange={handleChangePembeli} value={dataPembeli.no_telp} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: 0812-3456-7890" required />
                                     </div>
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Email</label>
-                                    <input type="email" id="email" name="email" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: reusemart@gmail.com" required />
+                                    <input type="email" id="email" name="email" onChange={handleChangePembeli} value={dataPembeli.email} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: reusemart@gmail.com" required />
                                 </div>
                                 <div>
                                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                    <input type="password" id="password" name="password" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                    <input type="password" id="password" name="password" onChange={handleChangePembeli} value={dataPembeli.password} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
                                 </div>
                                 <div>
                                     <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Konfirmasi password</label>
-                                    <input type="password" id="confirm_password" name="password_confirmation" onChange={handleChangePembeli} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                    <input type="password" id="confirm_password" name="password_confirmation" onChange={handleChangePembeli} value={dataPembeli.password_confirmation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
                                 </div>
                                 <div className="flex items-start">
                                     <div className="flex items-center h-5">
@@ -158,24 +184,24 @@ function Register() {
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div>
                                         <label htmlFor="nama" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Organisasi</label>
-                                        <input type="text" id="nama" name="nama" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Adit tolongin dit" required />
+                                        <input type="text" id="nama" name="nama" onChange={handleChangeOrganisasi} value={dataOrganisasi.nama} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Adit tolongin dit" required />
                                     </div>
                                     <div>
                                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Telepon</label>
-                                        <input type="text" id="phone" name="no_telp" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: 0812-3456-7890" required />
+                                        <input type="text" id="phone" name="no_telp" onChange={handleChangeOrganisasi} value={dataOrganisasi.no_telp} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: 0812-3456-7890" required />
                                     </div>
                                 </div>
                                 <div>
                                     <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Organisasi</label>
-                                    <input type="text" id="address" name="alamat" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: reusemart@gmail.com" required />
+                                    <input type="text" id="address" name="alamat" onChange={handleChangeOrganisasi} value={dataOrganisasi.alamat} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: reusemart@gmail.com" required />
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Email</label>
-                                    <input type="email" id="email" name="email" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                    <input type="email" id="email" name="email" onChange={handleChangeOrganisasi} value={dataOrganisasi.email} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
                                 </div>
                                 <div>
                                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                    <input type="password" id="password" name="password" onChange={handleChangeOrganisasi} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
+                                    <input type="password" id="password" name="password" onChange={handleChangeOrganisasi} value={dataOrganisasi.password} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="•••••••••" required />
                                 </div>
                                 <div>
                                     <label
