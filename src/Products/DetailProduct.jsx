@@ -17,6 +17,7 @@ const DetailProduct = () => {
 
     const fetchHalaman = (id) => {
         setIsLoading(true);
+        setError("");
         GetDetailBarang(id)
             .then((res) => {
                 setBarang(res.barang);
@@ -43,12 +44,11 @@ const DetailProduct = () => {
     const tambahDiskusi = (id, data) => {
         TambahDiskusi(id, data)
             .then((response) => {
-                console.log("mau fetch");
                 fetchDiskusi(id);
+                return response;
             })
             .catch((err) => {
-                console.log("error bos");
-                console.log(err);
+                setError(err.message);
             })
             .finally(() => setIsLoading(false));
     }
@@ -88,6 +88,7 @@ const DetailProduct = () => {
                                     diskusi={diskusi}
                                     tambahDiskusi={tambahDiskusi}
                                     barangId={id}
+                                    error={error}
                                 />
                             </div>
                         </div>

@@ -1,21 +1,31 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react';
 import { Button, Badge } from 'flowbite-react';
 import { LuMessageSquarePlus } from "react-icons/lu";
 import { PulseLoader } from 'react-spinners';
 
-const DiskusiBarangCard = ({ tambahDiskusi, diskusi, barangId }) => {
+const DiskusiBarangCard = ({ tambahDiskusi, diskusi, barangId, error }) => {
     const [pesanBaru, setPesanBaru] = useState("");
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [localError, setLocalError] = useState(false);
     const [success, setSuccess] = useState(false);
-    // const [userId, setUserId] = useState(null);
+
+    // Auto scroll ke chat paling bawah
+    const chatContainerRef = useRef(null);
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: 'smooth',
+            });
+        }
+    }, [diskusi]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setError("");
+        setLocalError("");
         setSuccess(false);
 
         try {
@@ -26,7 +36,7 @@ const DiskusiBarangCard = ({ tambahDiskusi, diskusi, barangId }) => {
             setPesanBaru("");
             setSuccess(true);
         } catch (error) {
-            setError(error.message);
+            setLocalError(error.message);
         } finally {
             setIsLoading(false);
         }
@@ -38,24 +48,25 @@ const DiskusiBarangCard = ({ tambahDiskusi, diskusi, barangId }) => {
                 <h3 className="font-medium text-gray-800">Diskusi ({diskusi.length})</h3>
             </div>
 
-            <div className="p-4 space-y-6 max-h-[500px] overflow-y-auto">
+            <div ref={chatContainerRef} className="p-4 space-y-6 max-h-[500px] overflow-y-auto">
                 {diskusi.map((item, index) => {
                     const isCustomerService = item.penulis === 'Customer Service';
-                    // const isUserLoggedIn = !isCustomerService && item.id_penulis
+                    const isWrittenByMe = item.oleh_saya === true;
                     return (
                         <div key={index} className="flex flex-col">
-                            <div className="flex items-center gap-2 mb-1">
+                            <div className={`flex items-center ${isWrittenByMe && "justify-end"} gap-2 mb-1`}>
+                                {isWrittenByMe && <span className="text-xs text-gray-500">{item.created_at}</span>}
                                 <span className={`font-semibold text-base ${isCustomerService ? "text-green-500" : "text-gray-800"}`}>
                                     {item.penulis}
                                 </span>
                                 {isCustomerService && <Badge color="success">
                                     <span className='text-green-500'>CS</span>
                                 </Badge>}
-                                <span className="text-xs text-gray-500">{item.created_at}</span>
+                                {!isWrittenByMe && <span className="text-xs text-gray-500">{item.created_at}</span>}
                             </div>
 
-                            <div className={`inline-block max-w-[80%] p-3 rounded-lg ${isCustomerService ? "bg-green-50 border-l-4 border-green-500" : "bg-gray-50"}`}>
-                                <p className="text-gray-700">{item.pesan}</p>
+                            <div className={`w-full p-3 rounded-lg ${isCustomerService ? `bg-green-50 ${isWrittenByMe ? "border-r-4" : "border-l-4"} border-green-500` : "bg-gray-50"}`}>
+                                <p className={`text-gray-700 ${isWrittenByMe && "text-right"}`}>{item.pesan}</p>
                             </div>
                         </div>
                     );
@@ -72,21 +83,25 @@ const DiskusiBarangCard = ({ tambahDiskusi, diskusi, barangId }) => {
                             </button>
                         ) : (
                             <>
-                            {error && <p className="text-sm text-red-500">{error}</p>}
-                                <input
-                                    type="text"
-                                    value={pesanBaru}
-                                    onChange={(e) => setPesanBaru(e.target.value)}
-                                    placeholder="Tulis pertanyaan Anda..."
-                                    className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                />
+                                {error
+                                    ? <div className='flex-1 px-4 py-2 border border-red-100 rounded-lg bg-red-100'>
+                                        <span className="text-sm text-red-500">{error}</span>
+                                    </div>
+                                    : <input
+                                        type="text"
+                                        value={pesanBaru}
+                                        onChange={(e) => setPesanBaru(e.target.value)}
+                                        placeholder="Tulis pertanyaan Anda..."
+                                        className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    />
+                                }
                                 <button
                                     type="submit"
                                     disabled={pesanBaru === ""}
                                     className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 hover:cursor-pointer transition-colors disabled:bg-gray-700 disabled:hover:cursor-default"
                                 >
                                     {isLoading
-                                        ? (<><PulseLoader /></>)
+                                        ? (<><PulseLoader size={8} color='#ffffff' /></>)
                                         : "Kirim"}
                                 </button>
                             </>
