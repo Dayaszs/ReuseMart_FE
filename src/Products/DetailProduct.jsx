@@ -15,19 +15,19 @@ const DetailProduct = () => {
     const [diskusi, setDiskusi] = useState([]);
     const { id } = useParams();
 
-    const fetchHalaman = (id) => {
-        setIsLoading(true);
-        setError("");
-        GetDetailBarang(id)
-            .then((res) => {
-                setBarang(res.barang);
-                setDiskusi(res.diskusi);
-            })
-            .catch((err) => {
-                setError(err.message || "Gagal mengambil data.");
-            })
-            .finally(() => setIsLoading(false));
-    }
+    // const fetchHalaman = (id) => {
+    //     setIsLoading(true);
+    //     setError("");
+    //     GetDetailBarang(id)
+    //         .then((res) => {
+    //             setBarang(res.barang);
+    //             setDiskusi(res.diskusi);
+    //         })
+    //         .catch((err) => {
+    //             setError(err.message || "Gagal mengambil data.");
+    //         })
+    //         .finally(() => setIsLoading(false));
+    // }
 
     const fetchDiskusi = (id) => {
         GetDiskusi(id)
@@ -36,6 +36,7 @@ const DetailProduct = () => {
                 setDiskusi(res.data);
             })
             .catch((err) => {
+                console.log("fetch diskusi error di detail product");
                 setError(err.message || "Gagal mengambil data.");
             })
             .finally(() => setIsLoading(false));
@@ -55,7 +56,7 @@ const DetailProduct = () => {
 
     useEffect(() => {
         if (id) {
-            fetchHalaman(id);
+            fetchDiskusi(id);
         }
     }, [id]);
 
