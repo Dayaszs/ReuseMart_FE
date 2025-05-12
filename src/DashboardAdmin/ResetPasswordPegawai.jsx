@@ -16,21 +16,27 @@ const ResetPasswordPegawai = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
 
-    const showPegawai = (search) => {
-        if (!search) {
-            setPegawai([]);
-            setIsLoading(false);
-            return;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
+    const [total, setTotal] = useState(0);
+    const [perPage, setPerPage] = useState(10);
+
+    const handlePageClick = (page) => {
+        if (page >= 1 && page <= lastPage && page !== currentPage) {
+            setCurrentPage(page);
+            fetchOrganisasi(page);
         }
+    };
 
-        const formData = new FormData();
-        formData.append("search", search);
-
+    const showPegawai = (page = 1, search = "") => {
         setIsLoading(true);
         setError("");
-        ShowPegawai(formData)
+        ShowPegawai(page, search)
             .then((res) => {
                 setPegawai(res.data);
+                setLastPage(res.last_page);
+                setPerPage(res.per_page);
+                setTotal(res.total);
             })
             .catch((err) => {
                 setError(err.message || "Gagal mengambil data pegawai.");
@@ -48,9 +54,7 @@ const ResetPasswordPegawai = () => {
             .then(() => {
                 setIsSuccess(true);
 
-                const formData = new FormData();
-                formData.append("search", debouncedSearch);
-                showPegawai(debouncedSearch);
+                showPegawai(currentPage, debouncedSearch);
 
                 setTimeout(() => setIsSuccess(false), 3000);
                 alert("Berhasil reset password.");
@@ -65,14 +69,15 @@ const ResetPasswordPegawai = () => {
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(searchTerm);
+            setCurrentPage(1);
         }, 1000);
 
         return () => clearTimeout(handler);
     }, [searchTerm]);
 
     useEffect(() => {
-        showPegawai(debouncedSearch);
-    }, [debouncedSearch]);
+        showPegawai(currentPage, debouncedSearch);
+    }, [currentPage, debouncedSearch]);
 
     if (error) return <p className="text-center text-red-600">{error}</p>;
 
@@ -100,7 +105,7 @@ const ResetPasswordPegawai = () => {
             <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-14 py-3">
                             Nama Pegawai
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
@@ -137,7 +142,7 @@ const ResetPasswordPegawai = () => {
                             ) : (
                                 pegawai?.map((item) => (
                                     <tr key={item.id_pegawai} className="bg-white border-b dark:bg-gray-800 border-gray-200">
-                                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
+                                        <th scope="row" className=" px-8 py-4 text-gray-900 whitespace-nowrap">
                                             {/* Beri placeholder pegawai */}
                                             <div className="ps-3">
                                                 <div className="text-base font-semibold">{item.nama}</div>
@@ -173,6 +178,61 @@ const ResetPasswordPegawai = () => {
                             )}
                 </tbody>
             </table>
+
+            {/* Pagination untuk Penanda Halaman */}
+            <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
+                <span className="text-sm text-gray-500">
+                    Showing{" "}
+                    <span className="font-semibold text-gray-900">
+                        {(currentPage - 1) * perPage + 1}
+                    </span>{" "}
+                    to{" "}
+                    <span className="font-semibold text-gray-900">
+                        {Math.min(currentPage * perPage, total)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-semibold text-gray-900">
+                        {total}
+                    </span>
+                </span>
+
+                <ul className="inline-flex -space-x-px text-sm h-8 mt-2 md:mt-0">
+                    <li>
+                        <button
+                            className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 disabled:bg-gray-100"
+                            onClick={() => handlePageClick(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </button>
+                    </li>
+                    {[...Array(lastPage)].map((_, i) => {
+                        const page = i + 1;
+                        return (
+                            <li key={page}>
+                                <button
+                                    className={`px-3 h-8 border border-gray-300 ${page === currentPage
+                                        ? "bg-green-500 text-white"
+                                        : "bg-white text-gray-500 hover:bg-gray-100"
+                                        }`}
+                                    onClick={() => handlePageClick(page)}
+                                >
+                                    {page}
+                                </button>
+                            </li>
+                        );
+                    })}
+                    <li>
+                        <button
+                            className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 disabled:bg-gray-100"
+                            onClick={() => handlePageClick(currentPage + 1)}
+                            disabled={currentPage === lastPage}
+                        >
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
     );

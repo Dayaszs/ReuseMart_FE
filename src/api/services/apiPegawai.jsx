@@ -1,8 +1,8 @@
 import useAxios from "..";
 
-const ShowPegawai = async (data) => {
+const ShowPegawai = async (page = 1, search = "") => {
     try {
-        const response = await useAxios.post("/admin/pegawai/show", data, {
+        const response = await useAxios.get(`/admin/pegawai/show?page=${page}&search=${search}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
