@@ -1,21 +1,24 @@
-import NavigationBar from "../Components/NavigationBar";
-import FooterBar from '../Components/FooterBar';
 import { Helmet } from "react-helmet";
-import { Button, Checkbox, Label, TextInput, Card, Dropdown, DropdownItem} from "flowbite-react";
+import { Button, Checkbox, Label, TextInput, Card, Dropdown, DropdownItem, Badge} from "flowbite-react";
 import axios from "axios";
 import api from "@/routes/api";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, use, useState } from "react";
 import { PulseLoader } from 'react-spinners';
-
+import { NumericFormat } from 'react-number-format';
 
 
 function ProductHome() {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [barang, setBarang] = useState(null);
+    const [allBarang, setAllBarang] = useState(null); // Store all barang
     const [kategori, setKategori] = useState(null);
+    const [selectedKategoriId, setSelectedKategoriId] = useState(null);
     const {id} = useParams();
     const [loading, setLoading] = useState(true);
+    const detailProductClick = (barangId) =>{
+        navigate(`/products/detail/${barangId}`);
+    };
 
     useEffect( () => {
         const fetchAll = async () => {
@@ -23,22 +26,43 @@ function ProductHome() {
                 const responseBarang = await axios.get(`${api}/barang/home`);
                 const responseKategori = await axios.get(`${api}/kategori`);
                 
-                setBarang(responseBarang.data?.data|| []);
-                setKategori(responseKategori.data?.kategori || []);
+                console.log('API Response Kategori:', responseKategori.data?.data);
+                
+                const availableBarang = responseBarang.data?.data?.filter(item => item.status === "Tersedia") || [];
+                setAllBarang(availableBarang);
+                setBarang(availableBarang);
+                console.log("available barang", availableBarang);
+
+                if (selectedKategoriId) {
+                    const filteredBarang = responseBarang.data?.data?.filter(item => 
+                        item.kategori_kode < selectedKategoriId * 10 + 10 &&
+                        item.kategori_kode > selectedKategoriId * 10 && 
+                        item.status === "Tersedia"
+                    );
+
+                    console.log(filteredBarang);
+                    setBarang(filteredBarang);
+                } else {
+                    setKategori(responseKategori.data?.data || []);
+                }
             }catch(error){
                 console.error('Error fetching barang : ', error);
             }finally{
                 setLoading(false);
             }
         }
-
         fetchAll();
-    },[])
+    },[selectedKategoriId])
+
+    const handleKategoriSelect = (kategoriId) => {
+        console.log('Kategori Selected:', kategoriId);
+        setSelectedKategoriId(kategoriId);
+    };
 
     if (loading) {
         return (
             <Card className="w-full h-full bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
-                <PulseLoader size={15} color="#61d52c" />;
+                <PulseLoader size={15} color="#61d52c" />
             </Card>
         );
     }
@@ -69,7 +93,13 @@ function ProductHome() {
                 <div className="flex justify-start w-full ">
                     <Dropdown dismissOnClick={false} label="Select Kategori" size="md" className="ms-20" color="green">
                         {list_kategori?.map((kategori, index) =>(
-                            <DropdownItem key={index}>{kategori.value}</DropdownItem>
+                            <DropdownItem 
+                                key={index}
+                                onClick={() => handleKategoriSelect(kategori.id)}
+                                className={selectedKategoriId === kategori.id ? 'bg-green-100' : ''}
+                            >
+                                {kategori.value}
+                            </DropdownItem>
                         ))}
                     </Dropdown>
                     <TextInput className="w-xl ms-3" id="search" placeholder="Search"/>
@@ -80,12 +110,25 @@ function ProductHome() {
                         />
                     </Button>
                 </div>
-                <div className="grid grid-cols-5 auto-rows-auto gap-x-4 gap-y-8 p-20">
+                <div className="grid grid-cols-5 auto-rows-auto gap-x-4 gap-y-8 p-20" >
                     {barang?.map(barang => (
-                        <Card key={barang.id_barang} className="border-2">
+                        <Card key={barang.id_barang} className="border-2" onClick={() => detailProductClick(barang.id_barang)}>
                                 <img src="logo.png" alt="" />
+                                {/* <img src={barang.url_gambar_barang} alt="" /> */}
                                 <p>{barang.nama_barang}</p>
-                                <p className="font-bold -mt-3">Rp. {barang.harga}</p>
+                                <NumericFormat 
+                                    value={barang.harga} 
+                                    prefix = "Rp. "
+                                    displayType = "text"
+                                    thousandSeparator = "."
+                                    decimalSeparator=","
+                                    className="font-bold -mt-3"
+                                />
+                                {barang.tanggal_garansi_habis?(
+                                    <Badge color="success" className="w-fit h-8">Bergaransi</Badge>
+                                ) : (
+                                    <Badge  className="w-auto h-8 text-transparent bg-transparen hover:bg-transparent"></Badge>
+                                )}
                         </Card>
                     ))}
                 </div>

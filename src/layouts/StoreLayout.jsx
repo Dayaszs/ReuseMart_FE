@@ -4,14 +4,14 @@ import Header from "../Components/NavigationBar";
 
 const StoreLayout = () => {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Header />
-          <Outlet />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );
 };
-
-
 
 export default StoreLayout;

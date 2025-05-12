@@ -98,9 +98,9 @@ const router = createBrowserRouter([
             {
                 path: "/products/detail/:id",
                 element: (
-                    // <ProtectedRoute allowedRoles={["owner", "admin", "gudang"]}>
-                    <DetailProduct />
-                    // </ProtectedRoute>
+                    <ProtectedRoute allowedRoles={["Pembeli"]}>
+                        <DetailProduct />
+                    </ProtectedRoute>
                 ),
             },
         ],
