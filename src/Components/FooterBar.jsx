@@ -6,7 +6,7 @@ function FooterBar() {
 
     return ( 
         <>
-            <div className="w-full h-1/5 bg-[#66d22f] p-15">
+            <div className="w-full h-auto bg-[#66d22f] p-15">
                 <div className='grid grid-cols-3 grid-rows-1 gap-8'>
                     <div className='p-8'>
                         <p className='text-2xl font-semibold'>Bergabung bersama kami</p>
@@ -37,7 +37,7 @@ function FooterBar() {
                                 </a>
                             </div>
                             <div className='flex mt-3'>
-                                <img src="/tik-tok.png" style={{maxWidth : '5%'}}/>
+                                <img src="/tik-tok.png" style={{maxWidth : '5%', maxHeight: '1%'}}/>
                                 <a href="https://www.tiktok.com" className='ms-3'>
                                     <p className=''>reusemart_id</p>
                                 </a>

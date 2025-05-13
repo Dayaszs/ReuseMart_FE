@@ -121,7 +121,8 @@ function NavigationBar() {
             <span>Home</span>
           </Link>
 
-          {userRole === 'Pembeli' && (
+        {userRole === 'Pembeli' && (
+          <>
             <Link
               to="/pembeli/profile"
               className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/pembeli/profile") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
@@ -129,6 +130,15 @@ function NavigationBar() {
             >
               Profile
             </Link>
+            <Link
+              to="/products"
+              className={`flex items-center gap-2 py-2 px-4 rounded ${
+                isActive("/products") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+              }`}
+            >
+              Barang
+            </Link>
+          </>
           )}
 
           {userRole === 'Customer Service' && (
