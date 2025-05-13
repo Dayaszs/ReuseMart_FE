@@ -1,4 +1,6 @@
 import React from 'react'
+import api from '@/routes/api';
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { useLocation } from 'react-router-dom';
@@ -90,7 +92,7 @@ const DetailProduct = () => {
               }catch(error){
                   console.error('Error fetching detail barang : ', error);
               }finally{ 
-                  setLoading(false);
+                  setIsLoading(false)
               }
           };
 
