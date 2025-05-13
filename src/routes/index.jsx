@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ThemeProvider } from "flowbite-react";
+import flowbiteTheme from "@/lib/theme/flowbiteTheme.js";
 
 import AuthLayout from "../layouts/AuthLayout.jsx";
 import StoreLayout from "../layouts/StoreLayout.jsx";
@@ -13,6 +15,7 @@ import PembeliProfile from '/src/ProfilePembeli/PembeliProfile.jsx';
 import DetailPemesanan from '/src/ProfilePembeli/DetailPemesanan.jsx';
 
 import OrganisasiProfile from '/src/ProfileOrganisasi/OrganisasiProfile.jsx';
+import PenitipProfile from "@/ProfilePenitip/PenitipProfile.jsx";
 
 import CSDash from '@/DashboardCS/CSDash.jsx';
 
@@ -22,6 +25,7 @@ import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
+import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 
 
 const router = createBrowserRouter([
@@ -96,6 +100,14 @@ const router = createBrowserRouter([
                 ),
             },
             {
+                path: "/penitip/profile",
+                element: (
+                    <ProtectedRoute allowedRoles={["Penitip"]}>
+                        <PenitipProfile />
+                    </ProtectedRoute>
+                ),
+            },
+            {
                 path: "/products/detail/:id",
                 element: (
                     <ProtectedRoute allowedRoles={["Pembeli"]}>
@@ -123,6 +135,14 @@ const router = createBrowserRouter([
                         <OrganisasiList />
                     </ProtectedRoute>
                 )
+            },
+            {
+                path: "admin/dashboard/reset-pass",
+                element: (
+                    <ProtectedRoute allowedRoles={["Admin"]}>
+                        <ResetPasswordPegawai />
+                    </ProtectedRoute>
+                )
             }
         ],
     }
@@ -131,7 +151,9 @@ const router = createBrowserRouter([
 const AppRouter = () => {
     return (
         <>
-            <RouterProvider router={router} />
+            <ThemeProvider theme={flowbiteTheme}>
+                <RouterProvider router={router} />
+            </ThemeProvider>
         </>
     );
 };

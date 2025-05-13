@@ -4,7 +4,7 @@ import {
     Button, Label, TextInput, FileInput
 } from 'flowbite-react';
 import { PulseLoader } from 'react-spinners';
-import { getProfilePicture } from '@/api';
+import { getProfilePictureOrganisasi } from '@/api';
 
 
 const EditOrganisasiModal = ({ show, onClose, organisasiData, updateOrganisasi }) => {
@@ -30,7 +30,7 @@ const EditOrganisasiModal = ({ show, onClose, organisasiData, updateOrganisasi }
             setAlamat(organisasiData.alamat || "");
             setNoTelp(organisasiData.no_telp || "");
             setEmail(organisasiData.email || "");
-            setLogo(organisasiData.url_gambar ? getProfilePicture(organisasiData.url_gambar) : "gada woi");
+            setLogo(organisasiData.url_gambar ? getProfilePictureOrganisasi(organisasiData.url_gambar) : "gada woi");
             setFotoFile(null);
         }
     }, [organisasiData]);
@@ -61,12 +61,6 @@ const EditOrganisasiModal = ({ show, onClose, organisasiData, updateOrganisasi }
             if (fotoFile) {
                 formData.append('profile_picture', fotoFile);
             }
-
-            // debugging
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-            
 
             await updateOrganisasi(organisasiData.id_organisasi, formData);
             onClose();

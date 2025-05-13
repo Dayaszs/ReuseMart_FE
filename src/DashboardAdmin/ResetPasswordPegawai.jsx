@@ -1,17 +1,16 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { GetOrganisasi, DeleteOrganisasi, UpdateOrganisasi } from '@/api/services/apiOrganisasi';
-import { getProfilePictureOrganisasi } from '@/api';
+import { ShowPegawai, ResetPassword } from '@/api/services/apiPegawai';
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import HapusOrganisasiModal from '../Components/modals/HapusOrganisasiModal';
-import EditOrganisasiModal from '../Components/modals/EditOrganisasiModal';
 
-const OrganisasiList = () => {
-    const [organisasi, setOrganisasi] = useState([]);
+const ResetPasswordPegawai = () => {
+
+    const [pegawai, setPegawai] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState("");
 
     const [searchTerm, setSearchTerm] = useState("");
@@ -22,11 +21,6 @@ const OrganisasiList = () => {
     const [total, setTotal] = useState(0);
     const [perPage, setPerPage] = useState(10);
 
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [organisasiData, setOrganisasiData] = useState(null);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-
     const handlePageClick = (page) => {
         if (page >= 1 && page <= lastPage && page !== currentPage) {
             setCurrentPage(page);
@@ -34,59 +28,42 @@ const OrganisasiList = () => {
         }
     };
 
-    const fetchOrganisasi = (page = 1, search = "") => {
+    const showPegawai = (page = 1, search = "") => {
         setIsLoading(true);
-        GetOrganisasi(page, search)
+        setError("");
+        ShowPegawai(page, search)
             .then((res) => {
-                setOrganisasi(res.data);
+                setPegawai(res.data);
                 setLastPage(res.last_page);
                 setPerPage(res.per_page);
                 setTotal(res.total);
             })
             .catch((err) => {
-                setError(err.message || "Gagal mengambil data.");
+                setError(err.message || "Gagal mengambil data pegawai.");
+                setPegawai(null);
             })
             .finally(() => setIsLoading(false));
     };
 
-    const updateOrganisasi = (id, data) => {
-        UpdateOrganisasi(id, data)
-            .then((response) => {
-                fetchOrganisasi(currentPage, debouncedSearch);
+    const resetPassword = (id) => {
+        setIsLoading(true);
+        setError("");
+        setIsSuccess(false);
+
+        ResetPassword(id)
+            .then(() => {
+                setIsSuccess(true);
+
+                showPegawai(currentPage, debouncedSearch);
+
+                setTimeout(() => setIsSuccess(false), 3000);
+                alert("Berhasil reset password.");
             })
             .catch((err) => {
-                console.log(err);
+                setError(err.message || "Gagal mereset kata sandi.");
+                console.error("Reset password error:", err);
             })
-    }
-
-    const openEditModal = (data) => {
-        setOrganisasiData(data);
-        setShowEditModal(true);
-    };
-
-    const closeEditModal = () => {
-        setOrganisasiData(null);
-        setShowEditModal(false);
-    };
-
-    const deleteOrganisasi = (id) => {
-        DeleteOrganisasi(id)
-            .then((response) => {
-                fetchOrganisasi(currentPage, debouncedSearch);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
-
-    const openDeleteModal = (id) => {
-        setDeleteId(id);
-        setShowDeleteModal(true);
-    };
-
-    const closeDeleteModal = () => {
-        setShowDeleteModal(false);
-        setDeleteId(null);
+            .finally(() => setIsLoading(false));
     };
 
     useEffect(() => {
@@ -99,7 +76,7 @@ const OrganisasiList = () => {
     }, [searchTerm]);
 
     useEffect(() => {
-        fetchOrganisasi(currentPage, debouncedSearch);
+        showPegawai(currentPage, debouncedSearch);
     }, [currentPage, debouncedSearch]);
 
     if (error) return <p className="text-center text-red-600">{error}</p>;
@@ -117,28 +94,31 @@ const OrganisasiList = () => {
                         type="text"
                         id="table-search-users"
                         className="block w-80 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
-                        placeholder="Cari Organisasi"
+                        placeholder="Cari Pegawai"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
             </div>
 
-            {/* Tabel Data Organisasi */}
+            {/* Tabel Data Pegawai */}
             <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" className="px-6 py-3">
-                            Nama Organisasi
+                        <th scope="col" className="px-14 py-3">
+                            Nama Pegawai
                         </th>
-                        <th scope="col" className="px-6 py-3">
-                            Alamat
+                        <th scope="col" className="px-6 py-3 text-center">
+                            Jabatan
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        <th scope="col" className="px-6 py-3 text-center">
                             Nomor Telp
                         </th>
-                        <th scope="col" className="px-6 py-3">
-                            Action
+                        <th scope="col" className="px-6 py-3 text-center">
+                            Tanggal Lahir
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-center">
+                            Reset Password
                         </th>
                     </tr>
                 </thead>
@@ -146,72 +126,58 @@ const OrganisasiList = () => {
                     {isLoading
                         ? (
                             <tr>
-                                <td colSpan={4}>
+                                <td colSpan={5}>
                                     <div className="flex justify-center items-center py-8">
                                         <PulseLoader size={8} color="#057A55" />
                                     </div>
                                 </td>
                             </tr>
-                        ) : (
-                            <>
-                                {organisasi?.map((item, index) => (
-                                    <tr key={item.id_organisasi} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
-                                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                                            <img className="w-10 h-10 rounded-full" src={getProfilePictureOrganisasi(item.url_gambar)} alt="Logo Organisasi" />
+                        ) : pegawai?.length === 0
+                            ? (
+                                <tr>
+                                    <td colSpan={5} className="text-center py-6 font-medium text-gray-500">
+                                        Pegawai tidak ditemukan.
+                                    </td>
+                                </tr>
+                            ) : (
+                                pegawai?.map((item) => (
+                                    <tr key={item.id_pegawai} className="bg-white border-b dark:bg-gray-800 border-gray-200">
+                                        <th scope="row" className=" px-8 py-4 text-gray-900 whitespace-nowrap">
+                                            {/* Beri placeholder pegawai */}
                                             <div className="ps-3">
                                                 <div className="text-base font-semibold">{item.nama}</div>
                                                 <div className="font-normal text-gray-500">{item.email}</div>
                                             </div>
                                         </th>
-                                        <td className="px-6 py-4">
-                                            {item.alamat}
+                                        <td className="px-6 py-4 text-center">
+                                            {item.jabatan.nama_jabatan}
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center">
-                                                {item.no_telp}
-                                            </div>
+                                        <td className="px-6 py-4 text-center">
+                                            {item.no_telp}
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex justify-start items-center gap-2">
-                                                {/* Modal Edit */}
+                                        <td className="px-6 py-4 text-center">
+                                            {new Date(item.tanggal_lahir).toLocaleDateString('id-ID', {
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric',
+                                            })}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex justify-center items-center">
                                                 <button
-                                                    onClick={() => openEditModal(item)}
-                                                    className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                                    onClick={() => resetPassword(item.id_pegawai, item.email)}
+                                                    className="p-2 bg-green-600 hover:bg-green-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300 w-50"
                                                     type="button"
                                                 >
-                                                    <FaEdit />
-                                                </button>
-
-                                                {/* Modal Delete */}
-                                                <button
-                                                    onClick={() => openDeleteModal(item.id_organisasi)}
-                                                    className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
-                                                    type="button"
-                                                >
-                                                    <FaTrashAlt />
+                                                    Reset
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
-                                ))}
-                            </>
-                        )}
+                                ))
+                            )}
                 </tbody>
             </table>
-
-            <EditOrganisasiModal
-                show={showEditModal}
-                onClose={closeEditModal}
-                updateOrganisasi={updateOrganisasi}
-                organisasiData={organisasiData}
-            />
-            <HapusOrganisasiModal
-                show={showDeleteModal}
-                onClose={closeDeleteModal}
-                deleteOrganisasi={deleteOrganisasi}
-                organisasiId={deleteId}
-            />
-
 
             {/* Pagination untuk Penanda Halaman */}
             <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
@@ -272,4 +238,4 @@ const OrganisasiList = () => {
     );
 }
 
-export default OrganisasiList
+export default ResetPasswordPegawai

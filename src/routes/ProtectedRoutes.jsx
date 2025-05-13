@@ -50,7 +50,10 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  if(!loading){
+    return children;
+  }
+  
 };
 
 export default ProtectedRoute;
