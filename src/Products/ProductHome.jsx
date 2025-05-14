@@ -11,7 +11,7 @@ import { NumericFormat } from 'react-number-format';
 function ProductHome() {
     const navigate = useNavigate();
     const [barang, setBarang] = useState(null);
-    const [allBarang, setAllBarang] = useState(null); // Store all barang
+    const [allBarang, setAllBarang] = useState(null);
     const [kategori, setKategori] = useState(null);
     const [selectedKategoriId, setSelectedKategoriId] = useState(null);
     const {id} = useParams();
@@ -26,6 +26,7 @@ function ProductHome() {
                 const responseBarang = await axios.get(`${api}/barang/home`);
                 const responseKategori = await axios.get(`${api}/kategori`);
                 
+                console.log('API Response Barang:', responseBarang.data?.data);
                 console.log('API Response Kategori:', responseKategori.data?.data);
                 
                 const availableBarang = responseBarang.data?.data?.filter(item => item.status === "Tersedia") || [];
@@ -34,13 +35,13 @@ function ProductHome() {
                 console.log("available barang", availableBarang);
 
                 if (selectedKategoriId) {
-                    const filteredBarang = responseBarang.data?.data?.filter(item => 
-                        item.kategori_kode < selectedKategoriId * 10 + 10 &&
-                        item.kategori_kode > selectedKategoriId * 10 && 
-                        item.status === "Tersedia"
-                    );
-
-                    console.log(filteredBarang);
+                    console.log('Selected Kategori ID:', selectedKategoriId);
+                    const filteredBarang = availableBarang.filter(item => {
+                        console.log('Item kategori_kode:', item.kategori_kode);
+                        return item.kategori_kode >= selectedKategoriId * 10 && 
+                               item.kategori_kode < (selectedKategoriId + 1) * 10;
+                    });
+                    console.log('Filtered Barang:', filteredBarang);
                     setBarang(filteredBarang);
                 } else {
                     setKategori(responseKategori.data?.data || []);
@@ -111,30 +112,34 @@ function ProductHome() {
                     </Button>
                 </div>
                 <div className="grid grid-cols-5 auto-rows-auto gap-x-4 gap-y-8 p-20" >
-                    {barang?.map(barang => (
-                        <Card key={barang.id_barang} className="border-2" onClick={() => detailProductClick(barang.id_barang)}>
-                                <img src="logo.png" alt="" />
-                                {/* <img src={barang.url_gambar_barang} alt="" /> */}
-                                <p>{barang.nama_barang}</p>
-                                <NumericFormat 
-                                    value={barang.harga} 
-                                    prefix = "Rp. "
-                                    displayType = "text"
-                                    thousandSeparator = "."
-                                    decimalSeparator=","
-                                    className="font-bold -mt-3"
-                                />
-                                {barang.tanggal_garansi_habis?(
-                                    <Badge color="success" className="w-fit h-8">Bergaransi</Badge>
-                                ) : (
-                                    <Badge  className="w-auto h-8 text-transparent bg-transparen hover:bg-transparent"></Badge>
-                                )}
-                        </Card>
-                    ))}
+                    {barang?.length > 0 ? (
+                        barang.map(barang => (
+                            <Card key={barang.id_barang} className="border-2" onClick={() => detailProductClick(barang.id_barang)}>
+                                    <img src="logo.png" alt="" />
+                                    <p>{barang.nama_barang}</p>
+                                    <NumericFormat 
+                                        value={barang.harga} 
+                                        prefix = "Rp. "
+                                        displayType = "text"
+                                        thousandSeparator = "."
+                                        decimalSeparator=","
+                                        className="font-bold -mt-3"
+                                    />
+                                    {barang.tanggal_garansi_habis?(
+                                        <Badge color="success" className="w-fit h-8">Bergaransi</Badge>
+                                    ) : (
+                                        <Badge  className="w-auto h-8 text-transparent bg-transparen hover:bg-transparent"></Badge>
+                                    )}
+                            </Card>
+                        ))
+                    ) : (
+                        <div className="col-span-5 text-center py-10">
+                            <p className="text-gray-500">No products found</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
-
         </>
     )
 }

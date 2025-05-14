@@ -26,6 +26,7 @@ import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
 import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
+import MasterPegawai from "@/DashboardAdmin/MasterPegawai.jsx";
 
 
 const router = createBrowserRouter([
@@ -133,6 +134,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Admin"]}>
                         <OrganisasiList />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "admin/dashboard/pegawai",
+                element: (
+                    <ProtectedRoute allowedRoles={["Admin"]}>
+                        <MasterPegawai />
                     </ProtectedRoute>
                 )
             },

@@ -79,6 +79,7 @@ const DetailProduct = () => {
         if (id) {
             const fetchDetailBarang = async () => {
               try{
+                  setIsLoading(true)
                   console.log(`${api}/barang/${id}/detail`);
                   const token = localStorage.getItem('token');
 
