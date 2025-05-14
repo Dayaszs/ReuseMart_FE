@@ -8,6 +8,7 @@ import { Button } from "flowbite-react";
 import { NumericFormat } from 'react-number-format';
 import TambahPegawaiModal from '@/Components/modals/TambahPegawaiModal';
 import EditPegawaiModal from '@/Components/modals/EditPegawaiModel';
+import DeletePegawaiModal from '@/Components/modals/HapusPegawaiModal';
 
 
 const MasterPegawai = () => {
@@ -28,7 +29,7 @@ const MasterPegawai = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [pegawaiData, setPegawaiData] = useState(null);
-    const [deleteId, setDeteltedId] = useState(null);
+    const [deleteId, setDeleteId] = useState(null);
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -85,6 +86,16 @@ const MasterPegawai = () => {
             })
     }
 
+    const deletePegawai = (id) => {
+        DeletePegawai(id)
+            .then((response) => {
+                fetchPegawai(currentPage, debouncedSearch);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     const openCreateModal = () =>{
         // setPegawai(data);
         setShowCreateModal(true);
@@ -103,6 +114,16 @@ const MasterPegawai = () => {
     const closeEditModal = () => {
         setPegawaiData(null);
         setShowEditModal(false);
+    };
+
+    const openDeleteModal = (id) => {
+        setDeleteId(id);
+        setShowDeleteModal(true);
+    };
+
+    const closeDeleteModal = () => {
+        setShowDeleteModal(false);
+        setDeleteId(null);
     };
 
 
@@ -217,7 +238,7 @@ const MasterPegawai = () => {
 
                                                 {/* Modal Delete */}
                                                 <button
-                                                    onClick={() => openDeleteModal(item.id_organisasi)}
+                                                    onClick={() => openDeleteModal(item.id_pegawai)}
                                                     className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                                                     type="button"
                                                 >
@@ -244,6 +265,14 @@ const MasterPegawai = () => {
                     onClose={closeEditModal}
                     updatePegawai={updatePegawai}
                     pegawaiData={pegawaiData}
+                />
+            )}
+            {showDeleteModal && (
+                <DeletePegawaiModal
+                    show={showDeleteModal}
+                    onClose={closeDeleteModal}
+                    deletePegawai={deletePegawai}
+                    pegawaiId={deleteId}
                 />
             )}
             <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">

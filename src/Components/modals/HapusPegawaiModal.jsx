@@ -36,15 +36,15 @@ const HapusPegawaiModal = ({show, onClose, deletePegawai, pegawaiId}) =>{
 
     return (
         <Modal dismissible show={show} onClose={onClose} className="modal-backfrop">
-            <ModalHeader>Hapus Organisasi</ModalHeader>
+            <ModalHeader>Hapus Pegawai</ModalHeader>
             <ModalBody>
                 {error && <Alert color="red">{error}</Alert>}
                 {success
                     ? (
-                        <Alert color="green">Organisasi berhasil dihapus!</Alert>
+                        <Alert color="green">Pegawai berhasil dihapus!</Alert>
                     ) : (
                         <form onSubmit={handleSubmit}>
-                            <p>Apakah Anda yakin ingin menghapus organisasi ini?</p>
+                            <p>Apakah Anda yakin ingin menghapus pegawai ini?</p>
                             <div className="flex justify-end mt-4">
                                 <Button type="button" onClick={onClose} className="mr-2">
                                     Batal
