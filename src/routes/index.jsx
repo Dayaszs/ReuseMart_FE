@@ -19,6 +19,9 @@ import PenitipProfile from "@/ProfilePenitip/PenitipProfile.jsx";
 
 import CSDash from '@/DashboardCS/CSDash.jsx';
 
+import ListRequestDonasi from '@/DashboardOwner/ListRequestDonasi.jsx';
+import HistoriBarangDonasi from '@/DashboardOwner/HistoriBarangDonasi.jsx';
+
 import Home from '/src/Home/Home.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
 import DetailProduct from '/src/Products/DetailProduct.jsx';
@@ -152,7 +155,23 @@ const router = createBrowserRouter([
                         <MasterPegawai />
                     </ProtectedRoute>
                 )
-            }
+            },
+            {
+                path: "owner/request",
+                element: (
+                    <ProtectedRoute allowedRoles={["Owner"]}>
+                        <ListRequestDonasi />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "owner/request/histori",
+                element: (
+                    <ProtectedRoute allowedRoles={["Owner"]}>
+                        <HistoriBarangDonasi />
+                    </ProtectedRoute>
+                )
+            },
         ],
     }
 ]);
