@@ -26,7 +26,7 @@ import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
 import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
-
+import UnauthorizedPage from "@/pages/Unauthorized.jsx";
 
 const router = createBrowserRouter([
     {
@@ -66,7 +66,10 @@ const router = createBrowserRouter([
                 path: "/",
                 element: <Home />,
             },
-
+            {
+                path: "/unauthorized",
+                element: <UnauthorizedPage />,
+            },
             {
                 path: "/products",
                 element: (

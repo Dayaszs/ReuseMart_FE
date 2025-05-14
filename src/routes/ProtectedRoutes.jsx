@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from './api';
 import { PulseLoader } from 'react-spinners';
+import UnauthorizedPage from '@/pages/Unauthorized';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const [userRole, setUserRole] = useState(null);
@@ -47,7 +48,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (unauthorized || (!userRole && !loading)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/unauthorized" replace />;
   }
 
   if(!loading){
