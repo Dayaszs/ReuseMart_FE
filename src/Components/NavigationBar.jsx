@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
 import { PulseLoader } from 'react-spinners';
-import { Home, Menu, Building2, Check } from 'lucide-react';
+import { Home, Menu, Building2, Check, User2 } from 'lucide-react';
 import { MdPassword } from "react-icons/md";
 
 
@@ -173,6 +173,15 @@ function NavigationBar() {
               </Link>
 
               <Link
+                to="/admin/dashboard/pegawai"
+                className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/admin/dashboard/pegawai") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                  }`}
+              >
+                <User2 size={18} />
+                <span>List Pegawai</span>
+              </Link>
+
+              <Link
                 to="/admin/dashboard/reset-pass"
                 className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/admin/dashboard/reset-pass") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
                   }`}
@@ -180,6 +189,7 @@ function NavigationBar() {
                 <MdPassword size={18} />
                 <span>Reset Password</span>
               </Link>
+
             </>
           )}
 
