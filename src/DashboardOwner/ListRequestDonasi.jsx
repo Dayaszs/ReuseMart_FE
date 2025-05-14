@@ -5,21 +5,24 @@ import { PulseLoader } from 'react-spinners';
 import { IoIosSearch } from "react-icons/io";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
+import TambahDonasiModal from '@/Components/modals/TambahDonasiModal'
 
 
 function ListRequestDonasi() {
     const [ reqDonasi, setReqDonasi] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [ isLoading, setIsLoading] = useState(false);
+    const [ error, setError] = useState("");
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+    const [ searchTerm, setSearchTerm] = useState("");
+    const [ debouncedSearch, setDebouncedSearch] = useState(searchTerm);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [lastPage, setLastPage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [perPage, setPerPage] = useState(10);
+    const [ currentPage, setCurrentPage] = useState(1);
+    const [ lastPage, setLastPage] = useState(1);
+    const [ total, setTotal] = useState(0);
+    const [ perPage, setPerPage] = useState(10);
+
+    const [ showDonasiBarangModal, setShowDonasiBarangModal ] = useState(false);
 
     const handlePageClick = (page) =>{
         if(page >= 1 && page <= lastPage && page !== currentPage){
@@ -42,6 +45,15 @@ function ListRequestDonasi() {
             })
             .finally(() => setIsLoading(false));
     };
+
+
+    const openDonasiBarangModal = () =>{
+        setShowDonasiBarangModal(true);
+    }
+
+    const closeDonasiBarangModal = () =>{
+        setShowDonasiBarangModal(false);
+    }
 
     useEffect(() => {
         fetchRequest(currentPage, debouncedSearch);
@@ -143,7 +155,8 @@ function ListRequestDonasi() {
                                                 <div className="flex justify-start items-center gap-2">
                                                     {/* Modal Edit */}
                                                     <button
-                                                        onClick={() => openEditModal(item)}
+                                                        // onClick={() => openEditModal(item)}
+                                                        onClick={() => openDonasiBarangModal()}
                                                         className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                                                         type="button"
                                                     >
@@ -168,6 +181,66 @@ function ListRequestDonasi() {
                             )}
                     </tbody>
                 </table>
+                {showDonasiBarangModal && (
+                    <TambahDonasiModal
+                        show={showDonasiBarangModal}
+                        onClose={closeDonasiBarangModal}
+                        // tambahPegawai={tambahPegawai}
+                    />
+                )}
+                <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
+                    <span className="text-sm text-gray-500">
+                        Showing{" "}
+                        <span className="font-semibold text-gray-900">
+                            {(currentPage - 1) * perPage + 1}
+                        </span>{" "}
+                        to{" "}
+                        <span className="font-semibold text-gray-900">
+                            {Math.min(currentPage * perPage, total)}
+                        </span>{" "}
+                        of{" "}
+                        <span className="font-semibold text-gray-900">
+                            {total}
+                        </span>
+                    </span>
+
+                    <ul className="inline-flex -space-x-px text-sm h-8 mt-2 md:mt-0">
+                        <li>
+                            <button
+                                className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 disabled:bg-gray-100"
+                                onClick={() => handlePageClick(currentPage - 1)}
+                                disabled={currentPage === 1}
+                            >
+                                Previous
+                            </button>
+                        </li>
+                        {[...Array(lastPage)].map((_, i) => {
+                            const page = i + 1;
+                            return (
+                                <li key={page}>
+                                    <button
+                                        className={`px-3 h-8 border border-gray-300 ${page === currentPage
+                                            ? "bg-green-500 text-white"
+                                            : "bg-white text-gray-500 hover:bg-gray-100"
+                                            }`}
+                                        onClick={() => handlePageClick(page)}
+                                    >
+                                        {page}
+                                    </button>
+                                </li>
+                            );
+                        })}
+                        <li>
+                            <button
+                                className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 disabled:bg-gray-100"
+                                onClick={() => handlePageClick(currentPage + 1)}
+                                disabled={currentPage === lastPage}
+                            >
+                                Next
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </>
     );

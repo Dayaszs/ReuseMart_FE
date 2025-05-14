@@ -32,4 +32,20 @@ const showHistoriDonasi = async (page = 1, search = "") => {
     }
 }
 
-export { showReqDonasi, showHistoriDonasi };
+const showBarangDonasi = async (page = 1, search = "") => {
+    try{
+        const token = localStorage.getItem("token");
+        const response = await useAxios.get(`/owner/barang/donasi?page=${page}&search=${search}`, {
+            headers:{
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+        });
+
+        return response.data.data;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+export { showReqDonasi, showHistoriDonasi, showBarangDonasi };
