@@ -37,7 +37,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             setNoTelp(penitipData.no_telp || "");
             setSaldo(penitipData.saldo || "");
             setPoin(penitipData.poin || 0);
-            setFotoKTP(penitipData.foto_ktp ? `${storage}${penitipData.foto_ktp}` : "");
+            setFotoKTP(penitipData.foto_ktp ? getGambarKTP(penitipData.foto_ktp) : "");
             setFotoFile(null);
         }
     }, [penitipData]);
@@ -101,7 +101,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                         <Label htmlFor="foto-ktp">Foto KTP Ukuran Max 2MB</Label>
                         {fotoKTP && (
                             <img
-                                src={getGambarKTP(fotoKTP)}
+                                src={fotoKTP}
                                 alt="Foto KTP"
                                 className="w-60 h-60 object-contain mb-2 mx-auto"
                             />
