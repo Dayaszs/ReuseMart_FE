@@ -64,4 +64,20 @@ const tambahDonasiBarang = async(data) =>{
     }
 };
 
-export { showReqDonasi, showHistoriDonasi, showBarangDonasi , tambahDonasiBarang };
+const tolakRequestDonasi = async(id) =>{
+    try{
+        const response = await useAxios.post(`/owner/donasi/${id}`, {}, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        console.log(response.data);
+
+        return response.data;
+    }catch(error){
+        throw error.response.data
+    }
+}
+
+export { showReqDonasi, showHistoriDonasi, showBarangDonasi , tambahDonasiBarang, tolakRequestDonasi };

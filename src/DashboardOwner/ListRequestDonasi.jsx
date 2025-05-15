@@ -1,11 +1,12 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { showReqDonasi, tambahDonasiBarang } from '@/api/services/apiOwner';
+import { showReqDonasi, tambahDonasiBarang, tolakRequestDonasi } from '@/api/services/apiOwner';
 import { PulseLoader } from 'react-spinners';
 import { IoIosSearch } from "react-icons/io";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
 import TambahDonasiModal from '@/Components/modals/TambahDonasiModal'
+import TolakDonasiModal from '@/Components/modals/TolakDonasiModal';
 
 
 function ListRequestDonasi() {
@@ -23,6 +24,7 @@ function ListRequestDonasi() {
     const [ perPage, setPerPage] = useState(10);
 
     const [ showDonasiBarangModal, setShowDonasiBarangModal ] = useState(false);
+    const [ showTolakDonasiModal, setTolakDonasiModal ] = useState(false);
     const [ idRequestDonasi, setIdRequestDonasi ] = useState(0);
 
     const handlePageClick = (page) =>{
@@ -34,6 +36,11 @@ function ListRequestDonasi() {
 
     const handleClickDonasikan = (id) =>{
         openDonasiBarangModal();
+        setIdRequestDonasi(id);
+    }
+
+    const handleClickTolakDonasi = (id) => {
+        openReqTolakDonasiModal();
         setIdRequestDonasi(id);
     }
 
@@ -66,13 +73,35 @@ function ListRequestDonasi() {
             })
     }
 
+    const tolakDonasi = async (id) =>{
+        console.log(id);
+        try {
+            const response = await tolakRequestDonasi(id);
+            console.log(response);
+            fetchRequest();
+        } catch (err) {
+            console.log(err);
+            throw err; // Propagate the error to the modal
+        }
+    }
+
+    
+
 
     const openDonasiBarangModal = () =>{
         setShowDonasiBarangModal(true);
     }
 
+    const openReqTolakDonasiModal = () =>{
+        setTolakDonasiModal(true);
+    }
+
     const closeDonasiBarangModal = () =>{
         setShowDonasiBarangModal(false);
+    }
+
+    const closeReqTolakDonasiModal = () =>{
+        setTolakDonasiModal(false);
     }
 
     useEffect(() => {
@@ -186,7 +215,7 @@ function ListRequestDonasi() {
 
                                                     {/* Modal Delete */}
                                                     <button
-                                                        onClick={() => openDeleteModal(item.id_pegawai)}
+                                                        onClick={() => handleClickTolakDonasi(item.id_request_donasi)}
                                                         className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                                                         type="button"
                                                     >
@@ -207,6 +236,14 @@ function ListRequestDonasi() {
                         onClose={closeDonasiBarangModal}
                         tambahDonasi={tambahDonasi}
                         idRequestDonasi={idRequestDonasi}
+                    />
+                )}
+                {showTolakDonasiModal && (
+                    <TolakDonasiModal
+                        show={showTolakDonasiModal}
+                        onClose={closeReqTolakDonasiModal}
+                        tolakReqDonasi={tolakDonasi}
+                        idReqDonasi={idRequestDonasi}
                     />
                 )}
                 <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
