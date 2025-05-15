@@ -7,6 +7,7 @@ import { PulseLoader } from 'react-spinners';
 import TambahRequestDonasiModal from '@/Components/modals/TambahRequestDonasiModal';
 import HapusRequestDonasiModal from '@/Components/modals/HapusRequestDonasiModal';
 import EditRequestDonasiModal from '@/Components/modals/EditRequestDonasiModal';
+import { getProfilePictureOrganisasi } from '@/api';
 
 const OrganisasiProfile = () => {
     const [user, setUser] = useState(null);
@@ -62,9 +63,10 @@ const OrganisasiProfile = () => {
                     <h1 className="text-xl font-bold">Profil Organisasi</h1>
                     <div className="flex justify-between items-center mb-2 gap-6">
                         <img
-                            src={user?.url_gambar}
+                            src={getProfilePictureOrganisasi(user?.url_gambar)}
                             alt="Profile"
                             className="w-32 h-32 rounded-full object-cover"
+                            onError={(e) => e.target.src = '/logo.png'}
                         />
                     </div>
 

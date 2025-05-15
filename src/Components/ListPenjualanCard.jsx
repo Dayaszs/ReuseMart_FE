@@ -64,7 +64,7 @@ const ListPenjualanCard = ({ onCloseTransaksi }) => {
                             {barang.length === 0
                                 ? (
                                     <div className="text-center py-6 font-medium text-gray-500">
-                                        Pegawai tidak ditemukan.
+                                        Belum ada Transaksi Penjualan.
                                     </div>
                                 ) : (
                                     barang?.map((item, index) => (
@@ -91,7 +91,7 @@ const ListPenjualanCard = ({ onCloseTransaksi }) => {
                                                 {item.nama_barang}
                                             </h4>
                                             <img 
-                                                src={item.url_gambar_barang ? getGambarBarang(item.url_gambar_barang) : '/logo.png'} 
+                                                src={item.url_gambar_barang ? getGambarBarang(item.url_gambar_barang.split(';')[0]) : '/logo.png'}
                                                 alt="Gambar Barang" 
                                                 className='w-20 h-20'
                                                 onError={(e) => e.target.src = '/logo.png'}

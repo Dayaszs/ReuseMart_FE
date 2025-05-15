@@ -18,6 +18,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import { getGambarBarang } from '../api';
 
 const DetailProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -124,20 +125,16 @@ const DetailProduct = () => {
                                     <div className="h-[500px]">
                                         <Carousel className="w-full h-full">
                                             <CarouselContent>
-                                                <CarouselItem className="h-full">
-                                                    <img
-                                                        src="/logo.png"
-                                                        alt="Product Image"
-                                                        className="w-full h-full object-contain p-4"
-                                                    />
-                                                </CarouselItem>
-                                                <CarouselItem className="h-full">
-                                                    <img
-                                                        src="/logo.png"
-                                                        alt="Product Image"
-                                                        className="w-full h-full object-contain p-4"
-                                                    />
-                                                </CarouselItem>
+                                                {barang.url_gambar_barang?.split(';').map((gambar, index) => (
+                                                    <CarouselItem key={index} className="h-full">
+                                                        <img
+                                                            src={getGambarBarang(gambar)}
+                                                            alt={`Product Image ${index + 1}`}
+                                                            className="w-full h-full object-contain p-4"
+                                                            onError={(e) => e.target.src = '/logo.png'}
+                                                        />
+                                                    </CarouselItem>
+                                                ))}
                                             </CarouselContent>
                                             <CarouselPrevious />
                                             <CarouselNext />

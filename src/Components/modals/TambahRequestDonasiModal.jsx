@@ -56,7 +56,7 @@ const TambahRequestDonasiModal = ({ show, onClose, organisasiID}) => {
 
     return (
         <>
-        <Modal dismissible show={show} onClose={onClose} className='modal-backdrop'>
+        <Modal dismissible show={show} onClose={onClose}>
             <ModalHeader>
                Tambah Request Donasi
             </ModalHeader>
