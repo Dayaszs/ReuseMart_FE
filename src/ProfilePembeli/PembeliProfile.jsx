@@ -61,7 +61,7 @@ const PembeliProfile = () => {
                 <h1 className="text-xl font-bold">Profil Pembeli</h1>
                 <div className="flex justify-between items-center mb-2 gap-6">
                     <img
-                        src={getProfilePicturePembeli(user.url_gambar)}
+                        src="/profile_pembeli.png"
                         alt="Profile"
                         className="w-32 h-32 rounded-full object-cover"
                     />
