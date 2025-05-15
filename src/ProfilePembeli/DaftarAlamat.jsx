@@ -98,7 +98,9 @@ const DaftarAlamat = () => {
     }, []);
 
     const filteredAlamat = alamat.filter((item) =>
-        item.nama_alamat.toLowerCase().includes(searchAlamat.toLowerCase())
+        item.nama_alamat.toLowerCase().includes(searchAlamat.toLowerCase()) ||
+        item.nama_penerima.toLowerCase().includes(searchAlamat.toLowerCase()) ||
+        item.alamat_lengkap.toLowerCase().includes(searchAlamat.toLowerCase())
     );
 
     return (
