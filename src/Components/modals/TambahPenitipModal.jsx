@@ -6,6 +6,7 @@ import {
 import api from '../../routes/api';
 import { PulseLoader } from 'react-spinners';
 import axios from 'axios';
+import { getGambarKTP } from '@/api';
 
 const TambahPenitipModal = ({ show, onClose, }) => {
     const [email, setEmail] = useState("");

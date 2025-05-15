@@ -7,6 +7,7 @@ import api from '../../routes/api';
 import storage from '../../routes/storage';
 import { PulseLoader } from 'react-spinners';
 import axios from 'axios';
+import { getGambarKTP } from '@/api';
 
 const EditPenitipModal = ({ show, onClose, penitipData }) => {
     const [email, setEmail] = useState("");
@@ -100,7 +101,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
                         <Label htmlFor="foto-ktp">Foto KTP Ukuran Max 2MB</Label>
                         {fotoKTP && (
                             <img
-                                src={fotoKTP}
+                                src={getGambarKTP(fotoKTP)}
                                 alt="Foto KTP"
                                 className="w-60 h-60 object-contain mb-2 mx-auto"
                             />

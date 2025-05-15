@@ -13,6 +13,10 @@ export const getGambarBarang = (url_gambar) => {
     return `${BASE_URL}/storage/barang/${url_gambar}`;
 }
 
+export const getGambarKTP = (url_gambar) => {
+    return `${BASE_URL}/storage/ktp/${url_gambar}`;
+}
+
 const useAxios = axios.create({
     baseURL: `${BASE_URL}/api`,
 });
