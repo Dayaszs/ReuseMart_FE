@@ -193,7 +193,7 @@ function Register() {
                                 </div>
                                 <div>
                                     <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Organisasi</label>
-                                    <input type="text" id="address" name="alamat" onChange={handleChangeOrganisasi} value={dataOrganisasi.alamat} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Jl. Seminyak P-16" required />
+                                    <input type="text" id="address" name="alamat" onChange={handleChangeOrganisasi} value={dataOrganisasi.alamat} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-green-500 block w-full p-2.5" placeholder="Cnth: Jl. Seminyak Blok P-16" required />
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat Email</label>
