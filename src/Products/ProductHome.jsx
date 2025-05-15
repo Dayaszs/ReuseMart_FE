@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, use, useState } from "react";
 import { PulseLoader } from 'react-spinners';
 import { NumericFormat } from 'react-number-format';
+import { getGambarBarang } from '@/api';
 
 
 function ProductHome() {
@@ -113,8 +114,7 @@ function ProductHome() {
                 <div className="grid grid-cols-5 auto-rows-auto gap-x-4 gap-y-8 p-20" >
                     {barang?.map(barang => (
                         <Card key={barang.id_barang} className="border-2" onClick={() => detailProductClick(barang.id_barang)}>
-                                <img src="logo.png" alt="" />
-                                {/* <img src={barang.url_gambar_barang} alt="" /> */}
+                                <img src={barang.url_gambar_barang ? getGambarBarang(barang.url_gambar_barang.split(';')[0]) : '/logo.png'} alt="" />
                                 <p>{barang.nama_barang}</p>
                                 <NumericFormat 
                                     value={barang.harga} 
