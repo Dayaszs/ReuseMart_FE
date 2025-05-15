@@ -2,8 +2,8 @@ import useAxios from "..";
 
 const GetDiskusi = async (barangId) => {
     try {
-        console.log(barangId);
-        const response = await useAxios.get(`/barang/${barangId}/diskusi`, {
+        const token = localStorage.getItem("token");
+        const response = await useAxios.get(`/barang/${barangId}/diskusi${token ? `?token=${token}` : ''}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -29,6 +29,9 @@ const TambahDiskusi = async (barangId, data) => {
         return response.data;
     } catch (error) {
         console.log(error.response.data);
+        if (error.response.status === 401) {
+            throw { message: "Silakan login terlebih dahulu untuk menambahkan diskusi." };
+        }
         throw error.response.data;
     }
 };

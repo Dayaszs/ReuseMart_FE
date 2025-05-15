@@ -19,15 +19,18 @@ import PenitipProfile from "@/ProfilePenitip/PenitipProfile.jsx";
 
 import CSDash from '@/DashboardCS/CSDash.jsx';
 
+import ListRequestDonasi from '@/DashboardOwner/ListRequestDonasi.jsx';
+import HistoriBarangDonasi from '@/DashboardOwner/HistoriBarangDonasi.jsx';
+
 import Home from '/src/Home/Home.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
 import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
-import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 import MasterPegawai from "@/DashboardAdmin/MasterPegawai.jsx";
-
+import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
+import UnauthorizedPage from "@/pages/Unauthorized.jsx";
 
 const router = createBrowserRouter([
     {
@@ -67,7 +70,10 @@ const router = createBrowserRouter([
                 path: "/",
                 element: <Home />,
             },
-
+            {
+                path: "/unauthorized",
+                element: <UnauthorizedPage />,
+            },
             {
                 path: "/products",
                 element: (
@@ -111,9 +117,9 @@ const router = createBrowserRouter([
             {
                 path: "/products/detail/:id",
                 element: (
-                    <ProtectedRoute allowedRoles={["Pembeli"]}>
+                    // <ProtectedRoute allowedRoles={["Pembeli"]}>
                         <DetailProduct />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
         ],
@@ -152,7 +158,31 @@ const router = createBrowserRouter([
                         <ResetPasswordPegawai />
                     </ProtectedRoute>
                 )
-            }
+            },
+            {
+                path: "admin/dashboard/pegawai",
+                element: (
+                    <ProtectedRoute allowedRoles={["Admin"]}>
+                        <MasterPegawai />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "owner/request",
+                element: (
+                    <ProtectedRoute allowedRoles={["Owner"]}>
+                        <ListRequestDonasi />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "owner/request/histori",
+                element: (
+                    <ProtectedRoute allowedRoles={["Owner"]}>
+                        <HistoriBarangDonasi />
+                    </ProtectedRoute>
+                )
+            },
         ],
     }
 ]);

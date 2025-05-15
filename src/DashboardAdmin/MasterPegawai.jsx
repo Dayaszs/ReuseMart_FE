@@ -6,8 +6,9 @@ import { IoIosSearch } from "react-icons/io";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
 import { NumericFormat } from 'react-number-format';
-// import TambahPenitipModal from '@/Components/modals/TambahPenitipModal';
 import TambahPegawaiModal from '@/Components/modals/TambahPegawaiModal';
+import EditPegawaiModal from '@/Components/modals/EditPegawaiModel';
+import DeletePegawaiModal from '@/Components/modals/HapusPegawaiModal';
 
 
 const MasterPegawai = () => {
@@ -27,7 +28,8 @@ const MasterPegawai = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [deleteId, setDeteltedId] = useState(null);
+    const [pegawaiData, setPegawaiData] = useState(null);
+    const [deleteId, setDeleteId] = useState(null);
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -61,6 +63,39 @@ const MasterPegawai = () => {
             .finally(() => setIsLoading(false));
     };
 
+    const tambahPegawai = (data) =>{
+        CreatePegawai(data)
+            .then((response) =>{
+                console.log(response);
+                fetchPegawai();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    const updatePegawai = (id, data) => {
+        console.log("data : ",id);
+        UpdatePegawai(id, data)
+            .then((response) => {
+                fetchPegawai(currentPage, debouncedSearch);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const deletePegawai = (id) => {
+        DeletePegawai(id)
+            .then((response) => {
+                fetchPegawai(currentPage, debouncedSearch);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     const openCreateModal = () =>{
         // setPegawai(data);
         setShowCreateModal(true);
@@ -68,7 +103,30 @@ const MasterPegawai = () => {
 
     const closeCreateModal = () =>{
         setShowCreateModal(false);
+        fetchPegawai(1, debouncedSearch);
     }
+
+    const openEditModal = (data) =>{
+        setPegawaiData(data);
+        setShowEditModal(true);
+    };
+
+    const closeEditModal = () => {
+        setPegawaiData(null);
+        setShowEditModal(false);
+    };
+
+    const openDeleteModal = (id) => {
+        setDeleteId(id);
+        setShowDeleteModal(true);
+    };
+
+    const closeDeleteModal = () => {
+        setShowDeleteModal(false);
+        setDeleteId(null);
+    };
+
+
 
     useEffect(() => {
         fetchPegawai(currentPage, debouncedSearch);
@@ -180,7 +238,7 @@ const MasterPegawai = () => {
 
                                                 {/* Modal Delete */}
                                                 <button
-                                                    onClick={() => openDeleteModal(item.id_organisasi)}
+                                                    onClick={() => openDeleteModal(item.id_pegawai)}
                                                     className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                                                     type="button"
                                                 >
@@ -198,8 +256,78 @@ const MasterPegawai = () => {
                 <TambahPegawaiModal
                     show={showCreateModal}
                     onClose={closeCreateModal}
+                    tambahPegawai={tambahPegawai}
                 />
             )}
+            {showEditModal && (
+                <EditPegawaiModal
+                    show={showEditModal}
+                    onClose={closeEditModal}
+                    updatePegawai={updatePegawai}
+                    pegawaiData={pegawaiData}
+                />
+            )}
+            {showDeleteModal && (
+                <DeletePegawaiModal
+                    show={showDeleteModal}
+                    onClose={closeDeleteModal}
+                    deletePegawai={deletePegawai}
+                    pegawaiId={deleteId}
+                />
+            )}
+            <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
+                <span className="text-sm text-gray-500">
+                    Showing{" "}
+                    <span className="font-semibold text-gray-900">
+                        {(currentPage - 1) * perPage + 1}
+                    </span>{" "}
+                    to{" "}
+                    <span className="font-semibold text-gray-900">
+                        {Math.min(currentPage * perPage, total)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-semibold text-gray-900">
+                        {total}
+                    </span>
+                </span>
+
+                <ul className="inline-flex -space-x-px text-sm h-8 mt-2 md:mt-0">
+                    <li>
+                        <button
+                            className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 disabled:bg-gray-100"
+                            onClick={() => handlePageClick(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </button>
+                    </li>
+                    {[...Array(lastPage)].map((_, i) => {
+                        const page = i + 1;
+                        return (
+                            <li key={page}>
+                                <button
+                                    className={`px-3 h-8 border border-gray-300 ${page === currentPage
+                                        ? "bg-green-500 text-white"
+                                        : "bg-white text-gray-500 hover:bg-gray-100"
+                                        }`}
+                                    onClick={() => handlePageClick(page)}
+                                >
+                                    {page}
+                                </button>
+                            </li>
+                        );
+                    })}
+                    <li>
+                        <button
+                            className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 disabled:bg-gray-100"
+                            onClick={() => handlePageClick(currentPage + 1)}
+                            disabled={currentPage === lastPage}
+                        >
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     )
 }

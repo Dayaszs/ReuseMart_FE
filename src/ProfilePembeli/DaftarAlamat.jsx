@@ -98,7 +98,9 @@ const DaftarAlamat = () => {
     }, []);
 
     const filteredAlamat = alamat.filter((item) =>
-        item.nama_alamat.toLowerCase().includes(searchAlamat.toLowerCase())
+        item.nama_alamat.toLowerCase().includes(searchAlamat.toLowerCase()) ||
+        item.nama_penerima.toLowerCase().includes(searchAlamat.toLowerCase()) ||
+        item.alamat_lengkap.toLowerCase().includes(searchAlamat.toLowerCase())
     );
 
     return (
@@ -170,11 +172,11 @@ const DaftarAlamat = () => {
                                                         <button onClick={() => openEditModal(item)} className="hover:text-green-700 hover:cursor-pointer">
                                                             Ubah Alamat
                                                         </button>
-                                                        {!item.is_primary && (
+                                                        {/* {!item.is_primary && ( */}
                                                             <button onClick={() => openDeleteModal(item.id_alamat)} className="text-red-500 hover:text-red-700 hover:cursor-pointer">
                                                                 Hapus
                                                             </button>
-                                                        )}
+                                                        {/* )} */}
                                                     </div>
                                                 </div>
                                             </div>

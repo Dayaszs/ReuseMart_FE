@@ -66,7 +66,7 @@ const DiskusiBarangCard = ({ tambahDiskusi, diskusi, barangId, error }) => {
                             </div>
 
                             <div className={`w-full p-3 rounded-lg ${isCustomerService ? `bg-green-50 ${isWrittenByMe ? "border-r-4" : "border-l-4"} border-green-500` : "bg-gray-50"}`}>
-                                <p className={`text-gray-700 ${isWrittenByMe && "text-right"}`}>{item.pesan}</p>
+                                <p className={`text-black ${isWrittenByMe && "text-right"}`}>{item.pesan}</p>
                             </div>
                         </div>
                     );

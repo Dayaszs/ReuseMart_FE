@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from './api';
 import { PulseLoader } from 'react-spinners';
+import UnauthorizedPage from '@/pages/Unauthorized';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const [userRole, setUserRole] = useState(null);
@@ -37,7 +38,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   useEffect(() => {
     if (!loading && userRole && !allowedRoles.includes(userRole)) {
-      window.alert('Anda tidak memiliki izin untuk mengakses halaman ini!');
+      // window.alert('Anda tidak memiliki izin untuk mengakses halaman ini!');
       setUnauthorized(true);
     }
   }, [loading, userRole, allowedRoles]);
@@ -47,7 +48,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (unauthorized || (!userRole && !loading)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/unauthorized" replace />;
   }
 
   if(!loading){

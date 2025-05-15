@@ -8,11 +8,12 @@ import { id } from "date-fns/locale"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
-const TambahPegawaiModal = ({show, onClose, tambahPegawai}) =>{
+const EditPegawaiModal = ({show, onClose, pegawaiData, updatePegawai}) =>{
     const [ nama, setNama ] = useState("");
     const [ no_telp, setNoTelp ] = useState("");
     const [ email, setEmail ] = useState("");
-    const [ password, setPassword ] = useState("");
+    const [ komisi, setKomisi ] = useState("");
+    // const [ password, setPassword ] = useState("");
     const [ tanggalLahir, setTanggalLahir ] = useState(null);
     const [ jabatan, setJabatan ] = useState("");
 
@@ -23,16 +24,27 @@ const TambahPegawaiModal = ({show, onClose, tambahPegawai}) =>{
     useEffect(() => {
         if(!show){
             setError("");
-            setSuccess(false);
-
-            setNama("");
-            setNoTelp("");
-            setEmail("");
-            setPassword("");
-            setTanggalLahir(null);
-            setJabatan("");
         }
     }, [show]);
+
+    useEffect(() => {
+        if (pegawaiData) {
+            setNama(pegawaiData.nama || "");
+            setNoTelp(pegawaiData.no_telp || "");
+            setEmail(pegawaiData.email || "");
+            setKomisi(pegawaiData.komisi || "");
+            // setPassword(pegawaiData.password || "");
+            setTanggalLahir(pegawaiData.tanggal_lahir || "");
+            setJabatan(
+                pegawaiData.id_jabatan === 1 ? "Owner":
+                pegawaiData.id_jabatan === 2 ? "Admin":
+                pegawaiData.id_jabatan === 3 ? "Gudang":
+                pegawaiData.id_jabatan === 4 ? "Customer Service":
+                pegawaiData.id_jabatan === 5 ? "Kurir":
+                pegawaiData.id_jabatan === 6 ? "Hunter" : ""
+            );
+        }
+    }, [pegawaiData])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,27 +74,23 @@ const TambahPegawaiModal = ({show, onClose, tambahPegawai}) =>{
             console.log("nama", nama);
             console.log("noTelp", no_telp);
             console.log("email", email);
-            console.log("tanggalLahir", tanggalLahir);
+            // console.log("password", password);
+            console.log("tanggalLahir", formattedDate);
             console.log("idJabatan", idJabatan);
+            console.log("id pegawai", pegawaiData.id_pegawai);
 
             const formData = new FormData();
             formData.append('nama', nama);
             formData.append('no_telp', no_telp);
             formData.append('email', email);
-            formData.append('password', password);
-            // formData.append('komisi', 0);
+            formData.append('komisi', komisi);
             formData.append('tanggal_lahir', formattedDate);
             formData.append('id_jabatan', idJabatan);
 
-            // console.log("Form Data : ", formData);
-
-            await tambahPegawai(formData);
-            setSuccess(true);
-            setTimeout(() => {
-                onClose();
-            }, 1500);
+            await updatePegawai(pegawaiData.id_pegawai, formData);
+            onClose();
         } catch (error) {
-            setError(error.response?.data?.message || "Terjadi kesalahan saat edit pegawai");
+            setError(error.response?.data?.message || "Terjadi kesalahan saat mengupdate pegawai");
         } finally {
             setIsLoading(false);
         }
@@ -90,7 +98,7 @@ const TambahPegawaiModal = ({show, onClose, tambahPegawai}) =>{
     
     return(
         <Modal show={show} onClose={onClose}>
-            <ModalHeader>Tambah Pegawai Baru</ModalHeader>
+            <ModalHeader>Edit Pegawai {nama}</ModalHeader>
             <ModalBody>
                 {error && <Alert color="failure">{error}</Alert>}
                 {success ? (
@@ -134,13 +142,13 @@ const TambahPegawaiModal = ({show, onClose, tambahPegawai}) =>{
                         </div>
 
                         <div>
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="komisi">Komisi</Label>
                             <TextInput
-                                id="password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder='Masukkan password'
+                                id="komisi"
+                                type="number"
+                                value={komisi}
+                                onChange={(e) => setKomisi(e.target.value)}
+                                placeholder='Masukkan komisi'
                                 required
                             />
                         </div>
@@ -221,4 +229,4 @@ const TambahPegawaiModal = ({show, onClose, tambahPegawai}) =>{
     )
 }
 
-export default TambahPegawaiModal;
+export default EditPegawaiModal;

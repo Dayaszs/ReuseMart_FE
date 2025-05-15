@@ -10,14 +10,15 @@ import { TambahDiskusi, GetDiskusi } from '@/api/services/apiDiskusi';
 import DiskusiBarangCard from '@/Components/DiskusiBarangCard';
 import { useParams } from "react-router-dom";
 import { NumericFormat } from 'react-number-format';
-import { Card, Tabs, TabItem, Button} from 'flowbite-react'
+import { Card, Tabs, TabItem, Button } from 'flowbite-react'
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
     CarouselNext,
     CarouselPrevious,
-  } from "@/components/ui/carousel"
+} from "@/components/ui/carousel"
+import { getGambarBarang } from '../api';
 
 const DetailProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -25,16 +26,16 @@ const DetailProduct = () => {
     const [barang, setBarang] = useState([]);
     const [diskusi, setDiskusi] = useState([]);
     const { id } = useParams();
-  
-  const formatDate = (dateString) => {
-      if (!dateString) return '';
-      const date = new Date(dateString);
-      return date.toLocaleDateString('id-ID', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-      });
-  };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    };
 
     // const fetchHalaman = (id) => {
     //     setIsLoading(true);
@@ -78,26 +79,25 @@ const DetailProduct = () => {
     useEffect(() => {
         if (id) {
             const fetchDetailBarang = async () => {
-              try{
-                  setIsLoading(true)
-                  console.log(`${api}/barang/${id}/detail`);
-                  const token = localStorage.getItem('token');
+                try {
+                    console.log(`${api}/barang/${id}/detail`);
+                    const token = localStorage.getItem('token');
 
-                  const response = await axios.get(`${api}/barang/${id}/detail`,{
-                      headers:{
-                          Authorization: `Bearer ${token}`,
-                      }
-                  });
+                    const response = await axios.get(`${api}/barang/${id}/detail`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        }
+                    });
 
-                  setBarang(response.data?.barang[0]|| []);
-              }catch(error){
-                  console.error('Error fetching detail barang : ', error);
-              }finally{ 
-                  setIsLoading(false)
-              }
-          };
+                    setBarang(response.data?.barang[0] || []);
+                } catch (error) {
+                    console.error('Error fetching detail barang : ', error);
+                } finally {
+                    setIsLoading(false)
+                }
+            };
 
-          fetchDetailBarang();
+            fetchDetailBarang();
             fetchDiskusi(id);
         }
     }, [id]);
@@ -125,20 +125,16 @@ const DetailProduct = () => {
                                     <div className="h-[500px]">
                                         <Carousel className="w-full h-full">
                                             <CarouselContent>
-                                                <CarouselItem className="h-full">
-                                                    <img 
-                                                        src="/logo.png"
-                                                        alt="Product Image"
-                                                        className="w-full h-full object-contain p-4"
-                                                    />
-                                                </CarouselItem>
-                                                <CarouselItem className="h-full">
-                                                    <img 
-                                                        src="/logo.png" 
-                                                        alt="Product Image" 
-                                                        className="w-full h-full object-contain p-4"
-                                                    />
-                                                </CarouselItem>
+                                                {barang.url_gambar_barang?.split(';').map((gambar, index) => (
+                                                    <CarouselItem key={index} className="h-full">
+                                                        <img
+                                                            src={getGambarBarang(gambar)}
+                                                            alt={`Product Image ${index + 1}`}
+                                                            className="w-full h-full object-contain p-4"
+                                                            onError={(e) => e.target.src = '/logo.png'}
+                                                        />
+                                                    </CarouselItem>
+                                                ))}
                                             </CarouselContent>
                                             <CarouselPrevious />
                                             <CarouselNext />
@@ -147,11 +143,11 @@ const DetailProduct = () => {
                                     <div className="border-2 col-span-2 p-5 rounded-xl flex flex-col h-full">
                                         <div>
                                             <p className="font-bold text-3xl mb-3">{barang.nama_barang}</p>
-                                            <NumericFormat 
-                                                value={barang.harga} 
-                                                prefix = "Rp. "
-                                                displayType = "text"
-                                                thousandSeparator = "."
+                                            <NumericFormat
+                                                value={barang.harga}
+                                                prefix="Rp. "
+                                                displayType="text"
+                                                thousandSeparator="."
                                                 decimalSeparator=","
                                                 className="font-bold text-xl"
                                             />

@@ -7,6 +7,7 @@ import api from '../../routes/api';
 import storage from '../../routes/storage';
 import { PulseLoader } from 'react-spinners';
 import axios from 'axios';
+import { getGambarKTP } from '@/api';
 
 const EditPenitipModal = ({ show, onClose, penitipData }) => {
     const [email, setEmail] = useState("");
@@ -36,7 +37,7 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
             setNoTelp(penitipData.no_telp || "");
             setSaldo(penitipData.saldo || "");
             setPoin(penitipData.poin || 0);
-            setFotoKTP(penitipData.foto_ktp ? `${storage}${penitipData.foto_ktp}` : "");
+            setFotoKTP(penitipData.foto_ktp ? getGambarKTP(penitipData.foto_ktp) : "");
             setFotoFile(null);
         }
     }, [penitipData]);
@@ -54,6 +55,10 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
     };
 
     const handleSubmit = async (e) => {
+        window.confirm("Apakah anda yakin ingin mengedit penitip?");
+        if (!window.confirm) {
+            return;
+        }
         e.preventDefault();
         setLoading(true);
         setError("");
