@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
 import { PulseLoader } from 'react-spinners';
-import { Home, Menu, Building2, Check } from 'lucide-react';
+import { Home, Menu, Building2, Check, User2, BaggageClaim, BookOpenText } from 'lucide-react';
 import { MdPassword } from "react-icons/md";
 
 
@@ -150,6 +150,27 @@ function NavigationBar() {
               Dashboard & List Penitip
             </Link>
           )}
+          {userRole === 'Owner' && (
+            <>
+              <Link
+                to="/owner/request"
+                className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/owner/request") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                }`}
+              >
+                <BaggageClaim size={18} />
+                List Request Donasi
+              </Link>
+
+              <Link
+                to="/owner/request/histori"
+                className={`flex items-center gap-2 py-2 px-4 text-sm rounded ${isActive("/owner/request/histori") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                }`}
+                >
+                <BookOpenText size={18} />
+                Histori Barang Donasi
+              </Link>
+            </>
+          )}
 
           {userRole === 'Organisasi' && (
             <Link
@@ -173,6 +194,15 @@ function NavigationBar() {
               </Link>
 
               <Link
+                to="/admin/dashboard/pegawai"
+                className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/admin/dashboard/pegawai") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                  }`}
+              >
+                <User2 size={18} />
+                <span>List Pegawai</span>
+              </Link>
+
+              <Link
                 to="/admin/dashboard/reset-pass"
                 className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/admin/dashboard/reset-pass") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
                   }`}
@@ -180,6 +210,7 @@ function NavigationBar() {
                 <MdPassword size={18} />
                 <span>Reset Password</span>
               </Link>
+
             </>
           )}
 
