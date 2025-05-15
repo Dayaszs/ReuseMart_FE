@@ -40,6 +40,10 @@ const EditAlamatModal = ({ show, onClose, updateAlamat, alamatData }) => {
     }, [alamatData])
 
     const handleSubmit = async (e) => {
+        window.confirm("Apakah anda yakin ingin mengedit alamat?");
+        if (!window.confirm) {
+            return;
+        }
         e.preventDefault();
         setisLoading(true);
         setError("");

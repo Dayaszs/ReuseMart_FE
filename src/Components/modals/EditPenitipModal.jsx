@@ -55,6 +55,10 @@ const EditPenitipModal = ({ show, onClose, penitipData }) => {
     };
 
     const handleSubmit = async (e) => {
+        window.confirm("Apakah anda yakin ingin mengedit penitip?");
+        if (!window.confirm) {
+            return;
+        }
         e.preventDefault();
         setLoading(true);
         setError("");

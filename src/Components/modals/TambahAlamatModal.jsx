@@ -38,6 +38,10 @@ const TambahAlamatModal = ({ show, onClose, tambahAlamat }) => {
     }, [show]);
 
     const handleSubmit = async (e) => {
+        window.confirm("Apakah anda yakin ingin menambahkan alamat baru?");
+        if (!window.confirm) {
+            return;
+        }
         e.preventDefault();
         setisLoading(true);
         setError("");
