@@ -1,11 +1,12 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { showReqDonasi } from '@/api/services/apiOwner';
+import { showReqDonasi, tambahDonasiBarang, tolakRequestDonasi } from '@/api/services/apiOwner';
 import { PulseLoader } from 'react-spinners';
 import { IoIosSearch } from "react-icons/io";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
 import TambahDonasiModal from '@/Components/modals/TambahDonasiModal'
+import TolakDonasiModal from '@/Components/modals/TolakDonasiModal';
 
 
 function ListRequestDonasi() {
@@ -23,12 +24,24 @@ function ListRequestDonasi() {
     const [ perPage, setPerPage] = useState(10);
 
     const [ showDonasiBarangModal, setShowDonasiBarangModal ] = useState(false);
+    const [ showTolakDonasiModal, setTolakDonasiModal ] = useState(false);
+    const [ idRequestDonasi, setIdRequestDonasi ] = useState(0);
 
     const handlePageClick = (page) =>{
         if(page >= 1 && page <= lastPage && page !== currentPage){
             setCurrentPage(page);
             fetchPegawai(page);
         }
+    }
+
+    const handleClickDonasikan = (id) =>{
+        openDonasiBarangModal();
+        setIdRequestDonasi(id);
+    }
+
+    const handleClickTolakDonasi = (id) => {
+        openReqTolakDonasiModal();
+        setIdRequestDonasi(id);
     }
 
     const fetchRequest = (page = 1, search = "") =>{
@@ -46,13 +59,49 @@ function ListRequestDonasi() {
             .finally(() => setIsLoading(false));
     };
 
+    const tambahDonasi = (data) =>{
+        console.log(data);
+        // console.log("id_req_donasi : ", idRequestDonasi)
+        // data.append('id_request_donasi', idRequestDonasi);
+        tambahDonasiBarang(data)
+            .then((response) =>{
+                console.log(response);
+                fetchRequest();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const tolakDonasi = async (id) =>{
+        console.log(id);
+        try {
+            const response = await tolakRequestDonasi(id);
+            console.log(response);
+            fetchRequest();
+        } catch (err) {
+            console.log(err);
+            throw err; // Propagate the error to the modal
+        }
+    }
+
+    
+
 
     const openDonasiBarangModal = () =>{
         setShowDonasiBarangModal(true);
     }
 
+    const openReqTolakDonasiModal = () =>{
+        setTolakDonasiModal(true);
+    }
+
     const closeDonasiBarangModal = () =>{
         setShowDonasiBarangModal(false);
+    }
+
+    const closeReqTolakDonasiModal = () =>{
+        setTolakDonasiModal(false);
     }
 
     useEffect(() => {
@@ -122,7 +171,7 @@ function ListRequestDonasi() {
                             ) : (
                                 <>
                                     {reqDonasi?.map((item, index) => (
-                                        <tr key={item.id_reques_donasi} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
+                                        <tr key={item.id_request_donasi} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
                                             <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                                                 {/* <img className="w-10 h-10 rounded-full" src={getProfilePictureOrganisasi(item.url_gambar)} alt="Logo Organisasi" /> */}
                                                 <div className="ps-3">
@@ -156,7 +205,7 @@ function ListRequestDonasi() {
                                                     {/* Modal Edit */}
                                                     <button
                                                         // onClick={() => openEditModal(item)}
-                                                        onClick={() => openDonasiBarangModal()}
+                                                        onClick={() => handleClickDonasikan(item.id_request_donasi)}
                                                         className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                                                         type="button"
                                                     >
@@ -166,7 +215,7 @@ function ListRequestDonasi() {
 
                                                     {/* Modal Delete */}
                                                     <button
-                                                        onClick={() => openDeleteModal(item.id_pegawai)}
+                                                        onClick={() => handleClickTolakDonasi(item.id_request_donasi)}
                                                         className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                                                         type="button"
                                                     >
@@ -185,7 +234,16 @@ function ListRequestDonasi() {
                     <TambahDonasiModal
                         show={showDonasiBarangModal}
                         onClose={closeDonasiBarangModal}
-                        // tambahPegawai={tambahPegawai}
+                        tambahDonasi={tambahDonasi}
+                        idRequestDonasi={idRequestDonasi}
+                    />
+                )}
+                {showTolakDonasiModal && (
+                    <TolakDonasiModal
+                        show={showTolakDonasiModal}
+                        onClose={closeReqTolakDonasiModal}
+                        tolakReqDonasi={tolakDonasi}
+                        idReqDonasi={idRequestDonasi}
                     />
                 )}
                 <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">

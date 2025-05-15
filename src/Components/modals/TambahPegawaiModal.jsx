@@ -70,7 +70,7 @@ const TambahPegawaiModal = ({show, onClose, tambahPegawai}) =>{
             formData.append('no_telp', no_telp);
             formData.append('email', email);
             formData.append('password', password);
-            formData.append('komisi', 0);
+            // formData.append('komisi', 0);
             formData.append('tanggal_lahir', formattedDate);
             formData.append('id_jabatan', idJabatan);
 
