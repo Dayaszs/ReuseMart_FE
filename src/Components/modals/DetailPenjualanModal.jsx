@@ -81,9 +81,10 @@ const DetailPenjualanModal = ({ show, onClose, id }) => {
                                     <div className="flex items-center justify-between mt-2">
                                         <div className="flex items-center gap-3">
                                             <img
-                                                src={getGambarBarang(pemesanan.url_gambar_barang)}
+                                                src={pemesanan.url_gambar_barang ?getGambarBarang(pemesanan.url_gambar_barang.split(';')[0]) : '/logo.png'}
                                                 alt={pemesanan.nama_barang}
-                                                className="w-14 h-14 object-cover rounded"
+                                                className="w-14 h-14 object-cover rounded border border-gray-300"
+                                                onError={(e) => e.target.src = '/logo.png'}
                                             />
                                             <div>
                                                 <p className="font-semibold text-black">{pemesanan.nama_barang}</p>

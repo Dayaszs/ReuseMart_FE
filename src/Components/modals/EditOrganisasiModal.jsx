@@ -48,6 +48,10 @@ const EditOrganisasiModal = ({ show, onClose, organisasiData, updateOrganisasi }
     };
 
     const handleSubmit = async (e) => {
+        window.confirm("Apakah anda yakin ingin mengedit organisasi?");
+        if (!window.confirm) {
+            return;
+        }
         e.preventDefault();
         setLoading(true);
         setError("");

@@ -38,7 +38,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   useEffect(() => {
     if (!loading && userRole && !allowedRoles.includes(userRole)) {
-      window.alert('Anda tidak memiliki izin untuk mengakses halaman ini!');
+      // window.alert('Anda tidak memiliki izin untuk mengakses halaman ini!');
       setUnauthorized(true);
     }
   }, [loading, userRole, allowedRoles]);

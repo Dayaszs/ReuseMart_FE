@@ -6,6 +6,7 @@ import {
 import api from '../../routes/api';
 import { PulseLoader } from 'react-spinners';
 import axios from 'axios';
+import { getGambarKTP } from '@/api';
 
 const TambahPenitipModal = ({ show, onClose, }) => {
     const [email, setEmail] = useState("");
@@ -51,6 +52,10 @@ const TambahPenitipModal = ({ show, onClose, }) => {
     };
 
     const handleSubmit = async (e) => {
+        window.confirm("Apakah anda yakin ingin menambahkan penitip baru?");
+        if (!window.confirm) {
+            return;
+        }
         e.preventDefault();
         setLoading(true);
         setError("");
