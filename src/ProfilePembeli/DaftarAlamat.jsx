@@ -170,11 +170,11 @@ const DaftarAlamat = () => {
                                                         <button onClick={() => openEditModal(item)} className="hover:text-green-700 hover:cursor-pointer">
                                                             Ubah Alamat
                                                         </button>
-                                                        {!item.is_primary && (
+                                                        {/* {!item.is_primary && ( */}
                                                             <button onClick={() => openDeleteModal(item.id_alamat)} className="text-red-500 hover:text-red-700 hover:cursor-pointer">
                                                                 Hapus
                                                             </button>
-                                                        )}
+                                                        {/* )} */}
                                                     </div>
                                                 </div>
                                             </div>
