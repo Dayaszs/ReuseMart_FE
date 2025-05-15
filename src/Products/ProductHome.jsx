@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, use, useState } from "react";
 import { PulseLoader } from 'react-spinners';
 import { NumericFormat } from 'react-number-format';
+import { IoIosSearch } from "react-icons/io";
 
 
 function ProductHome() {
@@ -19,6 +20,10 @@ function ProductHome() {
     const detailProductClick = (barangId) =>{
         navigate(`/products/detail/${barangId}`);
     };
+
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
 
     useEffect( () => {
         const fetchAll = async () => {
@@ -53,6 +58,15 @@ function ProductHome() {
         }
         fetchAll();
     },[selectedKategoriId])
+
+    useEffect(() => {
+        if (allBarang) {
+            const filteredProducts = allBarang.filter(item => 
+                item.nama_barang.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setBarang(filteredProducts);
+        }
+    }, [searchTerm, allBarang]);
 
     const handleKategoriSelect = (kategoriId) => {
         console.log('Kategori Selected:', kategoriId);
@@ -102,14 +116,22 @@ function ProductHome() {
                             </DropdownItem>
                         ))}
                     </Dropdown>
-                    <TextInput className="w-xl ms-3" id="search" placeholder="Search"/>
-                    <Button type="submit" className="ms-5 bg-[#A837E8]" size="md">
-                        <img 
-                            src="./search.png" 
-                            className="w-5"
+                    <label htmlFor="table-search-users" className="sr-only">Search</label>
+                    <div className="relative ms-5">
+                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <IoIosSearch />
+                        </div>
+                        <input
+                            type="text"
+                            id="table-search-users"
+                            className="block w-80 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
+                            placeholder="Cari Pegawai"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                    </Button>
+                    </div>
                 </div>
+
                 <div className="grid grid-cols-5 auto-rows-auto gap-x-4 gap-y-8 p-20" >
                     {barang?.map(barang => (
                         <Card key={barang.id_barang} className="border-2" onClick={() => detailProductClick(barang.id_barang)}>
