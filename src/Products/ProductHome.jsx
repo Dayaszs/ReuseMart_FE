@@ -77,7 +77,7 @@ function ProductHome() {
 
     if (loading) {
         return (
-            <Card className="w-full h-full bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
+            <Card className="w-full min-h-screen h-full bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
                 <PulseLoader size={15} color="#61d52c" />
             </Card>
         );
@@ -149,7 +149,7 @@ function ProductHome() {
                                 />
                                 {barang.tanggal_garansi_habis?(
                                     <Badge color="success" className="w-fit h-8">Bergaransi</Badge>
-                                ) : (
+                                ) : ( 
                                     <Badge  className="w-auto h-8 text-transparent bg-transparen hover:bg-transparent"></Badge>
                                 )}
                         </Card>
