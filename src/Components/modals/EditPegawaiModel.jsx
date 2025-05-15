@@ -47,6 +47,11 @@ const EditPegawaiModal = ({show, onClose, pegawaiData, updatePegawai}) =>{
     }, [pegawaiData])
 
     const handleSubmit = async (e) => {
+        window.confirm("Apakah anda yakin ingin mengedit request donasi?");
+        if (!window.confirm) {
+            return;
+        }
+        
         e.preventDefault();
         setIsLoading(true);
         setError("");
