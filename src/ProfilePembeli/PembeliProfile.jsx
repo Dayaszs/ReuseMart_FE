@@ -32,7 +32,6 @@ const PembeliProfile = () => {
                     },
                 });
 
-
                 setPemesanan(response.data.pemesanan);
                 setLastPage(response.data.pemesanan.last_page);
                 setUser(response.data.user);

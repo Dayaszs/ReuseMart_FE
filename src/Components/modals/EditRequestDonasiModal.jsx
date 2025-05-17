@@ -28,8 +28,8 @@ const EditRequestDonasiModal = ({ show, onClose, requestDonasi }) => {
     }, [requestDonasi]);
 
     const handleSubmit = async (e) => {
-        window.confirm("Apakah anda yakin ingin mengedit request donasi?");
-        if (!window.confirm) {
+        const confirmed = window.confirm("Apakah anda yakin ingin mengedit request donasi?");
+        if (!confirmed) {
             return;
         }
         e.preventDefault();

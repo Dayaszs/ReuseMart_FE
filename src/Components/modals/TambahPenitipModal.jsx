@@ -52,8 +52,8 @@ const TambahPenitipModal = ({ show, onClose, }) => {
     };
 
     const handleSubmit = async (e) => {
-        window.confirm("Apakah anda yakin ingin menambahkan penitip baru?");
-        if (!window.confirm) {
+        const confirmed = window.confirm("Apakah anda yakin ingin menambahkan penitip baru?");
+        if (!confirmed) {
             return;
         }
         e.preventDefault();
