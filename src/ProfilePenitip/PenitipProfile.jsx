@@ -1,11 +1,11 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { GetPenitip } from '@/api/services/apiPenitip'
-import { Badge } from "flowbite-react";
+import { Badge, Card, Tabs, TabItem } from "flowbite-react";
 import { LuAward, LuCircleUserRound } from "react-icons/lu";
+import BarangPenitip from './BarangPenitip';
 import { FaStar } from "react-icons/fa";
 import { PulseLoader } from 'react-spinners';
-import { Card } from 'flowbite-react';
 
 import ProfileInfoCard from '@/Components/ProfileInfoCard';
 import StatistikPenitipCard from '@/Components/StatistikPenitipCard';
@@ -59,9 +59,8 @@ const PenitipProfile = () => {
     }
 
     return (
-        <div className="container px-4 py-8 mx-auto max-w-4xl">
+        <div className="w-full bg-white/90 backdrop-blur-md p-6">
             <div className="flex flex-col gap-6">
-
                 {/* Profile Pic, Avg Rating, Badge */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -73,7 +72,7 @@ const PenitipProfile = () => {
                             <div className="flex items-center gap-2 mt-1">
                                 <div className="flex items-center">
                                     <FaStar className="h-5 w-5 text-amber-500 fill-amber-500" />
-                                    <span className="ml-1 font-medium text-lg">{typeof penitip.rating === 'number' ? penitip.rating.toFixed(1) : '0.0'}</span>
+                                    <span className="ml-1 font-medium text-lg">{typeof penitip.avg_rating === 'number' ? penitip.avg_rating.toFixed(1) : '0.0'}</span>
                                 </div>
                                 {penitip.is_top_seller === 1 ? (
                                     <Badge color='success' className='text-green-500' icon={LuAward}>
@@ -85,24 +84,31 @@ const PenitipProfile = () => {
                     </div>
                 </div>
 
-                {/* Info Akun Penitip & Performa Penitip */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <ProfileInfoCard
-                        nama={penitip.nama_penitip}
-                        no_telp={penitip.no_telp}
-                        email={penitip.email} />
-                    {isTransaksi ? (
-                        <ListPenjualanCard onCloseTransaksi={closeTransaksiCard} />
-                    ) : (
-                        <StatistikPenitipCard
-                            rating={typeof penitip.rating === 'number' ? penitip.rating.toFixed(1) : '0.0'}
-                            isTopSeller={penitip.is_top_seller}
-                            poin={penitip.poin}
-                            saldo={penitip.saldo}
-                            onOpenTransaksi={openTransaksiCard}
-                        />
-                    )}
-                </div>
+                <Tabs aria-label="Tabs with underline" variant="underline">
+                    <TabItem active title="Profil">
+                        {/* Info Akun Penitip & Performa Penitip */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <ProfileInfoCard
+                                nama={penitip.nama_penitip}
+                                no_telp={penitip.no_telp}
+                                email={penitip.email} />
+                            {isTransaksi ? (
+                                <ListPenjualanCard onCloseTransaksi={closeTransaksiCard} />
+                            ) : (
+                                <StatistikPenitipCard
+                                    rating={typeof penitip.rating === 'number' ? penitip.rating.toFixed(1) : '0.0'}
+                                    isTopSeller={penitip.is_top_seller}
+                                    poin={penitip.poin}
+                                    saldo={penitip.saldo}
+                                    onOpenTransaksi={openTransaksiCard}
+                                />
+                            )}
+                        </div>
+                    </TabItem>
+                    <TabItem title="Daftar Barang">
+                        <BarangPenitip />
+                    </TabItem>
+                </Tabs>
             </div>
         </div>
     )

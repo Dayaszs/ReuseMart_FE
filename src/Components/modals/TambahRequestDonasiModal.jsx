@@ -23,8 +23,8 @@ const TambahRequestDonasiModal = ({ show, onClose, organisasiID }) => {
     }, [show]);
 
     const handleSubmit = async (e) => {
-        window.confirm("Apakah anda yakin ingin tambah request donasi?");
-        if (!window.confirm) {
+        const confirmed = window.confirm("Apakah anda yakin ingin tambah request donasi?");
+        if (!confirmed) {
             return;
         }
         e.preventDefault();
