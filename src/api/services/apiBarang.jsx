@@ -17,6 +17,36 @@ const GetDetailBarang = async (barangId) => {
     }
 };
 
+const showBarangTersedia = async(page = 1, search = "")=> {
+    try{
+        const response = await useAxios.get(`/barang/home?page=${page}&search=${search}&status=Tersedia`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+const showBarangByKategori = async(min_kode, max_kode) =>{
+    try{
+        const response = await useAxios.get(`/kategori?&min_kode=${min_kode}&max_kode=${max_kode}`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
 // const TambahBarang = async (data) => {
 //     try {
 //         const response = await useAxios.post("/barang", data, {
@@ -60,4 +90,4 @@ const GetDetailBarang = async (barangId) => {
 //     }
 // };
 
-export { GetDetailBarang };
+export { GetDetailBarang, showBarangTersedia };
