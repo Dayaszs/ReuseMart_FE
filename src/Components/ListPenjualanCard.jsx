@@ -93,7 +93,7 @@ const ListPenjualanCard = ({ onCloseTransaksi }) => {
                                             <img 
                                                 src={item.url_gambar_barang ? getGambarBarang(item.url_gambar_barang.split(';')[0]) : '/logo.png'}
                                                 alt="Gambar Barang" 
-                                                className='w-20 h-20'
+                                                className='w-20 h-20 rounded-sm'
                                                 onError={(e) => e.target.src = '/logo.png'}
                                             />
                                             <div className="flex flex-wrap mt-4 text-green-500 text-sm font-medium">
