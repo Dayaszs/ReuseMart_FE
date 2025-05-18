@@ -31,6 +31,7 @@ import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
 import MasterPegawai from "@/DashboardAdmin/MasterPegawai.jsx";
 import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 import UnauthorizedPage from "@/pages/Unauthorized.jsx";
+import CartPage from "@/Transaction/CartPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -103,6 +104,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Organisasi"]}>
                         <OrganisasiProfile />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/pembeli/cart",
+                element: (
+                    <ProtectedRoute allowedRoles={["Pembeli"]}>
+                        <CartPage />
                     </ProtectedRoute>
                 ),
             },
