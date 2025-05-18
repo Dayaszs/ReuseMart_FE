@@ -25,7 +25,7 @@ const StatistikPenitipCard = ({ rating, isTopSeller, poin, saldo, onOpenTransaks
                             <FaRegStar className='text-green-500 h-6 w-6' />
                         </div>
                         <p className="text-sm font-medium text-gray-500">Rating</p>
-                        <p className="text-2xl font-bold text-gray-900">{rating}</p>
+                        <p className="text-2xl font-bold text-gray-900">{parseFloat(rating).toFixed(1)}</p>
                     </div>
                     <div className="flex flex-col items-center p-4 bg-[#F2FDF6] rounded-lg">
                         <div className="p-3 bg-green-100 rounded-full mb-2">

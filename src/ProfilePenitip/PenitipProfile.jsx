@@ -72,7 +72,7 @@ const PenitipProfile = () => {
                             <div className="flex items-center gap-2 mt-1">
                                 <div className="flex items-center">
                                     <FaStar className="h-5 w-5 text-amber-500 fill-amber-500" />
-                                    <span className="ml-1 font-medium text-lg">{typeof penitip.avg_rating === 'number' ? penitip.avg_rating.toFixed(1) : '0.0'}</span>
+                                    <span className="ml-1 font-medium text-lg">{parseFloat(penitip.avg_rating).toFixed(1)}</span>
                                 </div>
                                 {penitip.is_top_seller === 1 ? (
                                     <Badge color='success' className='text-green-500' icon={LuAward}>
@@ -96,7 +96,7 @@ const PenitipProfile = () => {
                                 <ListPenjualanCard onCloseTransaksi={closeTransaksiCard} />
                             ) : (
                                 <StatistikPenitipCard
-                                    rating={typeof penitip.rating === 'number' ? penitip.rating.toFixed(1) : '0.0'}
+                                    rating={penitip.avg_rating}
                                     isTopSeller={penitip.is_top_seller}
                                     poin={penitip.poin}
                                     saldo={penitip.saldo}
