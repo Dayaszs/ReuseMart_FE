@@ -31,6 +31,8 @@ import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
 
+import ListBarangKirim from "@/DashboardGudang/ListBarangKirim.jsx";
+
 import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 import UnauthorizedPage from "@/pages/Unauthorized.jsx";
 import CartPage from "@/Transaction/CartPage.jsx";
@@ -202,6 +204,14 @@ const router = createBrowserRouter([
                     </ProtectedRoute>
                 )
             },
+            {
+                path: "gudang/dashboard/pemesanan",
+                element: (
+                    <ProtectedRoute allowedRoles={["Gudang"]}>
+                        <ListBarangKirim />
+                    </ProtectedRoute>
+                )
+            }
         ],
     }
 ]);
