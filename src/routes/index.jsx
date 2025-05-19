@@ -34,6 +34,7 @@ import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
 import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 import UnauthorizedPage from "@/pages/Unauthorized.jsx";
 import CartPage from "@/Transaction/CartPage.jsx";
+import CheckOutPage from "@/Transaction/CheckOutPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -114,6 +115,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Pembeli"]}>
                         <CartPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/pembeli/checkout",
+                element: (
+                    <ProtectedRoute allowedRoles={["Pembeli"]}>
+                        <CheckOutPage />
                     </ProtectedRoute>
                 ),
             },
