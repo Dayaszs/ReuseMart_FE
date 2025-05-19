@@ -81,6 +81,7 @@ const DetailProduct = () => {
         TambahCart(id)
             .then((response) => {
                 toggleToast();
+                window.dispatchEvent(new Event('cartChanged'));
                 return response;
             })
             .catch((err) => {

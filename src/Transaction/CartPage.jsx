@@ -72,6 +72,7 @@ const CartPage = () => {
                 .then((response) => {
                     toggleToast();
                     fetchCart();
+                    window.dispatchEvent(new Event('cartChanged'));
                 })
                 .catch((err) => {
                     console.log(err);

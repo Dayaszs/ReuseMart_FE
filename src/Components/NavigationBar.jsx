@@ -13,7 +13,7 @@ import { PulseLoader } from 'react-spinners';
 import { Home, Menu, Building2, Check, User2, BaggageClaim, BookOpenText, User, ClipboardList } from 'lucide-react';
 import { MdPassword } from "react-icons/md";
 import { LuShoppingCart } from "react-icons/lu";
-
+import { GetCart } from '@/api/services/apiCart';
 
 function NavigationBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,12 +21,21 @@ function NavigationBar() {
   const [nama, setNama] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const [showToast, setShowToast] = useState(false);
 
   const [loadingLogout, setLoadingLogout] = useState(false);
 
+  const fetchCartCount = async () => {
+    try {
+      const response = await GetCart();
+      setCartCount(response.data.length);
+    } catch (error) {
+      console.error("Gagal mengambil data keranjang", error);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -46,6 +55,10 @@ function NavigationBar() {
             setNama(response.data.nama);
           }
 
+          if (response.data.role === 'Pembeli') {
+            fetchCartCount();
+          }
+
         } catch (error) {
           console.error("Failed to fetch user role", error);
         } finally {
@@ -57,6 +70,20 @@ function NavigationBar() {
       setLoading(false);
     }
   }, []);
+
+  // Event listener apabila ada perubahan pada Cart
+  useEffect(() => {
+    const handleCartChange = () => {
+      if (userRole === 'Pembeli') {
+        fetchCartCount();
+      }
+    };
+
+    window.addEventListener('cartChanged', handleCartChange);
+    return () => {
+      window.removeEventListener('cartChanged', handleCartChange);
+    };
+  }, [userRole]);
 
   const handleLogout = async () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
@@ -292,9 +319,14 @@ function NavigationBar() {
             <>
               {userRole === 'Pembeli' && (
                 <>
-                  <Link to="/pembeli/cart" className="mr-2">
-                    <button className="bg-transparent hover:bg-green-600 text-white font-semibold hover:text-white py-2 px-4 hover:cursor-pointer rounded transition-colors h-full">
-                      <LuShoppingCart size={20} />
+                  <Link to="/pembeli/cart" className="mr-4 relative">
+                    <button className="bg-transparent hover:bg-green-600 text-white font-semibold hover:text-white py-1 px-2 hover:cursor-pointer rounded transition-colors h-full">
+                      <LuShoppingCart size={24} />
+                      {cartCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-white text-green-500 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                          {cartCount}
+                        </span>
+                      )}
                     </button>
                   </Link>
                   <Link to="/pembeli/profile" className="mr-2">
