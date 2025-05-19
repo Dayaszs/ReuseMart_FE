@@ -17,7 +17,7 @@ const GetCart = async () => {
 
 const TambahCart = async (barangId) => {
     try {
-        const response = await useAxios.post(`/cart/${barangId}`, {
+        const response = await useAxios.post(`/cart/${barangId}`, {}, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
