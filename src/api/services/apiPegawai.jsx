@@ -15,6 +15,20 @@ const ShowPegawai = async (page = 1, search = "") => {
     }
 };
 
+const ShowPegawaiByJabatan = async (id) => {
+    try {
+        const response = await useAxios.get(`/pegawai/jabatan/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error.response.data;
+    }
+};
+
 const ResetPassword = async (id) => {
     try {
         const response = await useAxios.put(`/admin/pegawai/${id}/reset`, {}, {
@@ -87,4 +101,4 @@ const DeletePegawai = async (id) => {
     }
 };
 
-export { ShowPegawai, ResetPassword, GetPegawai, CreatePegawai, UpdatePegawai, DeletePegawai };
+export { ShowPegawai, ResetPassword, GetPegawai, CreatePegawai, UpdatePegawai, DeletePegawai, ShowPegawaiByJabatan };

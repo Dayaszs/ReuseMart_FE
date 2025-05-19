@@ -21,6 +21,8 @@ import CSDash from '@/DashboardCS/CSDash.jsx';
 
 import ListRequestDonasi from '@/DashboardOwner/ListRequestDonasi.jsx';
 import HistoriBarangDonasi from '@/DashboardOwner/HistoriBarangDonasi.jsx';
+import MasterPegawai from "@/DashboardAdmin/MasterPegawai.jsx";
+import RincianPenitipan from "@/Components/DashboardGudang/RincianPenitipan.jsx";
 
 import Home from '/src/Home/Home.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
@@ -28,7 +30,7 @@ import DetailProduct from '/src/Products/DetailProduct.jsx';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
-import MasterPegawai from "@/DashboardAdmin/MasterPegawai.jsx";
+
 import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 import UnauthorizedPage from "@/pages/Unauthorized.jsx";
 import CartPage from "@/Transaction/CartPage.jsx";
@@ -141,6 +143,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Customer Service"]}>
                         <CSDash />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "/gudang/dashboard/rincian-penitipan",
+                element: (
+                    <ProtectedRoute allowedRoles={["Gudang"]}>
+                        <RincianPenitipan/>
                     </ProtectedRoute>
                 )
             },

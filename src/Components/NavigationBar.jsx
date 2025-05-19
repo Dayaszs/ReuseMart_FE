@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
 import { PulseLoader } from 'react-spinners';
-import { Home, Menu, Building2, Check, User2, BaggageClaim, BookOpenText, User } from 'lucide-react';
+import { Home, Menu, Building2, Check, User2, BaggageClaim, BookOpenText, User, ClipboardList } from 'lucide-react';
 import { MdPassword } from "react-icons/md";
 import { LuShoppingCart } from "react-icons/lu";
 
@@ -150,6 +150,18 @@ function NavigationBar() {
                 Dashboard & List Penitip
               </Link>
             )}
+
+            {userRole === 'Gudang' && (
+              <Link
+                to="/gudang/dashboard/rincian-penitipan"
+                className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/rincian-penitipan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                  }`}
+              >
+                <ClipboardList size={18} />
+                <span>Rincian Penitipan</span>
+              </Link>
+            )}
+
             {userRole === 'Owner' && (
               <>
                 <Link
