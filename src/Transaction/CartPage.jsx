@@ -129,7 +129,7 @@ const CartPage = () => {
                                             value=""
                                             checked={selectAll}
                                             onChange={toggleAll}
-                                            className="w-4 h-4 accent-green-500"
+                                            className="w-4 h-4 accent-green-500 hover:cursor-pointer"
                                         />
                                         <label htmlFor="default-checkbox" className="ms-2">
                                             <span className='ms-2 text-lg font-bold'>Pilih Semua</span>
@@ -157,7 +157,7 @@ const CartPage = () => {
                                                             type="checkbox"
                                                             checked={checkedItems.includes(item.id_cart)}
                                                             onChange={() => toggleItem(item.id_cart)}
-                                                            className="w-4 h-4 accent-green-500 self-center"
+                                                            className="w-4 h-4 accent-green-500 self-center hover:cursor-pointer"
                                                         />
                                                         <Link to={`/products/detail/${item.id_barang}`} className='no-underline flex space-x-4'>
                                                             <img
@@ -214,7 +214,7 @@ const CartPage = () => {
                                             </span>
                                         </div>
                                         <button
-                                            className="px-6 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-700 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
+                                            className="px-6 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-700 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-default"
                                             disabled={totalChecked === 0}
                                             onClick={() => toggleToast()}
                                         >
