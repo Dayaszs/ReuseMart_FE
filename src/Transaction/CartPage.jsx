@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { GetCart, DeleteCart } from '@/api/services/apiCart'
 import { PulseLoader } from 'react-spinners'
@@ -158,27 +159,30 @@ const CartPage = () => {
                                                             onChange={() => toggleItem(item.id_cart)}
                                                             className="w-4 h-4 accent-green-500 self-center"
                                                         />
-                                                        <img
-                                                            src={
-                                                                item.barang.url_gambar_barang
-                                                                    ? getGambarBarang(item.barang.url_gambar_barang.split(";")[0])
-                                                                    : "/logo.png"
-                                                            }
-                                                            alt={item.barang.nama_barang}
-                                                            className="w-16 h-16 object-cover rounded-md"
-                                                            onError={(e) => (e.target.src = "/logo.png")}
-                                                        />
-                                                        <div className="flex-1 flex flex-col items-start">
-                                                            <h4 className="text-md font-semibold text-gray-800 line-clamp-2 self-start">
-                                                                {item.barang.nama_barang}
-                                                            </h4>
-                                                            <p className="text-base font-bold text-gray-900">
-                                                                Rp{parseInt(item.barang.harga).toLocaleString("id-ID")}
-                                                            </p>
-                                                        </div>
+                                                        <Link to={`/products/detail/${item.id_barang}`} className='no-underline flex space-x-4'>
+                                                            <img
+                                                                src={
+                                                                    item.barang.url_gambar_barang
+                                                                        ? getGambarBarang(item.barang.url_gambar_barang.split(";")[0])
+                                                                        : "/logo.png"
+                                                                }
+                                                                alt={item.barang.nama_barang}
+                                                                className="w-16 h-16 object-cover rounded-md"
+                                                                onError={(e) => (e.target.src = "/logo.png")}
+                                                            />
+                                                            <div className="flex flex-col items-start">
+                                                                <h4 className="text-md font-semibold text-gray-800 line-clamp-2 self-start">
+                                                                    {item.barang.nama_barang}
+                                                                </h4>
+                                                                <p className="text-base font-bold text-gray-900">
+                                                                    Rp{parseInt(item.barang.harga).toLocaleString("id-ID")}
+                                                                </p>
+                                                            </div>
+                                                        </Link>
+                                                        <div className='flex-1'></div>
                                                         <button
                                                             onClick={() => deleteCart(item.id_cart)}
-                                                            className="w-8 h-8 self-center text-gray-400 hover:text-red-500 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-red-300 rounded-sm flex items-center justify-center"
+                                                            className="w-8 h-8 self-center text-gray-400 hover:text-red-500 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-red-300 rounded-sm flex items-center justify-center hover:cursor-pointer"
                                                             type="button"
                                                             aria-label="Hapus item dari keranjang"
                                                         >
