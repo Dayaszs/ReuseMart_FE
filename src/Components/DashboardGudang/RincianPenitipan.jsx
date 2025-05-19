@@ -42,11 +42,11 @@ const RincianPenitipan = () => {
     const handlePageClick = (page) => {
         if (page >= 1 && page <= lastPage && page !== currentPage) {
             setCurrentPage(page);
-            fetchOrganisasi(page);
+            fetchRincianPenitipan(page);
         }
     };
 
-    const fetchRincianPenitipan = (page, search = "") =>{
+    const fetchRincianPenitipan = (page = 1, search = "") =>{
         setIsLoading(true);
 
         ShowRincianPenitipan(page, search)
@@ -56,9 +56,9 @@ const RincianPenitipan = () => {
 
             setRincianPenitipan(dataRincianPenitipan);
 
-            setLastPage(res.last_page);
-            setPerPage(res.per_page);
-            setTotal(res.total);
+            setLastPage(res.data.last_page);
+            setPerPage(res.data.per_page);
+            setTotal(res.data.total);
         })
         .catch((err) => {
             setError(err.message || "Gagal mengambil data rincian penitipan");
@@ -160,7 +160,7 @@ const RincianPenitipan = () => {
                                                 {/* <img className="w-24 h-24" src={item.barang.url_gambar_barang} alt="Logo Organisasi" /> */}
                                                 {/* <div className="text-base font-semibold">{item.nama}</div>
                                                 <div className="font-normal text-gray-500">{item.email}</div> */}
-                                                <Carousel className="w-44 h-44">
+                                                <Carousel className="max-w-44 max-h-44">
                                                     <CarouselContent>
                                                         {item.barang.url_gambar_barang?.split(';').map((gambar, index) => (
                                                             <CarouselItem key={index} className="h-full">
@@ -233,6 +233,59 @@ const RincianPenitipan = () => {
                         )}
                 </tbody>
             </table>
+            <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
+                <span className="text-sm text-gray-500">
+                    Showing{" "}
+                    <span className="font-semibold text-gray-900">
+                        {(currentPage - 1) * perPage + 1}
+                    </span>{" "}
+                    to{" "}
+                    <span className="font-semibold text-gray-900">
+                        {Math.min(currentPage * perPage, total)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-semibold text-gray-900">
+                        {total}
+                    </span>
+                </span>
+
+                <ul className="inline-flex -space-x-px text-sm h-8 mt-2 md:mt-0">
+                    <li>
+                        <button
+                            className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 disabled:bg-gray-100"
+                            onClick={() => handlePageClick(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </button>
+                    </li>
+                    {[...Array(lastPage)].map((_, i) => {
+                        const page = i + 1;
+                        return (
+                            <li key={page}>
+                                <button
+                                    className={`px-3 h-8 border border-gray-300 ${page === currentPage
+                                        ? "bg-green-500 text-white"
+                                        : "bg-white text-gray-500 hover:bg-gray-100"
+                                        }`}
+                                    onClick={() => handlePageClick(page)}
+                                >
+                                    {page}
+                                </button>
+                            </li>
+                        );
+                    })}
+                    <li>
+                        <button
+                            className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 disabled:bg-gray-100"
+                            onClick={() => handlePageClick(currentPage + 1)}
+                            disabled={currentPage === lastPage}
+                        >
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     );
 }

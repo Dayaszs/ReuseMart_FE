@@ -29,7 +29,11 @@ function ProductHome() {
     const handlePageClick = (page) =>{
         if(page >= 1 && page <= lastPage && page !== currentPage){
             setCurrentPage(page);
-            fetchPegawai(page);
+            if (selectedKategoriId) {
+                fetchBarangByKategori(page, selectedKategoriId * 10, selectedKategoriId * 10 + 10);
+            } else {
+                fetchBarang(page, debouncedSearch);
+            }
         }
     }
 
@@ -43,14 +47,17 @@ function ProductHome() {
                              Array.isArray(res.data?.data) ? res.data.data : [];
             
             setBarang(barangData);
-            setLastPage(res.last_page || res.data?.last_page || 1);
-            setPerPage(res.per_page || res.data?.per_page || 25);
-            setTotal(res.total || res.data?.total || 0);
+            setLastPage(parseInt(res.last_page || res.data?.last_page || 1));
+            setPerPage(parseInt(res.per_page || res.data?.per_page || 25));
+            setTotal(parseInt(res.total || res.data?.total || 0));
         })
         .catch((err) =>{
             console.error('Error fetching data:', err);
             setError(err.message || "Gagal mengambil data barang tersedia.");
             setBarang([]);
+            setLastPage(1);
+            setPerPage(25);
+            setTotal(0);
         })
         .finally(() => setIsLoading(false));
     };
@@ -66,14 +73,17 @@ function ProductHome() {
                 res.data.data : [];
                 
             setBarang(barangData);
-            setLastPage(res.last_page || res.data?.last_page || 1);
-            setPerPage(res.per_page || res.data?.per_page || 25);
-            setTotal(res.total || res.data?.total || 0);
+            setLastPage(parseInt(res.last_page || res.data?.last_page || 1));
+            setPerPage(parseInt(res.per_page || res.data?.per_page || 25));
+            setTotal(parseInt(res.total || res.data?.total || 0));
         })
         .catch((err) =>{
             console.error('Error fetch data by kategori : ', err);
             setError(err.message || "Gagal mengambil data barang kategori yang tersedia.");
             setBarang([]);
+            setLastPage(1);
+            setPerPage(25);
+            setTotal(0);
         })
         .finally(() => setIsLoading(false));
     };
