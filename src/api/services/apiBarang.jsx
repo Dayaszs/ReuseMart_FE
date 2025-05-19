@@ -32,9 +32,9 @@ const showBarangTersedia = async(page = 1, search = "")=> {
     }
 }
 
-const showBarangByKategori = async(min_kode, max_kode) =>{
+const showBarangByKategori = async(page = 1, min_kode, max_kode) =>{
     try{
-        const response = await useAxios.get(`/kategori?&min_kode=${min_kode}&max_kode=${max_kode}`,{
+        const response = await useAxios.get(`/kategori?&min_kode=${min_kode}&max_kode=${max_kode}&page=${page}`,{
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -90,4 +90,4 @@ const showBarangByKategori = async(min_kode, max_kode) =>{
 //     }
 // };
 
-export { GetDetailBarang, showBarangTersedia };
+export { GetDetailBarang, showBarangTersedia, showBarangByKategori };

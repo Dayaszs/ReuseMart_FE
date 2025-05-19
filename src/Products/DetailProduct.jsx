@@ -37,20 +37,6 @@ const DetailProduct = () => {
         });
     };
 
-    // const fetchHalaman = (id) => {
-    //     setIsLoading(true);
-    //     setError("");
-    //     GetDetailBarang(id)
-    //         .then((res) => {
-    //             setBarang(res.barang);
-    //             setDiskusi(res.diskusi);
-    //         })
-    //         .catch((err) => {
-    //             setError(err.message || "Gagal mengambil data.");
-    //         })
-    //         .finally(() => setIsLoading(false));
-    // }
-
     const fetchDiskusi = (id) => {
         GetDiskusi(id)
             .then((res) => {
@@ -108,7 +94,6 @@ const DetailProduct = () => {
                 <title>Products - Reusemart</title>
             </Helmet>
 
-            {/* <PulseLoader></PulseLoader> */}
             <div className="container min-h-screen mx-auto px-4 py-8">
                 {isLoading ? (
                     <>
@@ -127,12 +112,14 @@ const DetailProduct = () => {
                                             <CarouselContent>
                                                 {barang.url_gambar_barang?.split(';').map((gambar, index) => (
                                                     <CarouselItem key={index} className="h-full">
-                                                        <img
-                                                            src={getGambarBarang(gambar)}
-                                                            alt={`Product Image ${index + 1}`}
-                                                            className="w-full h-full object-contain p-4"
-                                                            onError={(e) => e.target.src = '/logo.png'}
-                                                        />
+                                                        <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                                                            <img
+                                                                src={getGambarBarang(gambar)}
+                                                                alt={`Product Image ${index + 1}`}
+                                                                className="max-w-full max-h-full object-contain rounded-md"
+                                                                onError={(e) => e.target.src = '/logo.png'}
+                                                            />
+                                                        </div>
                                                     </CarouselItem>
                                                 ))}
                                             </CarouselContent>
