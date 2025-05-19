@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { GetCart, DeleteCart } from '@/api/services/apiCart'
 import { PulseLoader } from 'react-spinners'
@@ -8,10 +8,12 @@ import { getGambarBarang } from '@/api'
 import { Card } from 'flowbite-react'
 import { FaTrashAlt } from "react-icons/fa";
 import { HiX } from "react-icons/hi";
-import { Toast, ToastToggle } from 'flowbite-react'
+import { Toast } from 'flowbite-react'
+import { CheckoutPreview } from '@/api/services/apiPemesanan'
 
 const CartPage = () => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
     const [error, setError] = useState("");
     const [cart, setCart] = useState([]);
     const [checkedItems, setCheckedItems] = useState([]);
@@ -22,17 +24,19 @@ const CartPage = () => {
 
     const stickyRef = useRef(null);
     const [isStuck, setIsStuck] = useState(false);
+    const navigate = useNavigate();
 
     const toggleItem = (id) => {
         setCheckedItems((prev) =>
             prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
         );
+        console.log(checkedItems);
     };
 
     const toggleAll = () => {
         setSelectAll((prevSelectAll) => {
             const newSelectAll = !prevSelectAll;
-            setCheckedItems(newSelectAll ? cart.map(item => item.id_cart) : []);
+            setCheckedItems(newSelectAll ? cart.map(item => item.id_barang) : []);
             return newSelectAll;
         });
     };
@@ -49,7 +53,7 @@ const CartPage = () => {
 
     const totalChecked = checkedItems.length;
     const totalPrice = cart
-        .filter((item) => checkedItems.includes(item.id_cart))
+        .filter((item) => checkedItems.includes(item.id_barang))
         .reduce((sum, item) => sum + parseInt(item.barang.harga), 0)
         .toLocaleString('id-ID');
 
@@ -80,6 +84,37 @@ const CartPage = () => {
                 })
         }
     }
+
+    const checkout = () => {
+        setIsLoadingCheckout(true);
+
+        CheckoutPreview({ id_barang: checkedItems })
+            .then((res) => {
+                if (res.status) {
+                    navigate("/pembeli/checkout", {
+                        state: {
+                            barang: res.data,
+                            alamat: res.alamat,
+                            poin: res.poin,
+                        },
+                    });
+                } else {
+                    setError(res.message || "Gagal mendapatkan data checkout.");
+                    toggleToast();
+                }
+            })
+            .catch((err) => {
+                setError(err.response.data.message || "Terjadi kesalahan saat checkout.");
+                toggleToast();
+                if (err.response && err.response.status === 409) {
+                    fetchCart();
+                }
+            })
+            .finally(() => {
+                setIsLoadingCheckout(false);
+            });
+    };
+
 
     useEffect(() => {
         fetchCart();
@@ -156,8 +191,8 @@ const CartPage = () => {
                                                         <input
                                                             id={`checkbox-${item.id_cart}`}
                                                             type="checkbox"
-                                                            checked={checkedItems.includes(item.id_cart)}
-                                                            onChange={() => toggleItem(item.id_cart)}
+                                                            checked={checkedItems.includes(item.id_barang)}
+                                                            onChange={() => toggleItem(item.id_barang)}
                                                             className="w-4 h-4 accent-green-500 self-center hover:cursor-pointer"
                                                         />
                                                         <Link to={`/products/detail/${item.id_barang}`} className='no-underline flex space-x-4'>
@@ -216,8 +251,8 @@ const CartPage = () => {
                                         </div>
                                         <button
                                             className="px-6 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-700 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-default"
-                                            disabled={totalChecked === 0}
-                                            onClick={() => toggleToast()}
+                                            disabled={totalChecked === 0 || isLoadingCheckout}
+                                            onClick={() => checkout()}
                                         >
                                             Checkout
                                         </button>
@@ -232,7 +267,7 @@ const CartPage = () => {
                                     <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
                                         <HiX className="h-5 w-5" />
                                     </div>
-                                    <div className="ml-3 text-sm font-normal">Cart berhasil dihapus.</div>
+                                    <div className="ml-3 text-sm font-normal">{error ? error : "Cart berhasil dihapus."}</div>
                                 </Toast>
                             </div>
                         )}
