@@ -1,16 +1,17 @@
 import React from 'react'
 import api from '@/routes/api';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
 import { useLocation } from 'react-router-dom';
 import { PulseLoader } from "react-spinners";
 import { GetDetailBarang } from "@/api/services/apiBarang";
+import { TambahCart } from '@/api/services/apiCart';
 import { TambahDiskusi, GetDiskusi } from '@/api/services/apiDiskusi';
 import DiskusiBarangCard from '@/Components/DiskusiBarangCard';
 import { useParams } from "react-router-dom";
 import { NumericFormat } from 'react-number-format';
-import { Card, Tabs, TabItem, Button } from 'flowbite-react'
+import { Card, Tabs, TabItem, Button, Toast } from 'flowbite-react'
 import {
     Carousel,
     CarouselContent,
@@ -19,6 +20,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import { getGambarBarang } from '../api';
+import { HiCheck, HiX } from "react-icons/hi";
 
 const DetailProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +28,19 @@ const DetailProduct = () => {
     const [barang, setBarang] = useState([]);
     const [diskusi, setDiskusi] = useState([]);
     const { id } = useParams();
+
+    const toastTimeout = useRef(null);
+    const [showToast, setShowToast] = useState(false);
+
+    const toggleToast = () => {
+        setShowToast(true);
+        if (toastTimeout.current) {
+            clearTimeout(toastTimeout.current);
+        }
+        toastTimeout.current = setTimeout(() => {
+            setShowToast(false);
+        }, 3000);
+    };
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -58,6 +73,19 @@ const DetailProduct = () => {
             })
             .catch((err) => {
                 setError(err.message);
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    const tambahCart = (id) => {
+        TambahCart(id)
+            .then((response) => {
+                toggleToast();
+                return response;
+            })
+            .catch((err) => {
+                setError(err.message);
+                toggleToast();
             })
             .finally(() => setIsLoading(false));
     }
@@ -151,8 +179,8 @@ const DetailProduct = () => {
                                             </Tabs>
                                         </div>
                                         <div className="flex gap-3 mt-auto pt-5 ms-auto">
-                                            <Button color="green" className="w-32">+ Keranjang</Button>
-                                            <Button color="light" className="w-32">Beli</Button>
+                                            <Button className="w-32 bg-green-500 hover:bg-green-600 hover:cursor-pointer text-white focus:ring-0" onClick={() => tambahCart(id)}>+ Keranjang</Button>
+                                            <Button color="light" className="w-32 hover:cursor-pointer">Beli</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -170,6 +198,17 @@ const DetailProduct = () => {
                                 />
                             </div>
                         </div>
+
+                        {showToast && (
+                            <div className="fixed top-4 right-4">
+                                <Toast>
+                                    <div className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${error ? "bg-red-100 text-red-500" : "bg-green-100 text-green-500"}`}>
+                                        {error ? (<HiX className="h-5 w-5" />) : (<HiCheck className="h-5 w-5" />)}
+                                    </div>
+                                    <div className="ml-3 text-sm font-normal">{error ? error : "Barang berhasil ditambahkan ke keranjang."}</div>
+                                </Toast>
+                            </div>
+                        )}
                     </>
                 )}
             </div>
