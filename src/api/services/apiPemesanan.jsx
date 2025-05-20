@@ -29,4 +29,18 @@ const TambahPemesanan = async (data) => {
     }
 };
 
-export { CheckoutPreview, TambahPemesanan };
+const CancelPemesanan = async (pemesananId) => {
+    try {
+        const response = await useAxios.post(`/pemesanan/${pemesananId}/cancel`, {}, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error.response.data;
+    }
+};
+
+export { CheckoutPreview, TambahPemesanan, CancelPemesanan };
