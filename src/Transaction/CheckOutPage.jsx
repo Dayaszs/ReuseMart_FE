@@ -65,7 +65,7 @@ const CheckOutPage = () => {
       .then((response) => {
         // navigate('/pembeli/checkout/pembayaran');
         window.dispatchEvent(new Event('cartChanged'));
-        navigate('/pembeli/profile');
+        navigate('/pembeli/checkout/pembayaran/' + response.data.id_pemesanan);
       })
       .catch((err) => {
         console.log(err);

@@ -17,6 +17,10 @@ export const getGambarKTP = (url_gambar) => {
     return `${BASE_URL}/storage/ktp/${url_gambar}`;
 }
 
+export const getGambarBuktiPembayaran = (url_gambar) => {
+    return `${BASE_URL}/storage/bukti_pembayaran/${url_gambar}`;
+}
+
 const useAxios = axios.create({
     baseURL: `${BASE_URL}/api`,
 });
