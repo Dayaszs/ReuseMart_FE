@@ -33,7 +33,7 @@ const ResetPasswordPegawai = () => {
         setError("");
         ShowPegawai(page, search)
             .then((res) => {
-                setPegawai(res.data.data);
+                setPegawai(res.data);
                 setLastPage(res.last_page);
                 setPerPage(res.per_page);
                 setTotal(res.total);
