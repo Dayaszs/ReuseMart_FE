@@ -52,10 +52,13 @@ const MasterPegawai = () => {
         setIsLoading(true);
         ShowPegawai(page, search)
             .then((res) => {
-                setPegawai(res.data);
-                setLastPage(res.last_page);
-                setPerPage(res.per_page);
-                setTotal(res.total);
+                const dataPegawai = Array.isArray(res.data) ? res.data : 
+                Array.isArray(res.data?.data) ? res.data.data : [];
+                
+                setPegawai(dataPegawai);
+                setLastPage(res.data.last_page);
+                setPerPage(res.data.per_page);
+                setTotal(res.data.total);
             })
             .catch((err) => {
                 setError(err.message || "Gagal mengambil data.");
