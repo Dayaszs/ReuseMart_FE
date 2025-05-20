@@ -22,7 +22,7 @@ import CSDash from '@/DashboardCS/CSDash.jsx';
 import ListRequestDonasi from '@/DashboardOwner/ListRequestDonasi.jsx';
 import HistoriBarangDonasi from '@/DashboardOwner/HistoriBarangDonasi.jsx';
 import MasterPegawai from "@/DashboardAdmin/MasterPegawai.jsx";
-import RincianPenitipan from "@/Components/DashboardGudang/RincianPenitipan.jsx";
+import RincianPenitipan from "@/DashboardGudang/RincianPenitipan.jsx";
 
 import Home from '/src/Home/Home.jsx';
 import ProductHome from '/src/Products/ProductHome.jsx';
