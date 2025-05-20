@@ -5,6 +5,7 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button, Pagination, Card, Tabs, TabItem } from "flowbite-react";
 import axios from 'axios';
 import api from '../routes/api';
+import DetailBarangModal from '@/Components/modals/DetailBarangPenitipModal';
 
 const ListBarangPenitip = () => {
     const [barang, setBarang] = useState([]);
@@ -13,6 +14,8 @@ const ListBarangPenitip = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
+    const [showDetailBarangModal, setShowDetailBarangModal] = useState(false);
+    const [idBarang, setIdBarang] = useState(null);
 
     const onPageChange = (page) => setCurrentPage(page);
 
@@ -103,21 +106,25 @@ const ListBarangPenitip = () => {
                     ) : (
                         <>
                             {barang?.data?.map((item) => (
-                                <tr key={item.id_barang} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
+                                <tr key={item.id_barang} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50 cursor-pointer" onClick={() => {
+                                    setShowDetailBarangModal(true);
+                                    setIdBarang(item.id_barang);
+                                }}>
                                     <td className="px-6 py-4">
                                         {item.id_barang}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {formatDate(item.rincian_penitipan.batas_ambil)}
+                                        {formatDate(item.rincian_penitipan?.batas_ambil)}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {item.rincian_penitipan.penitipan.penitip.nama_penitip}
+                                        {item.rincian_penitipan?.penitipan?.penitip?.nama_penitip || "-"}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.status === 'Akan Diambil' ? (
                                             <button
                                                 className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                 type="button"
+                                                onClick={e => { e.stopPropagation(); }}
                                             >
                                                 Kembalikan Barang
                                             </button>
@@ -139,6 +146,12 @@ const ListBarangPenitip = () => {
                     onPageChange={onPageChange}
                 />
             </div>
+            <DetailBarangModal
+                show={showDetailBarangModal}
+                onClose={() => setShowDetailBarangModal(false)}
+                id={idBarang}
+                gudang={true}
+            />
         </div>
     );
 }

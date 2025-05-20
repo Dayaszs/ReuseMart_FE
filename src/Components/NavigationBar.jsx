@@ -179,14 +179,24 @@ function NavigationBar() {
             )}
 
             {userRole === 'Gudang' && (
-              <Link
-                to="/gudang/dashboard/rincian-penitipan"
-                className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/rincian-penitipan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+              <>
+                <Link
+                to="/gudang/dashboard/pemesanan"
+                className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/pemesanan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
                   }`}
               >
-                <ClipboardList size={18} />
-                <span>Rincian Penitipan</span>
+                <BaggageClaim size={18} />
+                <span>List Pengambilan Barang</span>
               </Link>
+                <Link
+                  to="/gudang/dashboard/rincian-penitipan"
+                  className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/rincian-penitipan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                    }`}
+                >
+                  <ClipboardList size={18} />
+                  <span>Rincian Penitipan</span>
+                </Link>
+              </>
             )}
 
             {userRole === 'Owner' && (

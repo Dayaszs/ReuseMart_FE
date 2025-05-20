@@ -6,6 +6,7 @@ import { Card, Pagination, Button } from "flowbite-react";
 import { PulseLoader } from 'react-spinners';
 import { getGambarBarang } from '@/api';
 import { FaStar } from "react-icons/fa";
+import DetailBarangPenitipModal from '@/Components/modals/DetailBarangPenitipModal';
 
 const BarangPenitip = () => {
     const [barang, setBarang] = useState([]);
@@ -15,6 +16,9 @@ const BarangPenitip = () => {
     const [search, setSearch] = useState('');
     const [loadingBarang, setLoadingBarang] = useState(false);
     const [filter, setFilter] = useState('');
+    const [showDetailBarangPenitipModal, setShowDetailBarangPenitipModal] = useState(false);
+    const [idBarang, setIdBarang] = useState(null);
+
 
     const onPageChange = (page) => setCurrentPage(page);
 
@@ -125,7 +129,7 @@ const BarangPenitip = () => {
                             <input
                                 id="search"
                                 type="text"
-                                placeholder="ID, Nama,  Metode Pengambilan, Biaya Total..."
+                                placeholder="Cari..."
                                 value={search}
                                 onChange={(e) => {
                                     setSearch(e.target.value);
@@ -149,6 +153,7 @@ const BarangPenitip = () => {
                                 <option value="">Semua Status</option>
                                 <option value="Tersedia">Tersedia</option>
                                 <option value="Akan Diambil">Akan Diambil</option>
+                                <option value="Siap Donasi">Siap Donasi</option>
                                 <option value="Dikembalikan">Dikembalikan</option>
                                 <option value="Didonasikan">Didonasikan</option>
                                 <option value="Terjual">Terjual</option>
@@ -168,7 +173,10 @@ const BarangPenitip = () => {
                             </Card>
                         ) : (
                             barang.data.map((item, index) => (
-                                <Card key={index} className="p-2 shadow-md min-h-[100px]">
+                                <Card key={index} className="p-2 shadow-md min-h-[100px]" onClick={() => {
+                                    setShowDetailBarangPenitipModal(true);
+                                    setIdBarang(item.id_barang);
+                                }}>
                                     <div className="flex justify-between items-start mb-2">
                                         <h3 className="text-lg font-semibold">ID Barang: {item.id_barang}</h3>
                                         <span
@@ -183,62 +191,67 @@ const BarangPenitip = () => {
                                                                 ? 'bg-orange-100 text-orange-700'
                                                                 : item.status === 'Akan Diambil'
                                                                     ? 'bg-blue-100 text-blue-700'
-                                                                    : 'bg-gray-100 text-gray-700'
+                                                                    : item.status === 'Siap Donasi'
+                                                                        ? 'bg-purple-100 text-purple-700'
+                                                                            : 'bg-gray-100 text-gray-700'
                                                 }`}
                                         >
                                             {item.status}
                                         </span>
                                     </div>
                                     <div className="flex gap-4">
-                                        <Link to={`/products/detail/${item.id_barang}`} className="flex-shrink-0">
-                                            <img
-                                                src={item.url_gambar_barang ? getGambarBarang(item.url_gambar_barang.split(';')[0]) : '/logo.png'}
-                                                alt="Gambar Barang"
-                                                className='w-32 h-32 object-contain'
-                                                onError={(e) => e.target.src = '/logo.png'}
-                                            />
-                                        </Link>
-                                        <Link to={`/products/detail/${item.id_barang}`} className="flex-grow space-y-1 text-sm">
-                                            <p><span className="font-medium">Nama Barang:</span> {item.nama_barang}</p>
-                                            <p><span className="font-medium">Harga:</span> Rp {parseInt(item.harga).toLocaleString('id-ID')}</p>
-                                            <p><span className="font-medium">Tanggal Penitipan Berakhir:</span> {formatDate(item.rincian_penitipan.tanggal_selesai)}</p>
-                                            <p><span className="font-medium">Batas Ambil:</span> {formatDate(item.rincian_penitipan.batas_ambil)}</p>
-                                            <p>
+                                        <img
+                                            src={item.url_gambar_barang ? getGambarBarang(item.url_gambar_barang.split(';')[0]) : '/logo.png'}
+                                            alt="Gambar Barang"
+                                            className='w-32 h-32 object-contain'
+                                            onError={(e) => e.target.src = '/logo.png'}
+                                        />
+                                        <div className="flex flex-col gap-1">
+                                            <div>
+                                                <span className="font-medium">Nama Barang:</span> {item.nama_barang}
+                                            </div>
+                                            <div>
+                                                <span className="font-medium">Harga:</span> Rp {parseInt(item.harga).toLocaleString('id-ID')}
+                                            </div>
+                                            <div>
+                                                <span className="font-medium">Tanggal Penitipan Berakhir:</span> {formatDate(item.rincian_penitipan.tanggal_selesai)}
+                                            </div>
+                                            <div>
+                                                <span className="font-medium">Batas Ambil:</span> {formatDate(item.rincian_penitipan.batas_ambil)}
+                                            </div>
+                                            <div>
                                                 <span className="font-medium">Status Perpanjangan:</span>{' '}
                                                 <span className={item.rincian_penitipan.sudah_diperpanjang ? 'text-green-600' : 'text-orange-600'}>
                                                     {item.rincian_penitipan.sudah_diperpanjang ? 'Sudah Diperpanjang' : 'Belum Diperpanjang'}
                                                 </span>
-                                            </p>
+                                            </div>
                                             {item.status === 'Terjual' && item.rating !== null && (
-                                                <p className="flex items-center gap-1">
+                                                <div className="flex items-center gap-1">
                                                     <span className="font-medium">Rating:</span>
-                                                    <div className="flex items-center">
-                                                        <FaStar className="h-4 w-4 text-amber-500 fill-amber-500" />
-                                                        <span className="ml-1 text-amber-500">{item.rating}</span>
-                                                    </div>
-                                                </p>
-                                            )}
-                                        </Link>
-                                        <div className="flex flex-col gap-2 justify-center">
-                                            {item.status === 'Tersedia' && !item.rincian_penitipan.sudah_diperpanjang && (
-                                                <Button className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
-                                                    onClick={() => {
-                                                        handlePerpanjangBarang(item.id_rincian_penitipan);
-                                                    }}
-                                                >
-                                                    Perpanjang Penitipan
-
-                                                </Button>
-                                            )}
-                                            {item.status === 'Tersedia' && (
-                                                <Button className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'
-                                                    onClick={() => {
-                                                        handleAmbilBarang(item.id_barang);
-                                                    }}>
-                                                    Ambil Barang
-                                                </Button>
+                                                    <FaStar className="h-4 w-4 text-amber-500 fill-amber-500" />
+                                                    <span className="ml-1 text-amber-500">{item.rating}</span>
+                                                </div>
                                             )}
                                         </div>
+                                    </div>
+                                    <div className="flex flex-col gap-2 justify-center mt-2">
+                                        {item.status === 'Tersedia' && !item.rincian_penitipan.sudah_diperpanjang && (
+                                            <Button className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
+                                                onClick={() => {
+                                                    handlePerpanjangBarang(item.id_rincian_penitipan);
+                                                }}
+                                            >
+                                                Perpanjang Penitipan
+                                            </Button>
+                                        )}
+                                        {item.status === 'Tersedia' && (
+                                            <Button className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'
+                                                onClick={() => {
+                                                    handleAmbilBarang(item.id_barang);
+                                                }}>
+                                                Ambil Barang
+                                            </Button>
+                                        )}
                                     </div>
                                 </Card>
                             ))
@@ -254,6 +267,11 @@ const BarangPenitip = () => {
                     />
                 </div>
             </div>
+            <DetailBarangPenitipModal 
+                show={showDetailBarangPenitipModal} 
+                onClose={() => setShowDetailBarangPenitipModal(false)} 
+                id={idBarang} 
+            />
         </Card>
     );
 };
