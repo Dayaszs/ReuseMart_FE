@@ -18,6 +18,7 @@ import OrganisasiProfile from '/src/ProfileOrganisasi/OrganisasiProfile.jsx';
 import PenitipProfile from "@/ProfilePenitip/PenitipProfile.jsx";
 
 import CSDash from '@/DashboardCS/CSDash.jsx';
+import VerifikasiPembayaran from '@/DashboardCS/VerifikasiPembayaran.jsx';
 
 import ListRequestDonasi from '@/DashboardOwner/ListRequestDonasi.jsx';
 import HistoriBarangDonasi from '@/DashboardOwner/HistoriBarangDonasi.jsx';
@@ -163,6 +164,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Customer Service"]}>
                         <CSDash />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "/cs/verifikasi-pembayaran",
+                element: (
+                    <ProtectedRoute allowedRoles={["Customer Service"]}>
+                        <VerifikasiPembayaran />
                     </ProtectedRoute>
                 )
             },

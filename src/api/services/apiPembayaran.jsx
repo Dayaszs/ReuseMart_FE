@@ -1,8 +1,8 @@
 import useAxios from "..";
 
-const GetPembayaran = async () => {
+const GetPembayaran = async (page = 1) => {
     try {
-        const response = await useAxios.get("/pembayaran", {
+        const response = await useAxios.get(`/cs/pembayaran?page=${page}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -45,7 +45,7 @@ const UploadBuktiPembayaran = async (pemesananId, data) => {
 
 const DeleteBuktiPembayaran = async (pembayaranId) => {
     try {
-        const response = await useAxios.delete(`/pembayaran/${pembayaranId}`, {
+        const response = await useAxios.delete(`/cs/pembayaran/${pembayaranId}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -58,9 +58,9 @@ const DeleteBuktiPembayaran = async (pembayaranId) => {
     }
 }
 
-const VerifikasiPembayaran = async (pembayaranId) => {
+const VerifPembayaran = async (pembayaranId) => {
     try {
-        const response = await useAxios.put(`/pembayaran/${pembayaranId}/verifikasi`, {
+        const response = await useAxios.put(`/cs/pembayaran/${pembayaranId}/verifikasi`, {}, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -72,4 +72,4 @@ const VerifikasiPembayaran = async (pembayaranId) => {
     }
 }
 
-export { GetPembayaran, ShowDetailPembayaran, UploadBuktiPembayaran, DeleteBuktiPembayaran };
+export { GetPembayaran, ShowDetailPembayaran, UploadBuktiPembayaran, DeleteBuktiPembayaran, VerifPembayaran };
