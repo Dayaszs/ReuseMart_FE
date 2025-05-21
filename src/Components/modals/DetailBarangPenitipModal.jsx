@@ -146,10 +146,10 @@ const DetailBarangPenitipModal = ({ show, onClose, id, gudang = false }) => {
                             {barang.status === 'Didonasikan' && (
                                 <>
                                 <div>
-                                    <span className="font-medium">Didonasikan Ke: </span> {barang.donasi[0].nama_penerima} ({barang.donasi[0].request_donasi.organisasi.nama})
+                                    <span className="font-medium">Didonasikan Ke: </span> {barang.donasi.nama_penerima} ({barang.donasi.request_donasi.organisasi.nama})
                                 </div>
                                 <div>
-                                    <span className="font-medium">Tanggal Didonasikan:</span> {formatDate(barang.donasi[0].tanggal_diterima)}
+                                    <span className="font-medium">Tanggal Didonasikan:</span> {formatDate(barang.donasi.tanggal_diterima)}
                                 </div>
                                 </>
                             )}
