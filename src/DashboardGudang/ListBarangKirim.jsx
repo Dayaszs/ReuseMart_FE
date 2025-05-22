@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
 import { Button, Pagination, Card, Tabs, TabItem, Alert } from "flowbite-react";
 import axios from 'axios';
 import api from '../routes/api';
-import ListBarangPenitip from './ListBarangPenitip';
-import ListBarangPembeli from './ListBarangKonfirmasi';
 import GudangKirimBarangModal from '../Components/modals/GudangKirimBarangModal';
+
+// Lazy load the components
+const ListBarangPenitip = lazy(() => import('./ListBarangPenitip'));
+const ListBarangPembeli = lazy(() => import('./ListBarangKonfirmasi'));
 
 const ListBarangKirim = () => {
     const [pemesanan, setPemesanan] = useState([]);
@@ -19,6 +21,7 @@ const ListBarangKirim = () => {
     const [showModal, setShowModal] = useState(false);
     const [pemesananId, setPemesananId] = useState(null);
     const [isKirim, setIsKirim] = useState(false);
+    const [activeTab, setActiveTab] = useState(0);
 
     const onPageChange = (page) => setCurrentPage(page);
 
@@ -64,7 +67,11 @@ const ListBarangKirim = () => {
 
     return (
         <Card className="w-full bg-white/90 backdrop-blur-md p-6">
-            <Tabs aria-label="Tabs with underline" variant="underline">
+            <Tabs 
+                aria-label="Tabs with underline" 
+                variant="underline"
+                onActiveTabChange={(tab) => setActiveTab(tab)}
+            >
                 <TabItem active title="List Barang Kirim">
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                         {/* Search Bar */}
@@ -187,10 +194,22 @@ const ListBarangKirim = () => {
                     </div>
                 </TabItem>
                 <TabItem title="Proses & Konfirmasi Barang">
-                    <ListBarangPembeli />
+                    <Suspense fallback={
+                        <div className="flex justify-center items-center py-8">
+                            <PulseLoader size={8} color="#057A55" />
+                        </div>
+                    }>
+                        {activeTab === 1 && <ListBarangPembeli />}
+                    </Suspense>
                 </TabItem>
                 <TabItem title="Pengambilan Penitip">
-                    <ListBarangPenitip />
+                    <Suspense fallback={
+                        <div className="flex justify-center items-center py-8">
+                            <PulseLoader size={8} color="#057A55" />
+                        </div>
+                    }>
+                        {activeTab === 2 && <ListBarangPenitip />}
+                    </Suspense>
                 </TabItem>
             </Tabs> 
             <GudangKirimBarangModal 
@@ -204,4 +223,4 @@ const ListBarangKirim = () => {
     );
 }
 
-export default ListBarangKirim;
+export default ListBarangKirim; 
