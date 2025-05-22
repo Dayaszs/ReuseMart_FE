@@ -4,6 +4,7 @@ import { ShowRincianPenitipan } from '@/api/services/apiRincianPenitipan'
 import { ShowPegawaiByJabatan } from '@/api/services/apiPegawai'
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
+import { Eye } from 'lucide-react';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
 import {
@@ -14,6 +15,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import { getGambarBarang } from '@/api/index';
+import DetailRincianModal from '@/Components/modals/DetailRincianModal'
 
 const RincianPenitipan = () => {
     const [ rincianPenitipan, setRincianPenitipan ] = useState([]);
@@ -28,6 +30,9 @@ const RincianPenitipan = () => {
     const [lastPage, setLastPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [perPage, setPerPage] = useState(8);
+
+    const [ showDetailRincianModal, setShowDetailRincianModal ] = useState(false);
+    const [ rincianData, setRincianData ] = useState(0);
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -65,6 +70,16 @@ const RincianPenitipan = () => {
         })
         .finally(() => setIsLoading(false));
     };
+
+    const openShowDetailRincianModal = (data) => {
+        setRincianData(data);
+        setShowDetailRincianModal(true);
+    }
+
+    const closeShowDetailRincianModal = () => {
+        setRincianData(null);
+        setShowDetailRincianModal(false);
+    }
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -115,9 +130,9 @@ const RincianPenitipan = () => {
             <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" className="px-6 py-3">
+                        {/* <th scope="col" className="px-6 py-3">
                             Gambar Barang
-                        </th>
+                        </th> */}
                         <th scope="col" className="px-6 py-3">
                             Nama Barang
                         </th>
@@ -139,6 +154,9 @@ const RincianPenitipan = () => {
                         <th scope="col" className="px-6 py-3">
                             Action
                         </th>
+                        <th scope="col" className="px-6 py-3">
+                            Detail
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -155,12 +173,12 @@ const RincianPenitipan = () => {
                             <>
                                 {rincianPenitipan?.map((item, index) => (
                                     <tr key={item.id_rincian_penitipan} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
-                                        <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                                            <div className="ps-3">
+                                        {/* <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
+                                            <div className="ps-3"> */}
                                                 {/* <img className="w-24 h-24" src={item.barang.url_gambar_barang} alt="Logo Organisasi" /> */}
                                                 {/* <div className="text-base font-semibold">{item.nama}</div>
                                                 <div className="font-normal text-gray-500">{item.email}</div> */}
-                                                <Carousel className="max-w-44 max-h-44">
+                                                {/* <Carousel className="max-w-44 max-h-44">
                                                     <CarouselContent>
                                                         {item.barang.url_gambar_barang?.split(';').map((gambar, index) => (
                                                             <CarouselItem key={index} className="h-full">
@@ -177,9 +195,9 @@ const RincianPenitipan = () => {
                                                     </CarouselContent>
                                                     <CarouselPrevious />
                                                     <CarouselNext />
-                                                </Carousel>
-                                            </div>
-                                        </th>
+                                                </Carousel> */}
+                                            {/* </div>
+                                        </th> */}
                                         <td className="px-6 py-4">
                                             {item.barang.nama_barang}
                                         </td>
@@ -208,7 +226,7 @@ const RincianPenitipan = () => {
                                                 {formatDate(item.batas_ambil)}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 h-full flex items-center justify-center">
                                             {/* Modal Edit */}
                                             <button
                                                 onClick={() => openEditModal(item)}
@@ -227,12 +245,29 @@ const RincianPenitipan = () => {
                                                 <FaTrashAlt />
                                             </button>
                                         </td>
+                                        <td className="px-6 py-4">
+                                            <button
+                                                onClick={() => openShowDetailRincianModal(item)}
+                                                className="p-2 bg-green-600 hover:bg-green-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
+                                                type="button"
+                                            >
+                                                <Eye size={15}/>
+                                            </button>
+                                            {/* <div className="flex items-center">
+                                                {formatDate(item.batas_ambil)}
+                                            </div> */}
+                                        </td>
                                     </tr>
                                 ))}
                             </>
                         )}
                 </tbody>
             </table>
+            <DetailRincianModal
+                show={showDetailRincianModal}
+                onClose={closeShowDetailRincianModal}
+                data={rincianData}
+            />
             <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
                 <span className="text-sm text-gray-500">
                     Showing{" "}
