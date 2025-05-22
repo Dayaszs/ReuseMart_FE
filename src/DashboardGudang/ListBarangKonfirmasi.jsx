@@ -131,6 +131,7 @@ const ListBarangPembeli = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
+    const [filter, setFilter] = useState("");
 
     const onPageChange = (page) => setCurrentPage(page);
 
@@ -150,7 +151,7 @@ const ListBarangPembeli = () => {
         setIsLoading(true);
         const token = localStorage.getItem('token');
         const response = await axios.get(
-            `${api}/gudang/pemesanan-pembeli?page=${currentPage}&search=${searchTerm}`,
+            `${api}/gudang/pemesanan-pembeli?page=${currentPage}&search=${searchTerm}&filter=${filter}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -158,14 +159,13 @@ const ListBarangPembeli = () => {
             }
         );
         setPemesanan(response.data.pemesanan);
-        console.log(response.data.pemesanan);
         setLastPage(response.data.pemesanan.last_page);
         setIsLoading(false);
     };
 
     useEffect(() => {
         fetchRincianPenitipan();
-    }, [currentPage, searchTerm]);
+    }, [currentPage, searchTerm, filter, searchTerm]);
 
     if (error)
         return <p className='text-center text-red-600'>{error}</p>;
@@ -176,21 +176,34 @@ const ListBarangPembeli = () => {
             <div className="flex flex-col md:flex-row items-center justify-start flex-wrap gap-4 py-4 ps-6 bg-white">
                 <label htmlFor="table-search-users" className="sr-only">Search</label>
                 <p className='font-bold'>List Barang Proses</p>
-                <div className="relative">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <IoIosSearch />
+                <div className="flex flex-row gap-4">
+                    <div className="relative">
+                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <IoIosSearch />
+                        </div>
+                        <input
+                            type="text"
+                            className="block w-50 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
+                            placeholder="Cari..."
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
                     </div>
-                    <input
-                        type="text"
-                        id="table-search-users"
-                        className="block w-80 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
-                        placeholder="Cari..."
-                        value={searchTerm}
+                    <select
+                        value={filter}
                         onChange={(e) => {
-                            setSearchTerm(e.target.value);
+                            setFilter(e.target.value);
                             setCurrentPage(1);
                         }}
-                    />
+                        className="block w-50 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
+                    >
+                        <option value="">Semua Status</option>
+                        <option value="Dikirim">Dikirim</option>
+                        <option value="Siap Diambil">Siap Diambil</option>
+                    </select>
                 </div>
             </div>
 
@@ -203,6 +216,9 @@ const ListBarangPembeli = () => {
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Tanggal Pemesanan
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Tanggal Penjadwalan
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Alamat Penerima
@@ -227,13 +243,13 @@ const ListBarangPembeli = () => {
                 <tbody>
                     {isLoading ? (
                         <tr>
-                            <td colSpan={7}>
+                            <td colSpan={9}>
                                 <div className="flex justify-center items-center py-8">
                                     <PulseLoader size={8} color="#057A55" />
                                 </div>
                             </td>
                         </tr>
-                    ) : (
+                    ) : pemesanan?.data?.length > 0 ? (
                         <>
                             {pemesanan?.data?.map((item) => (
                                 <tr key={item.id_pemesanan} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
@@ -242,6 +258,9 @@ const ListBarangPembeli = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         {formatDate(item.tanggal_pemesanan)}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {formatDate(item.tanggal_jadwal)}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.alamat_penerima}
@@ -284,6 +303,14 @@ const ListBarangPembeli = () => {
                                 </tr>
                             ))}
                         </>
+                    ) : (
+                        <tr>
+                            <td colSpan={9}>
+                                <div className="flex justify-center items-center py-8 text-gray-500">
+                                    Tidak ada pemesanan
+                                </div>
+                            </td>
+                        </tr>
                     )}
                 </tbody>
             </table>

@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import { Button, Pagination, Card, Tabs, TabItem } from "flowbite-react";
+import { Button, Pagination, Card, Tabs, TabItem, Alert } from "flowbite-react";
 import axios from 'axios';
 import api from '../routes/api';
 import ListBarangPenitip from './ListBarangPenitip';
 import ListBarangPembeli from './ListBarangKonfirmasi';
+import GudangKirimBarangModal from '../Components/modals/GudangKirimBarangModal';
 
 const ListBarangKirim = () => {
     const [pemesanan, setPemesanan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
-    const [filter, setFilter] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [pemesananId, setPemesananId] = useState(null);
+    const [isKirim, setIsKirim] = useState(false);
 
     const onPageChange = (page) => setCurrentPage(page);
 
@@ -42,10 +43,16 @@ const ListBarangKirim = () => {
                 },
             }
         );
+       
         setPemesanan(response.data.pemesanan);
         setLastPage(response.data.pemesanan.last_page);
-        console.log(response.data.pemesanan);
         setIsLoading(false);
+    };
+
+    const handleOpenModal = (id, isKirimAction) => {
+        setPemesananId(id);
+        setIsKirim(isKirimAction);
+        setShowModal(true);
     };
 
     useEffect(() => {
@@ -115,9 +122,9 @@ const ListBarangKirim = () => {
                                             </div>
                                         </td>
                                     </tr>
-                                ) : (
+                                ) : pemesanan?.data?.length > 0 ? (
                                     <>
-                                        {pemesanan?.data?.map((item) => (
+                                        {pemesanan.data.map((item) => (
                                             <tr key={item.id_pemesanan} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
                                                 <td className="px-6 py-4">
                                                     {item.id_pemesanan}
@@ -135,12 +142,13 @@ const ListBarangKirim = () => {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     Rp. {parseInt(item.biaya_total).toLocaleString('id-ID')}
-                                                </td>
+                                                </td>             
                                                 <td className="px-6 py-4">
                                                     {item.metode_pengambilan === 'Diambil' ? (
                                                         <button
                                                             className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                             type="button"
+                                                            onClick={() => handleOpenModal(item.id_pemesanan, false)}
                                                         >
                                                             Atur Pengambilan
                                                         </button>
@@ -148,6 +156,7 @@ const ListBarangKirim = () => {
                                                         <button
                                                             className='bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                             type="button"
+                                                            onClick={() => handleOpenModal(item.id_pemesanan, true)}
                                                         >
                                                             Atur Pengiriman
                                                         </button>
@@ -156,6 +165,14 @@ const ListBarangKirim = () => {
                                             </tr>
                                         ))}
                                     </>
+                                ) : (
+                                    <tr>
+                                        <td colSpan={6}>
+                                            <div className="flex justify-center items-center py-8 text-gray-500">
+                                                Tidak ada pemesanan
+                                            </div>
+                                        </td>
+                                    </tr>
                                 )}
                             </tbody>
                         </table>
@@ -175,7 +192,14 @@ const ListBarangKirim = () => {
                 <TabItem title="Pengambilan Penitip">
                     <ListBarangPenitip />
                 </TabItem>
-            </Tabs>
+            </Tabs> 
+            <GudangKirimBarangModal 
+                show={showModal} 
+                onClose={() => setShowModal(false)} 
+                pemesananId={pemesananId} 
+                kirim={isKirim}
+                onSuccess={fetchRincianPenitipan}
+            />
         </Card>
     );
 }

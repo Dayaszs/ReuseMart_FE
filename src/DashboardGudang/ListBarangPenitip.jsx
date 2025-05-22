@@ -131,7 +131,7 @@ const ListBarangPenitip = () => {
                                 </div>
                             </td>
                         </tr>
-                    ) : (
+                    ) : barang?.data?.length > 0 ? (
                         <>
                             {barang?.data?.map((item) => (
                                 <tr key={item.id_barang} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50 cursor-pointer" onClick={() => {
@@ -176,6 +176,14 @@ const ListBarangPenitip = () => {
                                 </tr>
                             ))}
                         </>
+                    ) : (
+                        <tr>
+                            <td colSpan={7}>
+                                <div className="flex justify-center items-center py-8 text-gray-500">
+                                    Tidak ada barang penitip
+                                </div>
+                            </td>
+                        </tr>
                     )}
                 </tbody>
             </table>
