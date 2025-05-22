@@ -3,7 +3,7 @@ import api from '@/routes/api';
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PulseLoader } from "react-spinners";
 import { GetDetailBarang } from "@/api/services/apiBarang";
 import { TambahCart } from '@/api/services/apiCart';
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/carousel"
 import { getGambarBarang } from '../api';
 import { HiCheck, HiX } from "react-icons/hi";
+import { CheckoutPreview } from '@/api/services/apiPemesanan';
 
 const DetailProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +32,7 @@ const DetailProduct = () => {
 
     const toastTimeout = useRef(null);
     const [showToast, setShowToast] = useState(false);
+    const navigate = useNavigate();
 
     const toggleToast = () => {
         setShowToast(true);
@@ -90,6 +92,33 @@ const DetailProduct = () => {
             })
             .finally(() => setIsLoading(false));
     }
+
+    const checkout = (barangId) => {
+        setIsLoading(true);
+        const data = { id_barang: [barangId] };
+
+        CheckoutPreview(data)
+            .then((res) => {
+                if (res.status) {
+                    navigate("/pembeli/checkout", {
+                        state: {
+                            barang: res.data,
+                            alamat: res.alamat,
+                            poin: res.poin,
+                        },
+                    });
+                } else {
+                    setError(res.message || "Gagal mendapatkan data checkout.");
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                // setError(err.response.data.message || "Terjadi kesalahan saat checkout.");
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
 
     useEffect(() => {
         if (id) {
@@ -180,8 +209,8 @@ const DetailProduct = () => {
                                             </Tabs>
                                         </div>
                                         <div className="flex gap-3 mt-auto pt-5 ms-auto">
-                                            <Button className="w-32 bg-green-500 hover:bg-green-600 hover:cursor-pointer text-white focus:ring-0" onClick={() => tambahCart(id)}>+ Keranjang</Button>
-                                            <Button color="light" className="w-32 hover:cursor-pointer">Beli</Button>
+                                            <Button disabled={isLoading} onClick={() => tambahCart(id)} className="w-32 bg-green-500 hover:bg-green-600 hover:cursor-pointer text-white focus:ring-0">+ Keranjang</Button>
+                                            <Button disabled={isLoading} onClick={() => checkout(id)} color="light" className="w-32 hover:cursor-pointer" >Beli</Button>
                                         </div>
                                     </div>
                                 </div>
