@@ -6,7 +6,7 @@ import { Button, Pagination, Card, Tabs, TabItem } from "flowbite-react";
 import axios from 'axios';
 import api from '../routes/api';
 import ListBarangPenitip from './ListBarangPenitip';
-import ListBarangPembeli from './ListBarangPembeli';
+import ListBarangPembeli from './ListBarangKonfirmasi';
 
 const ListBarangKirim = () => {
     const [pemesanan, setPemesanan] = useState([]);
@@ -72,7 +72,7 @@ const ListBarangKirim = () => {
                                     type="text"
                                     id="table-search-users"
                                     className="block w-80 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
-                                    placeholder="Cari Barang Kirim"
+                                    placeholder="Cari..."
                                     value={searchTerm}
                                     onChange={(e) => {
                                         setSearchTerm(e.target.value);
@@ -139,14 +139,14 @@ const ListBarangKirim = () => {
                                                 <td className="px-6 py-4">
                                                     {item.metode_pengambilan === 'Diambil' ? (
                                                         <button
-                                                            className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
+                                                            className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                             type="button"
                                                         >
                                                             Atur Pengambilan
                                                         </button>
                                                     ) : item.metode_pengambilan === 'Dikirim' ? (
                                                         <button
-                                                            className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
+                                                            className='bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                             type="button"
                                                         >
                                                             Atur Pengiriman
@@ -169,7 +169,7 @@ const ListBarangKirim = () => {
                         </div>
                     </div>
                 </TabItem>
-                <TabItem title="Pengambilan & Pengiriman Pembeli">
+                <TabItem title="Proses & Konfirmasi Barang">
                     <ListBarangPembeli />
                 </TabItem>
                 <TabItem title="Pengambilan Penitip">

@@ -154,6 +154,12 @@ const DetailBarangPenitipModal = ({ show, onClose, id, gudang = false }) => {
                                 </>
                             )}
 
+                            {barang.rincian_penitipan.tanggal_konfirmasi && (
+                                <div>
+                                    <span className="font-medium">Tanggal Konfirmasi Pengambilan:</span> {formatDate(barang.rincian_penitipan.tanggal_konfirmasi)}
+                                </div>
+                            )}
+
                             {barang.status === 'Dikembalikan' && (
                                 <>
                                 <div>

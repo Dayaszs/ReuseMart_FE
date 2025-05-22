@@ -20,12 +20,14 @@ const ListBarangPenitip = () => {
     const onPageChange = (page) => setCurrentPage(page);
 
     const formatDate = (dateString) => {
-        if (!dateString) return '';
+        if (!dateString) return '-';
         const date = new Date(dateString);
         return date.toLocaleDateString('id-ID', {
             day: 'numeric',
             month: 'long',
-            year: 'numeric'
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
         });
     };
 
@@ -43,6 +45,23 @@ const ListBarangPenitip = () => {
         setBarang(response.data.barang);
         setLastPage(response.data.barang.last_page);
         setIsLoading(false);
+    };
+
+    const handleKembalikanBarang = async (id) => {
+        const confirmed = window.confirm('Apakah anda yakin ingin mengembalikan barang ini?');
+        if(!confirmed) return;
+
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${api}/gudang/kembalikan-barang-penitip/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if(response.status === 200) {
+            window.alert('Barang berhasil dikembalikan');
+            fetchRincianPenitipan();
+        }
     };
 
     useEffect(() => {
@@ -84,7 +103,16 @@ const ListBarangPenitip = () => {
                             ID Barang
                         </th>
                         <th scope="col" className="px-6 py-3">
+                            Nama Barang
+                        </th>
+                        <th scope="col" className="px-6 py-3">
                             Tanggal Batas Ambil
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Tanggal Konfirmasi Pengambilan
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Tanggal Diambil Penitip
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Nama Penitip
@@ -97,7 +125,7 @@ const ListBarangPenitip = () => {
                 <tbody>
                     {isLoading ? (
                         <tr>
-                            <td colSpan={4}>
+                            <td colSpan={7}>
                                 <div className="flex justify-center items-center py-8">
                                     <PulseLoader size={8} color="#057A55" />
                                 </div>
@@ -114,17 +142,30 @@ const ListBarangPenitip = () => {
                                         {item.id_barang}
                                     </td>
                                     <td className="px-6 py-4">
+                                        {item.nama_barang}
+                                    </td>
+                                    <td className="px-6 py-4">
                                         {formatDate(item.rincian_penitipan?.batas_ambil)}
                                     </td>
                                     <td className="px-6 py-4">
-                                        {item.rincian_penitipan?.penitipan?.penitip?.nama_penitip || "-"}
+                                        {formatDate(item.rincian_penitipan?.tanggal_konfirmasi)}
                                     </td>
+                                    <td className="px-6 py-4">
+                                        {item.rincian_penitipan?.tanggal_diambil ? formatDate(item.rincian_penitipan?.tanggal_diambil) : "-"}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {item.rincian_penitipan?.penitipan?.penitip?.nama_penitip}
+                                    </td>
+                                   
                                     <td className="px-6 py-4">
                                         {item.status === 'Akan Diambil' ? (
                                             <button
                                                 className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                 type="button"
-                                                onClick={e => { e.stopPropagation(); }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleKembalikanBarang(item.id_barang);
+                                                }}
                                             >
                                                 Kembalikan Barang
                                             </button>
