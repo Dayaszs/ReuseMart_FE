@@ -132,6 +132,7 @@ const ListBarangPembeli = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
     const [filter, setFilter] = useState("");
+    const [isLoadingAmbil, setIsLoadingAmbil] = useState(false);
 
     const onPageChange = (page) => setCurrentPage(page);
 
@@ -166,6 +167,35 @@ const ListBarangPembeli = () => {
     useEffect(() => {
         fetchRincianPenitipan();
     }, [currentPage, searchTerm, filter, searchTerm]);
+
+    const handleKonfirmasiAmbil = async (id) => {
+        const confirmed = window.confirm('Apakah anda yakin ingin mengkonfirmasi pengambilan barang?');
+        if (!confirmed) return;
+        
+        try {
+            setIsLoadingAmbil(true);
+            const token = localStorage.getItem('token');
+            const response = await axios.post(
+                `${api}/gudang/konfirmasi-pengambilan/${id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            
+            if (response.status === 200) {
+                window.alert('Pengambilan barang berhasil dikonfirmasi');
+                fetchRincianPenitipan(); // Refresh the list
+            }
+        } catch (error) {
+            console.error('Error confirming pickup:', error);
+            window.alert(error.response?.data?.message || 'Terjadi kesalahan saat mengkonfirmasi pengambilan');
+        } finally {
+            setIsLoadingAmbil(false);
+        }
+    };
 
     if (error)
         return <p className='text-center text-red-600'>{error}</p>;
@@ -281,6 +311,7 @@ const ListBarangPembeli = () => {
                                             <button
                                                 className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                 type="button"
+                                                onClick={() => handleKonfirmasiAmbil(item.id_pemesanan)}
                                             >
                                                 Konfirmasi
                                             </button>
@@ -322,6 +353,7 @@ const ListBarangPembeli = () => {
                     onPageChange={onPageChange}
                 />
             </div>
+            
         </div>
     );
 }
