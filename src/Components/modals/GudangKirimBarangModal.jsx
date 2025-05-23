@@ -107,85 +107,96 @@ const GudangKirimBarangModal = ({ show, onClose, kirim = false, pemesananId, onS
                 ) : pemesanan?.komisi && pemesanan.komisi.length > 0 ? (
                     <div>
                         <div>
+                            <span className='font-medium'>Nomor Nota:</span> {pemesanan.no_nota}
+                        </div>
+                        <div>
                             <span className='font-medium'>Nama Pembel:</span> {pemesanan.pembeli.nama_pembeli}
                         </div>
                         <div>
-                        <span className='font-medium'>Alamat Pembeli:</span> {pemesanan.alamat_penerima}
+                            <span className='font-medium'>Alamat Pembeli:</span> {pemesanan.alamat_penerima}
                         </div>
-                    <div className='flex flex-col gap-6 mt-4'>
-                        {pemesanan.komisi.map((item, index) => (
-                            <div key={index} className="flex flex-row gap-6 border rounded-lg p-4">
-                                <div className="w-1/3">
-                                    <Carousel className="w-full">
-                                        <CarouselContent>
-                                            {item.barang.url_gambar_barang?.split(';').map((gambar, imgIndex) => (
-                                                <CarouselItem key={imgIndex} className="h-full">
-                                                    <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
-                                                        <img
-                                                            src={getGambarBarang(gambar)}
-                                                            alt={`Product Image ${imgIndex + 1}`}
-                                                            className="max-w-full max-h-44 object-contain rounded-md"
-                                                            onError={(e) => e.target.src = '/logo.png'}
-                                                        />
-                                                    </div>
-                                                </CarouselItem>
-                                            ))}
-                                        </CarouselContent>
-                                        <CarouselPrevious />
-                                        <CarouselNext />
-                                    </Carousel>
-                                </div>
-                                <div className="flex-1 flex flex-col justify-center">
-                                    <div className="space-y-2">
-                                        <div>
-                                            <span className="font-medium">Nama Barang:</span> {item.barang.nama_barang}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium">Harga:</span> Rp {parseInt(item.barang.harga).toLocaleString('id-ID')}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium">Berat:</span> {item.barang.berat} Kg
-                                        </div>
-                                    </div>
-                                </div>
+
+                        {pemesanan.ongkos_kirim && (
+                            <div>
+                                <span className='font-medium'>Ongkos Kirim:</span> Rp {parseInt(pemesanan.ongkos_kirim).toLocaleString('id-ID')}
                             </div>
-                        ))}
-                        {kirim && (
-                            <Dropdown
-                                label={selectedKurir.nama || "Pilih Kurir"}
-                                dismissOnClick={false}
-                                className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-full text-center'
-                                color="success"
-                                disabled={isAfterJam4()}
-                            >
-                                {kurir.map((item, index) => (
-                                    <DropdownItem
-                                        className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-full text-center'
-                                        key={index}
-                                        onClick={() => setSelectedKurir({ nama: item.nama, id_pegawai: item.id_pegawai })}
-                                    >
-                                        {item.nama}
-                                    </DropdownItem>
-                                ))}
-                            </Dropdown>
                         )}
                         
 
-                        <Button className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-full text-center'
-                            onClick={() => {
-                                handleProsesLanjut();
-                            }}
-                            disabled={isAfterJam4() && kirim}
-                        >
-                            Proses Lanjut
-                        </Button>
+                        <div className='flex flex-col gap-6 mt-4'>
+                            {pemesanan.komisi.map((item, index) => (
+                                <div key={index} className="flex flex-row gap-6 border rounded-lg p-4">
+                                    <div className="w-1/3">
+                                        <Carousel className="w-full">
+                                            <CarouselContent>
+                                                {item.barang.url_gambar_barang?.split(';').map((gambar, imgIndex) => (
+                                                    <CarouselItem key={imgIndex} className="h-full">
+                                                        <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
+                                                            <img
+                                                                src={getGambarBarang(gambar)}
+                                                                alt={`Product Image ${imgIndex + 1}`}
+                                                                className="max-w-full max-h-44 object-contain rounded-md"
+                                                                onError={(e) => e.target.src = '/logo.png'}
+                                                            />
+                                                        </div>
+                                                    </CarouselItem>
+                                                ))}
+                                            </CarouselContent>
+                                            <CarouselPrevious />
+                                            <CarouselNext />
+                                        </Carousel>
+                                    </div>
+                                    <div className="flex-1 flex flex-col justify-center">
+                                        <div className="space-y-2">
+                                            <div>
+                                                <span className="font-medium">Nama Barang:</span> {item.barang.nama_barang}
+                                            </div>
+                                            <div>
+                                                <span className="font-medium">Harga:</span> Rp {parseInt(item.barang.harga).toLocaleString('id-ID')}
+                                            </div>
+                                            <div>
+                                                <span className="font-medium">Berat:</span> {item.barang.berat} Kg
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {kirim && (
+                                <Dropdown
+                                    label={selectedKurir.nama || "Pilih Kurir"}
+                                    dismissOnClick={false}
+                                    className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-full text-center'
+                                    color="success"
+                                    disabled={isAfterJam4()}
+                                >
+                                    {kurir.map((item, index) => (
+                                        <DropdownItem
+                                            className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-full text-center'
+                                            key={index}
+                                            onClick={() => setSelectedKurir({ nama: item.nama, id_pegawai: item.id_pegawai })}
+                                        >
+                                            {item.nama}
+                                        </DropdownItem>
+                                    ))}
+                                </Dropdown>
+                            )}
+                            
 
-                        {kirim && isAfterJam4() && (
-                            <div className="text-red-500 text-sm mt-2 w-full text-center">
-                                Pengiriman tidak tersedia setelah pukul 16:00
-                            </div>
-                        )}
-                    </div>
+                            <Button className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-full text-center'
+                                onClick={() => {
+                                    handleProsesLanjut();
+                                }}
+                                disabled={isAfterJam4() && kirim}
+                            >
+                                Proses Lanjut
+                            </Button>
+
+                            {kirim && isAfterJam4() && (
+                                <div className="text-red-500 text-sm mt-2 w-full text-center">
+                                    Pengiriman tidak tersedia setelah pukul 16:00
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ) : (
                     <div className="text-center text-gray-500">No data available</div>

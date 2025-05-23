@@ -112,13 +112,26 @@ const NotaPDF = ({ pemesanan }) => {
                     <Text style={styles.text}>QC oleh: {pemesanan?.komisi[0]?.barang?.rincian_penitipan?.penitipan?.pegawai?.nama || '-'} (P{pemesanan?.komisi[0]?.barang?.rincian_penitipan?.penitipan?.pegawai?.id_pegawai})</Text>
                 </View>
                 
-                <View style={styles.section}>
-                    <Text style={styles.text}>Diterima oleh:</Text>
-                    <Text style={styles.text}> </Text>
+                {pemesanan?.metode_pengambilan === 'Dikirim' && (   
+                    <View style={styles.section}>
+                        <Text style={styles.text}>Diterima oleh:</Text>
+                        <Text style={styles.text}> </Text>
                     <Text style={styles.text}> </Text>
                     <Text style={styles.text}>(.................................)</Text>
                     <Text style={styles.text}>Tanggal: ............................</Text>
                 </View>
+                )}
+
+                {pemesanan?.metode_pengambilan === 'Diambil' && (
+                    <View style={styles.section}>
+                        <Text style={styles.text}>Diterima oleh:</Text>
+                        <Text style={styles.text}> </Text>
+                        <Text style={styles.text}> </Text>
+                        <Text style={styles.text}>(.................................)</Text>
+                        <Text style={styles.text}>Tanggal: ............................</Text>
+                    </View>
+                )}
+                
             </Page>
         </Document>
     );
@@ -169,6 +182,7 @@ const ListBarangPembeli = () => {
     }, [currentPage, searchTerm, filter, searchTerm]);
 
     const handleKonfirmasiAmbil = async (id) => {
+
         const confirmed = window.confirm('Apakah anda yakin ingin mengkonfirmasi pengambilan barang?');
         if (!confirmed) return;
         
@@ -321,13 +335,21 @@ const ListBarangPembeli = () => {
                                     </td>
                                     <td className="px-6 py-4"> 
                                         <Button
-                                        className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center inline-block cursor-pointer'>
+                                            className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center inline-block cursor-pointer'>
                                             <PDFDownloadLink
                                                 document={<NotaPDF pemesanan={item} />}
                                                 fileName={`nota-${item.no_nota}.pdf`}
-                                                style={{ textDecoration: 'none' }}
+                                                style={{ textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                             >
-                                                Cetak Nota
+                                                {({ loading }) => 
+                                                    loading ? (
+                                                        <div className="flex items-center justify-center gap-2">
+                                                            <PulseLoader size={8} color="#ffffff" />
+                                                        </div>
+                                                    ) : (
+                                                        'Cetak Nota'
+                                                    )
+                                                }
                                             </PDFDownloadLink>
                                         </Button>
                                     </td>
