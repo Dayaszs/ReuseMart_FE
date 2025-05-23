@@ -134,6 +134,9 @@ const RincianPenitipan = () => {
                             Gambar Barang
                         </th> */}
                         <th scope="col" className="px-6 py-3">
+                            No
+                        </th>
+                        <th scope="col" className="px-6 py-3">
                             Nama Barang
                         </th>
                         <th scope="col" className="px-6 py-3">
@@ -198,6 +201,9 @@ const RincianPenitipan = () => {
                                                 </Carousel> */}
                                             {/* </div>
                                         </th> */}
+                                        <td className="px-6 py-4">
+                                            {item.id_rincian_penitipan}
+                                        </td>
                                         <td className="px-6 py-4">
                                             {item.barang.nama_barang}
                                         </td>
