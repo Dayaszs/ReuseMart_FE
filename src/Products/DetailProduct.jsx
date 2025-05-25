@@ -122,6 +122,8 @@ const DetailProduct = () => {
 
     useEffect(() => {
         if (id) {
+            setIsLoading(true);
+
             const fetchDetailBarang = async () => {
                 try {
                     console.log(`${api}/barang/${id}/detail`);
