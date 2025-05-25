@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/carousel"
 import { getGambarBarang } from '@/api/index';
 import DetailRincianModal from '@/Components/modals/DetailRincianModal'
+import TambahPenitipanModal from '@/Components/modals/TambahPenitipanModal'
 
 const RincianPenitipan = () => {
     const [ rincianPenitipan, setRincianPenitipan ] = useState([]);
@@ -32,6 +33,8 @@ const RincianPenitipan = () => {
     const [perPage, setPerPage] = useState(10);
 
     const [ showDetailRincianModal, setShowDetailRincianModal ] = useState(false);
+    const [ showTambahanPenitipanModal, setShowTambahanPenitipanModal ] = useState(false);
+
     const [ rincianData, setRincianData ] = useState(0);
 
     const formatDate = (dateString) => {
@@ -81,6 +84,14 @@ const RincianPenitipan = () => {
         setShowDetailRincianModal(false);
     }
 
+    const openShowTambahPenitipanModal = () =>{
+        setShowTambahanPenitipanModal(true);
+    }
+
+    const closeShowTambahPenitipanModal = () =>{
+        setShowTambahanPenitipanModal(false);
+    }
+
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(searchTerm);
@@ -121,7 +132,7 @@ const RincianPenitipan = () => {
                 </div>
                 <Button color="green" 
                 className='ms-auto me-10'
-                onClick={() => openCreateModal()}>
+                onClick={() => openShowTambahPenitipanModal()}>
                     + Create
                 </Button>
             </div>
@@ -273,6 +284,10 @@ const RincianPenitipan = () => {
                 show={showDetailRincianModal}
                 onClose={closeShowDetailRincianModal}
                 data={rincianData}
+            />
+            <TambahPenitipanModal
+                show={showTambahanPenitipanModal}
+                onClose={closeShowTambahPenitipanModal}
             />
             <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
                 <span className="text-sm text-gray-500">

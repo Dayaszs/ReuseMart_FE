@@ -43,4 +43,20 @@ const GetDetailBarangTerjual = async (id) => {
     }
 };
 
-export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual };
+const showAllPenitip = async(search = "") => {
+    try{
+        const response = await useAxios.get(`/getpenitip?page=&search=${search}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+
+export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual, showAllPenitip };

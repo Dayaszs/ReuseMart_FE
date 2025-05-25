@@ -40,10 +40,25 @@ const showBarangByKategori = async(page = 1, min_kode, max_kode) =>{
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
-
+        
         return response.data;
     }catch(error){
         throw error.response.data;
+    }
+}
+
+const showKategori = async() =>{
+    try{
+        const response = await useAxios.get(`/getAllKategori`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        return response;
+    }catch(error){
+        throw error.response;
     }
 }
 
@@ -90,4 +105,4 @@ const showBarangByKategori = async(page = 1, min_kode, max_kode) =>{
 //     }
 // };
 
-export { GetDetailBarang, showBarangTersedia, showBarangByKategori };
+export { GetDetailBarang, showBarangTersedia, showBarangByKategori, showKategori };
