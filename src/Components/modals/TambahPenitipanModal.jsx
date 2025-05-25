@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Dropdown, DropdownItem, Label, TextInput, FileInput } from 'flowbite-react'
 import { useState, useEffect } from 'react'
 import { ShowPegawaiByJabatan } from '@/api/services/apiPegawai'
-import { showAllPenitip } from '@/api/services/apiPenitip'
+import { showAllPenitip, tambahPenitipanBarang } from '@/api/services/apiPenitip'
 import { showKategori } from '@/api/services/apiBarang'
 import { IoIosSearch } from "react-icons/io";
 import { PiCodepenLogo, PiCornersOutLight } from 'react-icons/pi'
@@ -115,6 +115,104 @@ const TambahPenitipanModal = ({show, onClose}) => {
         setBarang(newItems);
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError("");
+        
+        try {
+            
+            if (!selectedIdPenitip) {
+                setError("Pilih penitip terlebih dahulu");
+                setIsLoading(false);
+                return;
+            }
+            
+            if (!selectedIdPegawai) {
+                setError("Pilih pegawai QC terlebih dahulu");
+                setIsLoading(false);
+                return;
+            }
+            
+            if (!barang || barang.length === 0) {
+                setError("Tambahkan minimal satu barang");
+                setIsLoading(false);
+                return;
+            }
+
+            //cek kosong
+            for (let i = 0; i < barang.length; i++) {
+                const item = barang[i];
+                if (!item.namaBarang.trim()) {
+                    setError(`Nama barang ke-${i + 1} harus diisi`);
+                    setIsLoading(false);
+                    return;
+                }
+                if (!item.deskripsiBarang.trim()) {
+                    setError(`Deskripsi barang ke-${i + 1} harus diisi`);
+                    setIsLoading(false);
+                    return;
+                }
+                if (!item.harga || item.harga <= 0) {
+                    setError(`Harga barang ke-${i + 1} harus diisi dengan nilai yang valid`);
+                    setIsLoading(false);
+                    return;
+                }
+                if (!item.berat || item.berat <= 0) {
+                    setError(`Berat barang ke-${i + 1} harus diisi dengan nilai yang valid`);
+                    setIsLoading(false);
+                    return;
+                }
+                if (!item.id_kategori || item.id_kategori === 0) {
+                    setError(`Kategori barang ke-${i + 1} harus dipilih`);
+                    setIsLoading(false);
+                    return;
+                }
+            }
+            
+            const transformedBarang = barang.map(item => ({
+                nama_barang: item.namaBarang.trim(),
+                deskripsi: item.deskripsiBarang.trim(),
+                url_gambar_barang: item.urlGambarBarang || "", // This should be handled properly for file upload
+                harga: parseInt(item.harga),
+                tanggal_garansi_habis: item.tanggal_garansi ? 
+                    format(new Date(item.tanggal_garansi), "yyyy-MM-dd") : null,
+                berat: parseFloat(item.berat),
+                id_kategori: parseInt(item.id_kategori)
+            }));
+            
+            const data = {
+                id_penitip: parseInt(selectedIdPenitip),
+                id_pegawai: parseInt(selectedIdPegawai),
+                barang: transformedBarang
+            };
+            
+            console.log("Payload to be sent:", data);
+            
+            const response = await tambahPenitipanBarang(data, banyakBarang);
+            
+            console.log("API Response:", response);
+            
+            alert("Penitipan barang berhasil ditambahkan!");
+            
+            setSelectedPenitip("");
+            setSelectedIdPenitip("");
+            setSelectedPegawai("");
+            setSelectedIdPegawai("");
+            setBanyakBarang(null);
+            setInputValue("");
+            setBarang([]);
+            
+            onClose();
+            
+        } catch (err) {
+            console.error('Submit Error:', err);
+            setError(err.message || "Gagal menambahkan penitipan barang");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchPegawaiGudang();
         fetchPenitip("");
@@ -128,6 +226,7 @@ const TambahPenitipanModal = ({show, onClose}) => {
         <Modal show={show} onClose={onClose} size='6xl'> 
             <ModalHeader>Tambah Penitipan Barang</ModalHeader>
             <ModalBody>
+                <form onSubmit={handleSubmit}>
                 <div className='flex justify-between py-3'>
                     <p>Nama Pegawai QC</p>
                     <Dropdown 
@@ -383,7 +482,20 @@ const TambahPenitipanModal = ({show, onClose}) => {
                         <></>
                     )
                 }
+                </form>
             </ModalBody>
+            <ModalFooter className='flex justify-end'>
+                <Button 
+                    color="green"
+                    onClick={handleSubmit}>
+                    Simpan
+                </Button>
+                <Button 
+                    color="red"
+                    onClick={onClose}>
+                    Batal
+                </Button>
+            </ModalFooter>
         </Modal>
     );
 }

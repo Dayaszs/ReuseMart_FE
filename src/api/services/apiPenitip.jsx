@@ -58,5 +58,21 @@ const showAllPenitip = async(search = "") => {
     }
 }
 
+const tambahPenitipanBarang = async(data, bykBarang) => {
+    try{
+        const response = await useAxios.post(`/gudang/penitipan-barang/${bykBarang}`, data,{
+            headers:{
+                "Accept": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
 
-export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual, showAllPenitip };
+        console.log(response.data);
+        return response;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+
+export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual, showAllPenitip, tambahPenitipanBarang };
