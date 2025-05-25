@@ -14,7 +14,7 @@ const PembayaranPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [detailPembayaran, setDetailPembayaran] = useState({})
-    const [timeLeft, setTimeLeft] = useState(null);
+    const [timeLeft, setTimeLeft] = useState(99);
     const [file, setFile] = useState(null)
     const [preview, setPreview] = useState("")
     const [isUploading, setIsUploading] = useState(false)
@@ -93,6 +93,10 @@ const PembayaranPage = () => {
             .finally(() => setIsLoading(false));
     }
 
+    useEffect(() => {
+        getDetailPembayaran();
+    }, []);
+
     const updateTimeLeft = (batasWaktu) => {
         const now = Date.now();
         const remaining = Math.max(0, Math.floor((batasWaktu - now) / 1000));
@@ -100,12 +104,10 @@ const PembayaranPage = () => {
     };
 
     useEffect(() => {
-        getDetailPembayaran();
-    }, []);
+        const key = `batasWaktu_${id}`;
 
-    useEffect(() => {
         const interval = setInterval(() => {
-            const storedBatas = localStorage.getItem(`batasWaktu_${id}`);
+            const storedBatas = localStorage.getItem(key);
             if (storedBatas) {
                 updateTimeLeft(parseInt(storedBatas));
             }
@@ -115,7 +117,11 @@ const PembayaranPage = () => {
     }, [id]);
 
     useEffect(() => {
-        if (timeLeft === 0 && !isSuccess) {
+        console.log("timeLeft", timeLeft);
+        console.log("isSuccess", isSuccess);
+        const storedBatas = localStorage.getItem(`batasWaktu_${id}`);
+        if (timeLeft === 0 && !isSuccess && storedBatas) {
+            console.log("storedBatas", storedBatas);
             cancelPemesanan();
         }
     }, [timeLeft, isSuccess]);
