@@ -62,6 +62,21 @@ const showKategori = async() =>{
     }
 }
 
+const ratingBarang = async(idBarang, data) => {
+    try{
+        const response = await useAxios.post(`/rating-barang/${idBarang}`, data, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        return response;
+    }catch(error){
+        throw error.response;
+    }
+}
+
 // const TambahBarang = async (data) => {
 //     try {
 //         const response = await useAxios.post("/barang", data, {
@@ -105,4 +120,4 @@ const showKategori = async() =>{
 //     }
 // };
 
-export { GetDetailBarang, showBarangTersedia, showBarangByKategori, showKategori };
+export { GetDetailBarang, showBarangTersedia, showBarangByKategori, showKategori, ratingBarang };

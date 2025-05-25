@@ -1,10 +1,12 @@
 import { use, useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
-import { Card } from "flowbite-react";
+import { Card, Button } from "flowbite-react";
 import { useParams } from "react-router-dom";
 import { PulseLoader } from 'react-spinners';
 import { getGambarBarang } from '../api';
+import { ratingBarang } from '@/api/services/apiBarang';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
 const DetailPemesanan = () => {
   const [pemesanan, setPemesanan] = useState(null);
@@ -12,6 +14,33 @@ const DetailPemesanan = () => {
   const [barang, setBarang] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [ success, setSuccess ] = useState(false);
+
+  const [ rating, setRating ] = useState(0);
+  const [ hover, setHover ] = useState(0);
+
+  const handleBeriRating = async(id) =>{
+    setIsLoading(true);
+    setError("");
+    setSuccess(false);
+
+    try{
+      const data = new FormData();
+
+      data.append('rating', rating);
+
+      console.log("id", id);
+      console.log("rating", rating);
+      await ratingBarang(id, data);
+    }catch(error){
+      setError(error.response?.data?.message || "Terjadi kesalahan saat memberi rating");
+    }finally{
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     const fetchPemesanan = async () => {
@@ -96,6 +125,68 @@ const DetailPemesanan = () => {
           </div>
           <p className='text-sm'>Harga: <span>Rp {parseInt(item.harga).toLocaleString('id-ID')}</span>
           </p>
+
+          {pemesanan.status === 'Selesai' ?
+            (
+              <>
+                <p className='py-3 font-bold text-2xl border-b-2'>Rating</p>
+                {!item.rating ? 
+                  (
+                    <>
+                      <div className='flex gap-5'>
+                        {[...Array(5)].map((star, i) => {
+                          const ratingValue = i + 1;
+                          return (
+                            <label key={i}>
+                              <input
+                                type="radio"
+                                name="rating"
+                                value={ratingValue}
+                                onClick={() => setRating(ratingValue)}
+                                className='hidden'
+                                />
+                              <FaStar
+                                className="star"
+                                color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
+                                size={30}
+                                onMouseEnter={() => setHover(ratingValue)}
+                                onMouseLeave={() => setHover(0)}
+                                />
+                            </label>
+                          );
+                        })}
+                      </div>
+                      <Button
+                        color="green"
+                        onClick={() => handleBeriRating(item.id_barang)}
+                        size='md'
+                        className='w-60'>
+                          Beri Rating
+                      </Button>
+                    </>
+                  )
+                  :
+                  (
+                    <>
+                      <div className='flex gap-5'>
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar
+                            key={i}
+                            color={i < parseInt(item.rating) ? "#ffc107" : "#e4e5e9"}
+                            size={30}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )
+                }
+              </>
+            )
+            :
+            (
+              <></>
+            ) 
+          }
         </Card>
       ))}
 
