@@ -68,9 +68,9 @@ const PembayaranPage = () => {
         ShowDetailPembayaran(id)
             .then((res) => {
                 setDetailPembayaran(res.data);
-                const batasWaktu = new Date(res.data.batas_waktu).getTime();
-                localStorage.setItem(`batasWaktu_${id}`, batasWaktu.toString());
-                updateTimeLeft(batasWaktu);
+                // const batasWaktu = new Date(res.data.batas_waktu).getTime();
+                // localStorage.setItem(`batasWaktu_${id}`, batasWaktu.toString());
+                // updateTimeLeft(batasWaktu);
             })
             .catch((err) => {
                 setError(err.message || "Gagal mengambil data.");
@@ -96,6 +96,12 @@ const PembayaranPage = () => {
     useEffect(() => {
         getDetailPembayaran();
     }, []);
+
+    useEffect(() => {
+        const batasWaktu = new Date(detailPembayaran.batas_waktu).getTime();
+        localStorage.setItem(`batasWaktu_${id}`, batasWaktu.toString());
+        updateTimeLeft(batasWaktu);
+    }, [detailPembayaran]);
 
     const updateTimeLeft = (batasWaktu) => {
         const now = Date.now();
