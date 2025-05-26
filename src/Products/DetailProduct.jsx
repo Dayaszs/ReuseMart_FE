@@ -3,9 +3,10 @@ import api from '@/routes/api';
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
+import { FaStar } from 'react-icons/fa'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PulseLoader } from "react-spinners";
-import { GetDetailBarang } from "@/api/services/apiBarang";
+import { GetDetailBarang, showPenitipByIdBarang,showRatingPenitip } from "@/api/services/apiBarang";
 import { TambahCart } from '@/api/services/apiCart';
 import { TambahDiskusi, GetDiskusi } from '@/api/services/apiDiskusi';
 import DiskusiBarangCard from '@/Components/DiskusiBarangCard';
@@ -27,9 +28,11 @@ const DetailProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [barang, setBarang] = useState([]);
-    const [diskusi, setDiskusi] = useState([]);
+    const [diskusi, setDiskusi]  = useState([]);
+    const [ penitip, setPenitip ] = useState([]);
+    const [ rating, setRating ] = useState(0.0);
     const { id } = useParams();
-
+    
     const toastTimeout = useRef(null);
     const [showToast, setShowToast] = useState(false);
     const navigate = useNavigate();
@@ -53,6 +56,28 @@ const DetailProduct = () => {
             year: 'numeric'
         });
     };
+
+    const fetchPenitip = (id) =>{
+        showPenitipByIdBarang(id)
+        .then((res) => {
+            console.log("Penitip",res);
+            setPenitip(res.data);
+        })
+        .catch((err) => {
+            setError(err.message || "Gagal mengambil data Penitip.");
+        })
+        .finally(() => setIsLoading(false));
+        
+        showRatingPenitip(id)
+        .then((res) =>{
+            console.log("Rating",res);
+            setRating(res.data);
+        })
+        .catch((err) =>{
+            setError(err.message || "Gagal mengambil data Penitip.");
+        })
+        .finally(() => setIsLoading(false));
+    }
 
     const fetchDiskusi = (id) => {
         GetDiskusi(id)
@@ -145,6 +170,7 @@ const DetailProduct = () => {
 
             fetchDetailBarang();
             fetchDiskusi(id);
+            fetchPenitip(id);
         }
     }, [id]);
 
@@ -198,6 +224,7 @@ const DetailProduct = () => {
                                                 decimalSeparator=","
                                                 className="font-bold text-xl"
                                             />
+                                            <p className='text-sm py-3 flex items-center'>Dijual oleh {penitip.nama_penitip}(<FaStar color='#ffc107'></FaStar>{parseFloat(rating).toFixed(1)})</p>
                                             {barang.tanggal_garansi_habis ? (
                                                 <p className="mt-1">Tanggal garansi habis : {formatDate(barang.tanggal_garansi_habis)}</p>
                                             ) : (

@@ -77,6 +77,36 @@ const ratingBarang = async(idBarang, data) => {
     }
 }
 
+const showRatingPenitip = async(id) => {
+    try{
+        const response = await useAxios.get(`/barang/${id}/rating`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+
+        return response;
+    }catch(error){ 
+        return error.response;
+    }
+}
+
+const showPenitipByIdBarang = async(id) =>{
+    try{
+        const response = await useAxios.get(`/barang/${id}/penitip`,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+        
+        return response;
+    }catch(error){
+        return error.response;
+    }
+}
+
 // const TambahBarang = async (data) => {
 //     try {
 //         const response = await useAxios.post("/barang", data, {
@@ -120,4 +150,4 @@ const ratingBarang = async(idBarang, data) => {
 //     }
 // };
 
-export { GetDetailBarang, showBarangTersedia, showBarangByKategori, showKategori, ratingBarang };
+export { GetDetailBarang, showBarangTersedia, showBarangByKategori, showKategori, ratingBarang, showRatingPenitip, showPenitipByIdBarang};

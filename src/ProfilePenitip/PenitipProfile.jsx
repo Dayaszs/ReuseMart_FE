@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { GetPenitip } from '@/api/services/apiPenitip'
+import { GetPenitip, hitungAvgRatingProfile } from '@/api/services/apiPenitip'
 import { Badge, Card, Tabs, TabItem } from "flowbite-react";
 import { LuAward, LuCircleUserRound } from "react-icons/lu";
 import BarangPenitip from './BarangPenitip';

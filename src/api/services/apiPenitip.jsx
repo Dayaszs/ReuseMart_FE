@@ -74,5 +74,21 @@ const tambahPenitipanBarang = async(data, bykBarang) => {
     }
 }
 
+const hitungAvgRatingProfile = async(id) =>{
+    try{
+        const response = await useAxios.get(`/penitip/rating-profile/${id}`,{
+            headers:{
+                "Accept": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
 
-export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual, showAllPenitip, tambahPenitipanBarang };
+        console.log(response.data);
+        return response;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+
+export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual, showAllPenitip, tambahPenitipanBarang, hitungAvgRatingProfile };
