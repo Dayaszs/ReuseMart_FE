@@ -58,6 +58,7 @@ const DetailProduct = () => {
     };
 
     const fetchPenitip = (id) =>{
+        setIsLoading(true);
         showPenitipByIdBarang(id)
         .then((res) => {
             console.log("Penitip",res);
