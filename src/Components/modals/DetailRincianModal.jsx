@@ -37,16 +37,6 @@ const DetailRincianModal = ({ show, onClose, data }) =>{
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
 
-    // const formatDate = (dateString) => {
-    //     if (!dateString) return '';
-    //     const date = new Date(dateString);
-    //     return date.toLocaleDateString('id-ID', {
-    //         day: 'numeric',
-    //         month: 'long',
-    //         year: 'numeric'
-    //     });
-    // };
-
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -160,29 +150,8 @@ const DetailRincianModal = ({ show, onClose, data }) =>{
                     
                 </div>
             </ModalBody>
-            {/* <ModalFooter>
-                <Button 
-                    color="gray" 
-                    onClick={onClose}
-                    disabled={isLoading}
-                >
-                    Batal
-                </Button>
-                <Button 
-                    // onClick={handleSubmit}
-                    disabled={isLoading}
-                >
-                    {isLoading ? (
-                        <PulseLoader size={8} color="#ffffff" />
-                    ) : (
-                        "Simpan"
-                    )}
-                </Button>
-            </ModalFooter> */}
         </Modal>
     )
-
-
 }
 
 export default DetailRincianModal;

@@ -33,6 +33,7 @@ import RedirectIfLoggedIn from './RedirectIfLoggedIn.jsx';
 import OrganisasiList from "@/DashboardAdmin/OrganisasiList.jsx";
 
 import ListBarangKirim from "@/DashboardGudang/ListBarangKirim.jsx";
+import ListPenitipan from "@/DashboardGudang/ListPenitipan.jsx";
 
 import ResetPasswordPegawai from "@/DashboardAdmin/ResetPasswordPegawai.jsx";
 import UnauthorizedPage from "@/pages/Unauthorized.jsx";
@@ -180,6 +181,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Gudang"]}>
                         <RincianPenitipan/>
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "/gudang/dashboard/penitipan",
+                element: (
+                    <ProtectedRoute allowedRoles={["Gudang"]}>
+                        <ListPenitipan/>
                     </ProtectedRoute>
                 )
             },

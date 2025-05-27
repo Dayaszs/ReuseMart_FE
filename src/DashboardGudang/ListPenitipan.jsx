@@ -1,25 +1,17 @@
 import React from 'react'
 import { useEffect, useState } from "react";
-import { ShowRincianPenitipan } from '@/api/services/apiRincianPenitipan'
-import { ShowPegawaiByJabatan } from '@/api/services/apiPegawai'
+import { getAllPenitipan } from '@/api/services/apiPenitipan'
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
 import { Eye } from 'lucide-react';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/carousel"
-import { getGambarBarang } from '@/api/index';
-import DetailRincianModal from '@/Components/modals/DetailRincianModal'
 import TambahPenitipanModal from '@/Components/modals/TambahPenitipanModal'
+import DetailPenitipanModal from '@/Components/modals/DetailPenitipanModal'
 
-const RincianPenitipan = () => {
-    const [ rincianPenitipan, setRincianPenitipan ] = useState([]);
+const ListPenitipan = () =>{
+    const[ penitipan, setPenitipan ] = useState([]);
+    const[ dataPenitipan, setDataPenitipan ] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -32,10 +24,8 @@ const RincianPenitipan = () => {
     const [total, setTotal] = useState(0);
     const [perPage, setPerPage] = useState(10);
 
-    const [ showDetailRincianModal, setShowDetailRincianModal ] = useState(false);
     const [ showTambahanPenitipanModal, setShowTambahanPenitipanModal ] = useState(false);
-
-    const [ rincianData, setRincianData ] = useState(0);
+    const [ showDetailPenitipanModal, setShowDetailPenitipanModal ] = useState(false);
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -50,47 +40,25 @@ const RincianPenitipan = () => {
     const handlePageClick = (page) => {
         if (page >= 1 && page <= lastPage && page !== currentPage) {
             setCurrentPage(page);
-            fetchRincianPenitipan(page);
+            fetchPenitipan(page);
         }
     };
 
-    const fetchRincianPenitipan = (page = 1, search = "") =>{
+    const fetchPenitipan = (page = 1, search = "") =>{
         setIsLoading(true);
 
-        ShowRincianPenitipan(page, search)
-        .then((res) => {
-            const dataRincianPenitipan = Array.isArray(res.data) ? res.data : 
-            Array.isArray(res.data?.data) ? res.data.data : [];
+        getAllPenitipan(page, search)
+        .then((res) =>{
+            setPenitipan(res.data);
 
-            console.log(dataRincianPenitipan);
-            setRincianPenitipan(dataRincianPenitipan);
-
-            setLastPage(res.data.last_page);
-            setPerPage(res.data.per_page);
-            setTotal(res.data.total);
+            setLastPage(res.last_page);
+            setPerPage(res.per_page);
+            setTotal(res.total);
         })
         .catch((err) => {
-            setError(err.message || "Gagal mengambil data rincian penitipan");
+            setError(err.message || "Gagal mengambil list penitipan");
         })
         .finally(() => setIsLoading(false));
-    };
-
-    const openShowDetailRincianModal = (data) => {
-        setRincianData(data);
-        setShowDetailRincianModal(true);
-    }
-
-    const closeShowDetailRincianModal = () => {
-        setRincianData(null);
-        setShowDetailRincianModal(false);
-    }
-
-    const openShowTambahPenitipanModal = () =>{
-        setShowTambahanPenitipanModal(true);
-    }
-
-    const closeShowTambahPenitipanModal = () =>{
-        setShowTambahanPenitipanModal(false);
     }
 
     useEffect(() => {
@@ -103,8 +71,26 @@ const RincianPenitipan = () => {
     }, [searchTerm]);
 
     useEffect(() => {
-        fetchRincianPenitipan(currentPage, debouncedSearch);
+        fetchPenitipan(currentPage, debouncedSearch);
     }, [currentPage, debouncedSearch]);
+
+    const openShowTambahPenitipanModal = () =>{
+        setShowTambahanPenitipanModal(true);
+    }
+
+    const closeShowTambahPenitipanModal = () =>{
+        setShowTambahanPenitipanModal(false);
+    }
+
+    const openShowDetailPenitipanModal = (data) =>{
+        setDataPenitipan(data);
+        console.log("data", data);
+        setShowDetailPenitipanModal(true);
+    }
+
+    const closeShowDetailPenitipanModal = () =>{
+        setShowDetailPenitipanModal(false);
+    }
 
     if(error)
         return
@@ -114,10 +100,9 @@ const RincianPenitipan = () => {
 
     return(
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            {/* Search Bar */}
             <div className="flex flex-col md:flex-row items-center justify-start flex-wrap gap-4 py-4 ps-6 bg-white">
                 <label htmlFor="table-search-users" className="sr-only">Search</label>
-                <p className='font-bold'>Rincian Penitipan</p>
+                <p className='font-bold'>Penitipan</p>
                 <div className="relative">
                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                         <IoIosSearch />
@@ -126,7 +111,7 @@ const RincianPenitipan = () => {
                         type="text"
                         id="table-search-users"
                         className="block w-80 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
-                        placeholder="Cari Rincian Penitipan"
+                        placeholder="Cari Penitipan"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -137,8 +122,6 @@ const RincianPenitipan = () => {
                     + Create
                 </Button>
             </div>
-
-            {/* Tabel Data Rincian Penitipan */}
             <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
@@ -149,9 +132,6 @@ const RincianPenitipan = () => {
                             No
                         </th>
                         <th scope="col" className="px-6 py-3">
-                            Nama Barang
-                        </th>
-                        <th scope="col" className="px-6 py-3">
                             Nama QC
                         </th>
                         <th scope="col" className="px-6 py-3">
@@ -160,12 +140,12 @@ const RincianPenitipan = () => {
                         <th scope="col" className="px-6 py-3">
                             Tanggal Masuk
                         </th>
-                        <th scope="col" className="px-6 py-3">
+                        {/* <th scope="col" className="px-6 py-3">
                             Tanggal Selesai
                         </th>
                         <th scope="col" className="px-6 py-3">
                             <p className='text-xs'>Batas Pengambilan Barang</p>
-                        </th>
+                        </th> */}
                         <th scope="col" className="px-6 py-3">
                             Action
                         </th>
@@ -186,8 +166,8 @@ const RincianPenitipan = () => {
                             </tr>
                         ) : (
                             <>
-                                {rincianPenitipan?.map((item, index) => (
-                                    <tr key={item.id_rincian_penitipan} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
+                                {penitipan?.map((item, index) => (
+                                    <tr key={item.penitipan} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
                                         {/* <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                                             <div className="ps-3"> */}
                                                 {/* <img className="w-24 h-24" src={item.barang.url_gambar_barang} alt="Logo Organisasi" /> */}
@@ -214,36 +194,33 @@ const RincianPenitipan = () => {
                                             {/* </div>
                                         </th> */}
                                         <td className="px-6 py-4">
-                                            {item.id_rincian_penitipan}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {item.barang.nama_barang}
+                                            {item.id_penitipan}
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                {item.penitipan.pegawai.nama}
+                                                {item.pegawai.nama}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                {item.penitipan.penitip.nama_penitip}
+                                                {item.penitip.nama_penitip}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                {formatDate(item.penitipan.tanggal_masuk)}
+                                                {formatDate(item.tanggal_masuk)}
+                                            </div>
+                                        </td>
+                                        {/* <td className="px-6 py-4">
+                                            <div className="flex items-center">
+                                                {formatDate(item.rincian_penitipan[0].tanggal_selesai)}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                {formatDate(item.tanggal_selesai)}
+                                                {formatDate(item.rincian_penitipan[0].batas_ambil)}
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center">
-                                                {formatDate(item.batas_ambil)}
-                                            </div>
-                                        </td>
+                                        </td> */}
                                         <td className="px-6 py-4 h-full flex items-center justify-center">
                                             {/* Modal Edit */}
                                             <button
@@ -265,15 +242,12 @@ const RincianPenitipan = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <button
-                                                onClick={() => openShowDetailRincianModal(item)}
+                                                onClick={() => openShowDetailPenitipanModal(item)}
                                                 className="p-2 bg-green-600 hover:bg-green-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                                                 type="button"
                                             >
                                                 <Eye size={15}/>
                                             </button>
-                                            {/* <div className="flex items-center">
-                                                {formatDate(item.batas_ambil)}
-                                            </div> */}
                                         </td>
                                     </tr>
                                 ))}
@@ -281,15 +255,16 @@ const RincianPenitipan = () => {
                         )}
                 </tbody>
             </table>
-            <DetailRincianModal
-                show={showDetailRincianModal}
-                onClose={closeShowDetailRincianModal}
-                data={rincianData}
-            />
             <TambahPenitipanModal
                 show={showTambahanPenitipanModal}
                 onClose={closeShowTambahPenitipanModal}
             />
+            <DetailPenitipanModal
+                show={showDetailPenitipanModal}
+                onClose={closeShowDetailPenitipanModal}
+                data={dataPenitipan}
+            />
+
             <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
                 <span className="text-sm text-gray-500">
                     Showing{" "}
@@ -344,7 +319,7 @@ const RincianPenitipan = () => {
                 </ul>
             </nav>
         </div>
-    );
+    )
 }
 
-export default RincianPenitipan;
+export default ListPenitipan;

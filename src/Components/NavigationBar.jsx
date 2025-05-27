@@ -207,6 +207,14 @@ function NavigationBar() {
                   <ClipboardList size={18} />
                   <span>Rincian Penitipan</span>
                 </Link>
+                <Link
+                  to="/gudang/dashboard/penitipan"
+                  className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/penitipan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                    }`}
+                >
+                  <ClipboardList size={18} />
+                  <span>List Penitipan</span>
+                </Link>
               </>
             )}
 
