@@ -31,7 +31,7 @@ const DetailPenitipanModal = ({ show, onClose, data }) => {
     const [ batasAmbil, setBatasAmbil ] = useState("");
     const [ tanggalDiambil, setTanggalDiambil ] = useState("");
 
-    //Barang
+    //Barang & Rincian Penitipan
     const [ barang, setBarang] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);

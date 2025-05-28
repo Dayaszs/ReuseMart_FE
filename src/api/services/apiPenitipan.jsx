@@ -15,4 +15,20 @@ const getAllPenitipan = async(page = 1, search = "") => {
     }
 }
 
-export { getAllPenitipan };
+const editPenitipanBarang = async(data, id) => {
+    try{
+        const response = await useAxios.post(`/gudang/penitipan/edit/${id}`, data,{
+            headers:{
+                "Accept": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+
+        console.log(response.data);
+        return response;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+export { getAllPenitipan, editPenitipanBarang };

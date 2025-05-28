@@ -8,6 +8,7 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
 import TambahPenitipanModal from '@/Components/modals/TambahPenitipanModal'
 import DetailPenitipanModal from '@/Components/modals/DetailPenitipanModal'
+import EditPenitipanModal from '@/Components/modals/EditPenitipanModal'
 
 const ListPenitipan = () =>{
     const[ penitipan, setPenitipan ] = useState([]);
@@ -26,6 +27,7 @@ const ListPenitipan = () =>{
 
     const [ showTambahanPenitipanModal, setShowTambahanPenitipanModal ] = useState(false);
     const [ showDetailPenitipanModal, setShowDetailPenitipanModal ] = useState(false);
+    const [ showEditPenitipanModal, setShowEditPenitipanModal ] = useState(false);
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -90,6 +92,18 @@ const ListPenitipan = () =>{
 
     const closeShowDetailPenitipanModal = () =>{
         setShowDetailPenitipanModal(false);
+    }
+
+    const openShowEditPenitipanModal = (data) =>{
+        setDataPenitipan(data);
+        console.log("data", data);
+        setShowEditPenitipanModal(true);
+    }
+
+    const closeShowEditPenitipanModal = () =>{
+        setIsLoading(true);
+        setShowEditPenitipanModal(false);
+        setIsLoading(false);
     }
 
     if(error)
@@ -224,7 +238,7 @@ const ListPenitipan = () =>{
                                         <td className="px-6 py-4 h-full flex items-center justify-center">
                                             {/* Modal Edit */}
                                             <button
-                                                onClick={() => openEditModal(item)}
+                                                onClick={() => openShowEditPenitipanModal(item)}
                                                 className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                                                 type="button"
                                             >
@@ -262,6 +276,11 @@ const ListPenitipan = () =>{
             <DetailPenitipanModal
                 show={showDetailPenitipanModal}
                 onClose={closeShowDetailPenitipanModal}
+                data={dataPenitipan}
+            />
+            <EditPenitipanModal
+                show={showEditPenitipanModal}
+                onClose={closeShowEditPenitipanModal}
                 data={dataPenitipan}
             />
 

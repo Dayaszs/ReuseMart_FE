@@ -121,7 +121,7 @@ const TambahPenitipanModal = ({show, onClose}) => {
         setError("");
         
         try {
-            
+
             if (!selectedIdPenitip) {
                 setError("Pilih penitip terlebih dahulu");
                 setIsLoading(false);
@@ -332,7 +332,7 @@ const TambahPenitipanModal = ({show, onClose}) => {
                                             newItems[index].deskripsiBarang = e.target.value;
                                             setBarang(newItems);
                                         }}
-                                        placeholder="Masukkan Harga barang"
+                                        placeholder="Masukkan deskripsi barang"
                                     />
 
                                     {/* Gambar */}
