@@ -101,9 +101,9 @@ const ListPenitipan = () =>{
     }
 
     const closeShowEditPenitipanModal = () =>{
-        setIsLoading(true);
         setShowEditPenitipanModal(false);
-        setIsLoading(false);
+        setDataPenitipan(null);
+        fetchPenitipan(currentPage, debouncedSearch);
     }
 
     if(error)
