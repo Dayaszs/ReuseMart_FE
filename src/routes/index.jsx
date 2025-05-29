@@ -41,6 +41,8 @@ import CartPage from "@/Transaction/CartPage.jsx";
 import CheckOutPage from "@/Transaction/CheckOutPage.jsx";
 import PembayaranPage from "@/Transaction/PembayaranPage.jsx";
 
+import ListKlaimMerchandise from "@/DashboardCS/ListKlaimMerchandise.jsx"
+
 const router = createBrowserRouter([
     {
         path: "*",
@@ -173,6 +175,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Customer Service"]}>
                         <VerifikasiPembayaran />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "/cs/list-klaim",
+                element: (
+                    <ProtectedRoute allowedRoles={["Customer Service"]}>
+                        <ListKlaimMerchandise />
                     </ProtectedRoute>
                 )
             },

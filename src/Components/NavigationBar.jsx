@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import api from '../routes/api';
 import { PulseLoader } from 'react-spinners';
-import { Home, Menu, Building2, Check, User2, BaggageClaim, BookOpenText, User, ClipboardList, Wallet, Users } from 'lucide-react';
+import { Home, Menu, Building2, Check, User2, BaggageClaim, BookOpenText, User, ClipboardList, Wallet, Users, Meh } from 'lucide-react';
 import { MdPassword } from "react-icons/md";
 import { LuShoppingCart } from "react-icons/lu";
 import { GetCart } from '@/api/services/apiCart';
@@ -185,6 +185,15 @@ function NavigationBar() {
                 >
                   <Wallet size={18} />
                   Verifikasi Pembayaran
+                </Link>
+
+                <Link
+                  to="/cs/list-klaim"
+                  className={`flex text-sm items-center gap-2 py-2 px-4 rounded ${isActive("/cs/list-klaim") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                    }`}
+                >
+                  <Meh size={18} />
+                  List Klaim Merchandise
                 </Link>
               </>
             )}
@@ -373,11 +382,15 @@ function NavigationBar() {
                 </Link>
               )}
               {userRole === 'Customer Service' && (
-                <Link to="/cs/dashboard" className="mr-2">
-                  <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
-                    Dashboard & List Penitip
-                  </button>
-                </Link>
+                <>
+                  <Link to="/cs/dashboard" className="mr-2">
+                    <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
+                      Dashboard & List Penitip
+                    </button>
+                  </Link>
+
+                  
+                </>
               )}
               {userRole === 'Organisasi' && (
                 <Link to="/organisasi/profile" className="mr-2">
