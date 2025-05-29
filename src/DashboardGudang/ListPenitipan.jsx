@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { getAllPenitipan } from '@/api/services/apiPenitipan'
 import { IoIosSearch } from "react-icons/io";
 import { PulseLoader } from 'react-spinners';
-import { Eye } from 'lucide-react';
+import { Eye, ArrowDownToLine } from 'lucide-react';
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import TambahPenitipanModal from '@/Components/modals/TambahPenitipanModal'
 import DetailPenitipanModal from '@/Components/modals/DetailPenitipanModal'
 import EditPenitipanModal from '@/Components/modals/EditPenitipanModal'
+import PDFPenitipan from '@/api/pdf/NotaPenitipan'
 
 const ListPenitipan = () =>{
     const[ penitipan, setPenitipan ] = useState([]);
@@ -104,6 +106,27 @@ const ListPenitipan = () =>{
         setShowEditPenitipanModal(false);
         setDataPenitipan(null);
         fetchPenitipan(currentPage, debouncedSearch);
+    }
+
+    const downloadPDF = (data) =>{
+        console.log("data pdf", data);
+        return (
+            <PDFDownloadLink
+                document={<PDFPenitipan data={data} />}
+                fileName={`nota-penitipan-${data.id_penitipan}.pdf`}
+                className="p-2 ms-2 bg-amber-500 hover:bg-amber-600 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-amber-300 flex items-center justify-center"
+            >
+                {({ loading }) => 
+                    loading ? (
+                        <div className="flex items-center justify-center gap-2">
+                            <PulseLoader size={8} color="#ffffff" />
+                        </div>
+                    ) : (
+                        <ArrowDownToLine size={15} />
+                    )
+                }
+            </PDFDownloadLink>
+        )
     }
 
     if(error)
@@ -235,7 +258,7 @@ const ListPenitipan = () =>{
                                                 {formatDate(item.rincian_penitipan[0].batas_ambil)}
                                             </div>
                                         </td> */}
-                                        <td className="px-6 py-4 h-full flex items-center justify-center">
+                                        <td className="px-6 py-4 h-full flex items-center">
                                             {/* Modal Edit */}
                                             <button
                                                 onClick={() => openShowEditPenitipanModal(item)}
@@ -245,13 +268,25 @@ const ListPenitipan = () =>{
                                                 <FaEdit />
                                             </button>
 
-                                            {/* Modal Delete */}
+                                            {/* Download PDF */}
                                             <button
-                                                onClick={() => openDeleteModal(item.id_pegawai)}
-                                                className="p-2 ms-2 bg-red-600 hover:bg-red-700 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-red-300"
+                                                className="p-2 ms-2 bg-amber-500 hover:bg-amber-600 text-white rounded-sm focus:outline-none focus:ring-2 focus:ring-amber-300 flex items-center justify-center"
                                                 type="button"
                                             >
-                                                <FaTrashAlt />
+                                                <PDFDownloadLink
+                                                    document={<PDFPenitipan data={item} />}
+                                                    fileName={`nota-penitipan-${item.id_penitipan}.pdf`}
+                                                >
+                                                    {({ loading }) => 
+                                                        loading ? (
+                                                            <div className="flex items-center justify-center gap-2">
+                                                                <PulseLoader size={8} color="#ffffff" />
+                                                            </div>
+                                                        ) : (
+                                                            <ArrowDownToLine size={15} />
+                                                        )
+                                                    }
+                                                </PDFDownloadLink>
                                             </button>
                                         </td>
                                         <td className="px-6 py-4">

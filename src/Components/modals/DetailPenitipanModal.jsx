@@ -105,13 +105,13 @@ const DetailPenitipanModal = ({ show, onClose, data }) => {
                         <p>Nama : {item.barang.nama_barang}</p>
                         <p>Deskripsi : {item.barang.deskripsi}</p>
                         <p>Harga : {item.barang.harga}</p>
-                        {item.barang.tanggal_garansi == "" ? 
+                        {!item.barang.tanggal_garansi_habis  ? 
                             (
                                 <></>
                             ) 
                             : 
                             (
-                                <p>Tanggal Garansi Barang Berakhir : {formatDate(item.barang.tanggal_garansi)}</p>
+                                <p>Tanggal Garansi Barang Berakhir : {formatDate(item.barang.tanggal_garansi_habis)}</p>
                             )
                         }
                         <p>Status : {item.barang.status}</p>
