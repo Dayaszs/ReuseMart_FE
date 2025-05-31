@@ -6,6 +6,9 @@ import { PulseLoader } from 'react-spinners';
 import EditPenitipModal from '@/Components/modals/EditPenitipModal';
 import HapusPenitipModal from '@/Components/modals/HapusPenitipModal';
 import TambahPenitipModal from '@/Components/modals/TambahPenitipModal';
+import PDFPenitip from '@/api/pdf/NotaPenitip';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { ArrowDownToLine } from 'lucide-react';
 
 const CSDash = () => {
     const [penitip, setPenitip] = useState([]);
@@ -95,7 +98,7 @@ const CSDash = () => {
                             {penitip?.map((item, index) => (
                                 <Card
                                     key={index}
-                                    className="p-2 shadow-md min-h-[100px] mb-2"
+                                    className="p-2 shadow-md min-h-[100px] mb-2 relative"
                                 >
                                     <div className="flex flex-wrap items-center justify-between mt-4 mb-4">
                                         <div>
@@ -138,6 +141,28 @@ const CSDash = () => {
                                             >
                                                 Delete
                                             </Button>
+                                        </div>
+
+                                        <div className="absolute top-2 right-2">
+                                            <PDFDownloadLink
+                                                document={<PDFPenitip data={item} />}
+                                                fileName={`nota-penitip-${item.id_penitip}.pdf`}
+                                            >
+                                                {({ loading }) =>
+                                                    loading ? (
+                                                        <div className="flex items-center justify-center gap-2">
+                                                            <PulseLoader size={8} color="#ffffff" />
+                                                        </div>
+                                                    ) : (
+                                                        <button
+                                                            className="p-2 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
+                                                            type="button"
+                                                        >
+                                                            <ArrowDownToLine size={15} color="black" />
+                                                        </button>
+                                                    )
+                                                }
+                                            </PDFDownloadLink>
                                         </div>
                                     </div>
                                 </Card>
