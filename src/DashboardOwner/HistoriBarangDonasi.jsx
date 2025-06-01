@@ -80,7 +80,7 @@ const HistoriBarangDonasi = () => {
                     <div className='flex items-center justify-center ms-auto me-4'>
                         <PDFDownloadLink
                             document={<LaporanDonasi data={historiDonasi} />}
-                            fileName={`nota-penitip-${new Date().toLocaleDateString('en-GB').replace(/\//g, '')}.pdf`}
+                            fileName={`nota-donasi-${new Date().toLocaleDateString('en-GB').replace(/\//g, '')}.pdf`}
                         >
                             {({ loading }) =>
                                 loading ? (
