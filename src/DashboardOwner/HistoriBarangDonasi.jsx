@@ -5,9 +5,12 @@ import { PulseLoader } from 'react-spinners';
 import { IoIosSearch } from "react-icons/io";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import LaporanDonasi from '@/api/pdf/LaporanDonasi';
+import { ArrowDownToLine } from 'lucide-react';
 
-const HistoriBarangDonasi = ()=>  {
-    const [ historiDonasi, setHistoriDonasi ] = useState([]);
+const HistoriBarangDonasi = () => {
+    const [historiDonasi, setHistoriDonasi] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -20,14 +23,14 @@ const HistoriBarangDonasi = ()=>  {
     const [total, setTotal] = useState(0);
     const [perPage, setPerPage] = useState(10);
 
-    const handlePageClick = (page) =>{
-        if(page >= 1 && page <= lastPage && page !== currentPage){
+    const handlePageClick = (page) => {
+        if (page >= 1 && page <= lastPage && page !== currentPage) {
             setCurrentPage(page);
             fetchHistoriDonasi(page);
         }
     }
 
-    const fetchHistoriDonasi = (page = 1, search = "") =>{
+    const fetchHistoriDonasi = (page = 1, search = "") => {
         setIsLoading(true);
         showHistoriDonasi(page, search)
             .then((res) => {
@@ -73,6 +76,28 @@ const HistoriBarangDonasi = ()=>  {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
+                    </div>
+                    <div className='flex items-center justify-center ms-auto me-4'>
+                        <PDFDownloadLink
+                            document={<LaporanDonasi data={historiDonasi} />}
+                            fileName={`nota-penitip-${new Date().toLocaleDateString('en-GB').replace(/\//g, '')}.pdf`}
+                        >
+                            {({ loading }) =>
+                                loading ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <PulseLoader size={8} color="#ffffff" />
+                                    </div>
+                                ) : (
+                                    <button
+                                        className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
+                                        type="button"
+                                    >
+                                        <ArrowDownToLine size={18} color="white" className='me-2' />
+                                        Cetak Laporan
+                                    </button>
+                                )
+                            }
+                        </PDFDownloadLink>
                     </div>
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -127,14 +152,14 @@ const HistoriBarangDonasi = ()=>  {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center">
-                                                {/* <NumericFormat 
+                                                    {/* <NumericFormat 
                                                     value={item.komisi} 
                                                     prefix = "Rp. "
                                                     displayType = "text"
                                                     thousandSeparator = "."
                                                     decimalSeparator=","
                                                 /> */}
-                                                {item.organisasi.alamat}
+                                                    {item.organisasi.alamat}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
