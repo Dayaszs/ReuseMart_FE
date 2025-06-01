@@ -201,13 +201,13 @@ function NavigationBar() {
             {userRole === 'Gudang' && (
               <>
                 <Link
-                to="/gudang/dashboard/pemesanan"
-                className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/pemesanan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
-                  }`}
-              >
-                <BaggageClaim size={18} />
-                <span>List Pengambilan Barang</span>
-              </Link>
+                  to="/gudang/dashboard/pemesanan"
+                  className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/pemesanan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                    }`}
+                >
+                  <BaggageClaim size={18} />
+                  <span>List Pengambilan Barang</span>
+                </Link>
                 <Link
                   to="/gudang/dashboard/rincian-penitipan"
                   className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/gudang/dashboard/rincian-penitipan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
@@ -245,6 +245,14 @@ function NavigationBar() {
                 >
                   <BookOpenText size={18} />
                   Histori Barang Donasi
+                </Link>
+                <Link
+                  to="/owner/list-penitip"
+                  className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("/owner/list-penitip") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                    }`}
+                >
+                  <Users size={18} />
+                  List Penitip
                 </Link>
               </>
             )}
@@ -389,7 +397,7 @@ function NavigationBar() {
                     </button>
                   </Link>
 
-                  
+
                 </>
               )}
               {userRole === 'Organisasi' && (
