@@ -42,6 +42,7 @@ import CheckOutPage from "@/Transaction/CheckOutPage.jsx";
 import PembayaranPage from "@/Transaction/PembayaranPage.jsx";
 
 import ListKlaimMerchandise from "@/DashboardCS/ListKlaimMerchandise.jsx"
+import ListPenitip from "@/DashboardOwner/ListPenitip.jsx";
 
 const router = createBrowserRouter([
     {
@@ -247,6 +248,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Owner"]}>
                         <HistoriBarangDonasi />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "owner/list-penitip",
+                element: (
+                    <ProtectedRoute allowedRoles={["Owner"]}>
+                        <ListPenitip />
                     </ProtectedRoute>
                 )
             },

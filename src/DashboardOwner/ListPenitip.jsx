@@ -6,18 +6,14 @@ import { PulseLoader } from 'react-spinners';
 import EditPenitipModal from '@/Components/modals/EditPenitipModal';
 import HapusPenitipModal from '@/Components/modals/HapusPenitipModal';
 import TambahPenitipModal from '@/Components/modals/TambahPenitipModal';
+import PDFPenitip from '@/api/pdf/NotaPenitip';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { ArrowDownToLine } from 'lucide-react';
 
-const CSDash = () => {
+const ListPenitip = () => {
     const [penitip, setPenitip] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadingPenitip, setLoadingPenitip] = useState(true);
-
-    const [selectedPenitip, setSelectedPenitip] = useState(null);
-    const [showModalEdit, setShowModalEdit] = useState(false);
-
-    const [showModalHapus, setShowModalHapus] = useState(false);
-
-    const [showModalTambah, setShowModalTambah] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(null);
@@ -58,12 +54,8 @@ const CSDash = () => {
 
 
     return (
-        <Card className="w-full bg-white/90 backdrop-blur-md p-6">
-            <div className="flex flex-col w-full h-full p-4">
-                <h1 className="text-2xl font-bold">Customer Service Dashboard</h1>
-                <p className="text-gray-600">Selamat Datang di Customer Service Dashboard</p>
-
-
+        <Card className="w-full bg-white/90 backdrop-blur-md">
+            <div className="flex flex-col w-full h-full">
                 <div className="flex flex-wrap items-center justify-between mt-4 mb-4">
                     <h1 className="text-2xl font-bold">List Penitip</h1>
                     <input
@@ -73,14 +65,6 @@ const CSDash = () => {
                         onChange={(e) => setSearch(e.target.value)}
                         className="border border-gray-300 rounded-md px-3 py-1 w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
                     />
-                </div>
-
-                <div className='mb-4'>
-                    <Button
-                        onClick={() => setShowModalTambah(true)}
-                        className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'>
-                        Tambah Penitip
-                    </Button>
                 </div>
 
                 {loadingPenitip ?
@@ -118,26 +102,26 @@ const CSDash = () => {
                                             </div>
                                         </div>
 
-                                        <div className='flex flex-row gap-2'>
-                                            <Button
-                                                className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors'
-                                                onClick={() => {
-                                                    setSelectedPenitip(item);
-                                                    setShowModalEdit(true);
-                                                }}
+                                        <div className="absolute top-2 right-2">
+                                            <PDFDownloadLink
+                                                document={<PDFPenitip data={item} />}
+                                                fileName={`nota-penitip-${item.id_penitip}.pdf`}
                                             >
-                                                Edit
-                                            </Button>
-
-                                            <Button
-                                                className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors'
-                                                onClick={() => {
-                                                    setSelectedPenitip(item);
-                                                    setShowModalHapus(true);
-                                                }}
-                                            >
-                                                Delete
-                                            </Button>
+                                                {({ loading }) =>
+                                                    loading ? (
+                                                        <div className="flex items-center justify-center gap-2">
+                                                            <PulseLoader size={8} color="#ffffff" />
+                                                        </div>
+                                                    ) : (
+                                                        <button
+                                                            className="p-2 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
+                                                            type="button"
+                                                        >
+                                                            <ArrowDownToLine size={20} color="black" />
+                                                        </button>
+                                                    )
+                                                }
+                                            </PDFDownloadLink>
                                         </div>
                                     </div>
                                 </Card>
@@ -152,24 +136,10 @@ const CSDash = () => {
                     />
                 </div>
             </div>
-            <EditPenitipModal
-                show={showModalEdit}
-                onClose={() => setShowModalEdit(false)}
-                penitipData={selectedPenitip}
-            />
-            <HapusPenitipModal
-                show={showModalHapus}
-                onClose={() => setShowModalHapus(false)}
-                penitipData={selectedPenitip}
-            />
-            <TambahPenitipModal
-                show={showModalTambah}
-                onClose={() => setShowModalTambah(false)}
-            />
         </Card>
 
 
     );
 }
 
-export default CSDash;
+export default ListPenitip;
