@@ -7,34 +7,37 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Button } from "flowbite-react";
 import TambahDonasiModal from '@/Components/modals/TambahDonasiModal'
 import TolakDonasiModal from '@/Components/modals/TolakDonasiModal';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import LaporanRequestDonasi from '@/api/pdf/LaporanRequestDonasi';
+import { ArrowDownToLine } from 'lucide-react';
 
 
 function ListRequestDonasi() {
-    const [ reqDonasi, setReqDonasi] = useState([]);
+    const [reqDonasi, setReqDonasi] = useState([]);
 
-    const [ isLoading, setIsLoading] = useState(false);
-    const [ error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const [ searchTerm, setSearchTerm] = useState("");
-    const [ debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
 
-    const [ currentPage, setCurrentPage] = useState(1);
-    const [ lastPage, setLastPage] = useState(1);
-    const [ total, setTotal] = useState(0);
-    const [ perPage, setPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
+    const [total, setTotal] = useState(0);
+    const [perPage, setPerPage] = useState(10);
 
-    const [ showDonasiBarangModal, setShowDonasiBarangModal ] = useState(false);
-    const [ showTolakDonasiModal, setTolakDonasiModal ] = useState(false);
-    const [ idRequestDonasi, setIdRequestDonasi ] = useState(0);
+    const [showDonasiBarangModal, setShowDonasiBarangModal] = useState(false);
+    const [showTolakDonasiModal, setTolakDonasiModal] = useState(false);
+    const [idRequestDonasi, setIdRequestDonasi] = useState(0);
 
-    const handlePageClick = (page) =>{
-        if(page >= 1 && page <= lastPage && page !== currentPage){
+    const handlePageClick = (page) => {
+        if (page >= 1 && page <= lastPage && page !== currentPage) {
             setCurrentPage(page);
             fetchPegawai(page);
         }
     }
 
-    const handleClickDonasikan = (id) =>{
+    const handleClickDonasikan = (id) => {
         openDonasiBarangModal();
         setIdRequestDonasi(id);
     }
@@ -44,7 +47,7 @@ function ListRequestDonasi() {
         setIdRequestDonasi(id);
     }
 
-    const fetchRequest = (page = 1, search = "") =>{
+    const fetchRequest = (page = 1, search = "") => {
         setIsLoading(true);
         showReqDonasi(page, search)
             .then((res) => {
@@ -52,6 +55,7 @@ function ListRequestDonasi() {
                 setLastPage(res.last_page);
                 setPerPage(res.per_page);
                 setTotal(res.total);
+                console.log(res.data);
             })
             .catch((err) => {
                 setError(err.message || "Gagal mengambil data.");
@@ -59,12 +63,12 @@ function ListRequestDonasi() {
             .finally(() => setIsLoading(false));
     };
 
-    const tambahDonasi = (data) =>{
+    const tambahDonasi = (data) => {
         console.log(data);
         // console.log("id_req_donasi : ", idRequestDonasi)
         // data.append('id_request_donasi', idRequestDonasi);
         tambahDonasiBarang(data)
-            .then((response) =>{
+            .then((response) => {
                 console.log(response);
                 fetchRequest();
             })
@@ -73,7 +77,7 @@ function ListRequestDonasi() {
             })
     }
 
-    const tolakDonasi = async (id) =>{
+    const tolakDonasi = async (id) => {
         console.log(id);
         try {
             const response = await tolakRequestDonasi(id);
@@ -85,22 +89,22 @@ function ListRequestDonasi() {
         }
     }
 
-    
 
 
-    const openDonasiBarangModal = () =>{
+
+    const openDonasiBarangModal = () => {
         setShowDonasiBarangModal(true);
     }
 
-    const openReqTolakDonasiModal = () =>{
+    const openReqTolakDonasiModal = () => {
         setTolakDonasiModal(true);
     }
 
-    const closeDonasiBarangModal = () =>{
+    const closeDonasiBarangModal = () => {
         setShowDonasiBarangModal(false);
     }
 
-    const closeReqTolakDonasiModal = () =>{
+    const closeReqTolakDonasiModal = () => {
         setTolakDonasiModal(false);
     }
 
@@ -136,6 +140,28 @@ function ListRequestDonasi() {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
+                    </div>
+                    <div className='flex items-center justify-center ms-auto me-4'>
+                        <PDFDownloadLink
+                            document={<LaporanRequestDonasi data={reqDonasi} />}
+                            fileName={`nota-request-donasi-${new Date().toLocaleDateString('en-GB').replace(/\//g, '')}.pdf`}
+                        >
+                            {({ loading }) =>
+                                loading ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <PulseLoader size={8} color="#ffffff" />
+                                    </div>
+                                ) : (
+                                    <button
+                                        className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
+                                        type="button"
+                                    >
+                                        <ArrowDownToLine size={18} color="white" className='me-2' />
+                                        Cetak Laporan
+                                    </button>
+                                )
+                            }
+                        </PDFDownloadLink>
                     </div>
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -190,14 +216,14 @@ function ListRequestDonasi() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center">
-                                                {/* <NumericFormat 
+                                                    {/* <NumericFormat 
                                                     value={item.komisi} 
                                                     prefix = "Rp. "
                                                     displayType = "text"
                                                     thousandSeparator = "."
                                                     decimalSeparator=","
                                                 /> */}
-                                                {item.organisasi.alamat}
+                                                    {item.organisasi.alamat}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
