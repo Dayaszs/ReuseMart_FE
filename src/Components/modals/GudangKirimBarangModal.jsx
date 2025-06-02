@@ -21,11 +21,17 @@ const GudangKirimBarangModal = ({ show, onClose, kirim = false, pemesananId, onS
     const [error, setError] = useState(false);
     const [selectedKurir, setSelectedKurir] = useState({ nama: '', id_pegawai: '' });
     const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
-
+    const [date, setDate] = useState('');
 
     const isAfterJam4 = () => {
         const now = new Date();
         return now.getHours() >= 16; 
+    };
+
+    const isSameDay = (dateStr) => {
+        const today = new Date();
+        const selectedDate = new Date(dateStr);
+        return today.toDateString() === selectedDate.toDateString();
     };
 
     useEffect(() => {
@@ -63,6 +69,12 @@ const GudangKirimBarangModal = ({ show, onClose, kirim = false, pemesananId, onS
         if (kirim && selectedKurir.id_pegawai === '') {
             window.alert('Anda belum memilih kurir');
             return;
+        } else if (date === '') {
+            window.alert('Anda belum memilih tanggal pengiriman');
+            return;
+        } else if (kirim && isAfterJam4() && isSameDay(date)) {
+            window.alert('Tidak Bisa Kirim Barang Setelah jam 4');
+            return;
         } else {
             const conirmed = window.confirm('Apakah anda yakin ingin melanjutkan proses pengiriman barang?');
             if (!conirmed) return;
@@ -72,6 +84,7 @@ const GudangKirimBarangModal = ({ show, onClose, kirim = false, pemesananId, onS
                 const response = await axios.post(`${api}/gudang/update-status-pemesanan/${pemesananId}`, 
                     {
                         kurir: selectedKurir.id_pegawai,
+                        tanggal_jadwal: date,
                     },
                     {
                     headers: {
@@ -161,13 +174,32 @@ const GudangKirimBarangModal = ({ show, onClose, kirim = false, pemesananId, onS
                                     </div>
                                 </div>
                             ))}
+
+                            <div className="w-full">
+                                <label className="block mb-2 text-sm font-medium text-gray-900">
+                                    Jadwal Pengiriman/Pengambilan
+                                </label>
+                                <input
+                                    type="date"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    min={new Date().toISOString().split('T')[0]}
+                                />
+                                {kirim && isAfterJam4() && isSameDay(date) && (
+                                    <div className="text-red-500 text-sm mt-2">
+                                        Tidak Bisa Kirim Barang Setelah jam 4
+                                    </div>
+                                )}
+                            </div>
+
                             {kirim && (
                                 <Dropdown
                                     label={selectedKurir.nama || "Pilih Kurir"}
                                     dismissOnClick={false}
                                     className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-full text-center'
                                     color="success"
-                                    disabled={isAfterJam4()}
+
                                 >
                                     {kurir.map((item, index) => (
                                         <DropdownItem
@@ -186,16 +218,12 @@ const GudangKirimBarangModal = ({ show, onClose, kirim = false, pemesananId, onS
                                 onClick={() => {
                                     handleProsesLanjut();
                                 }}
-                                disabled={isAfterJam4() && kirim}
+                                
                             >
                                 Proses Lanjut
                             </Button>
 
-                            {kirim && isAfterJam4() && (
-                                <div className="text-red-500 text-sm mt-2 w-full text-center">
-                                    Pengiriman tidak tersedia setelah pukul 16:00
-                                </div>
-                            )}
+                            
                         </div>
                     </div>
                 ) : (
