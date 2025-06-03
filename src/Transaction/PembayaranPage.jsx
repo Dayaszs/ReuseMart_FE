@@ -89,6 +89,10 @@ const PembayaranPage = () => {
             })
             .catch((err) => {
                 setError(err.message || "Gagal mengambil data.");
+                if (err && err.status === 410) {
+                    setIsBatal(false);
+                    setIsSuccess(true);
+                }
             })
             .finally(() => setIsLoading(false));
     }
