@@ -68,7 +68,10 @@
             try {
                 setLoadingAmbilBarang(true);
                 const confirmed = window.confirm('Apakah anda yakin ingin mengambil barang ini?');
-                if (!confirmed) return;
+                if (!confirmed) {
+                    setLoadingAmbilBarang(false);
+                    return;
+                }
 
                 const token = localStorage.getItem('token');
                 const response = await axios.post(`${api}/penitip/ambil-barang`, { id_barang }, {
