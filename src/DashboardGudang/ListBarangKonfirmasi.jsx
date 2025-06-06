@@ -5,6 +5,7 @@ import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-
 import { Pagination, Button } from "flowbite-react";
 import axios from 'axios';
 import api from '../routes/api';
+import GudangKonfirmasiBarangModal from '../Components/modals/GudangKonfirmasiBarangModal';
 
 const styles = StyleSheet.create({
     page: {
@@ -146,6 +147,8 @@ const ListBarangPembeli = () => {
     const [lastPage, setLastPage] = useState(1);
     const [filter, setFilter] = useState("");
     const [isLoadingAmbil, setIsLoadingAmbil] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedPemesananId, setSelectedPemesananId] = useState(null);
 
     const onPageChange = (page) => setCurrentPage(page);
 
@@ -296,7 +299,14 @@ const ListBarangPembeli = () => {
                     ) : pemesanan?.data?.length > 0 ? (
                         <>
                             {pemesanan?.data?.map((item) => (
-                                <tr key={item.id_pemesanan} className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50">
+                                <tr 
+                                    key={item.id_pemesanan} 
+                                    className="bg-white border-b dark:bg-gray-800 border-gray-200 hover:bg-gray-50 cursor-pointer"
+                                    onClick={() => {
+                                        setSelectedPemesananId(item.id_pemesanan);
+                                        setShowModal(true);
+                                    }}
+                                >
                                     <td className="px-6 py-4">
                                         {item.id_pemesanan}
                                     </td>
@@ -325,7 +335,11 @@ const ListBarangPembeli = () => {
                                             <button
                                                 className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center'
                                                 type="button"
-                                                onClick={() => handleKonfirmasiAmbil(item.id_pemesanan)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // Prevent row click when clicking button
+                                                    setSelectedPemesananId(item.id_pemesanan);
+                                                    setShowModal(true);
+                                                }}
                                             >
                                                 Konfirmasi
                                             </button>
@@ -333,7 +347,7 @@ const ListBarangPembeli = () => {
                                             <span className='text-blue-600'>Barang Sedang Dikirim</span>
                                         ) : null}
                                     </td>
-                                    <td className="px-6 py-4"> 
+                                    <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}> 
                                         <Button
                                             className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors w-50 text-center inline-block cursor-pointer'>
                                             <PDFDownloadLink
@@ -376,6 +390,15 @@ const ListBarangPembeli = () => {
                 />
             </div>
             
+            <GudangKonfirmasiBarangModal 
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                pemesananId={selectedPemesananId}
+                onSuccess={() => {
+                    setShowModal(false);
+                    fetchRincianPenitipan();
+                }}
+            />
         </div>
     );
 }
