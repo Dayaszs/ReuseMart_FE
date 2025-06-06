@@ -23,6 +23,10 @@ const DetailPemesanan = () => {
   const [ hover, setHover ] = useState(0);
 
   const handleBeriRating = async(id) =>{
+    const confirmed = window.confirm("Apakah anda yakin ingin memberi rating pada barang ?");
+    if (!confirmed) {
+        return;
+    }
     setIsLoading(true);
     setError("");
     setSuccess(false);
@@ -38,33 +42,33 @@ const DetailPemesanan = () => {
     }catch(error){
       setError(error.response?.data?.message || "Terjadi kesalahan saat memberi rating");
     }finally{
+      fetchPemesanan();
       setIsLoading(false);
     }
   }
+  const fetchPemesanan = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${api}/pemesanan/${id}/detail`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPemesanan(response.data.pemesanan);
+      setKomisi(response.data.komisi);
+
+      if (Array.isArray(response.data.komisi)) {
+        const allBarang = response.data.komisi.map(item => item.barang);
+        setBarang(allBarang);
+      }
+    } catch (error) {
+      console.error('Error fetching pemesanan:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPemesanan = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`${api}/pemesanan/${id}/detail`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPemesanan(response.data.pemesanan);
-        setKomisi(response.data.komisi);
-
-        if (Array.isArray(response.data.komisi)) {
-          const allBarang = response.data.komisi.map(item => item.barang);
-          setBarang(allBarang);
-        }
-      } catch (error) {
-        console.error('Error fetching pemesanan:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPemesanan();
   })
 

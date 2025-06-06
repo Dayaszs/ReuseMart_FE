@@ -116,6 +116,10 @@ const TambahPenitipanModal = ({show, onClose}) => {
     }
 
     const handleSubmit = async (e) => {
+        const confirmed = window.confirm("Apakah anda yakin ingin menambahkan penitipan baru?");
+        if (!confirmed) {
+            return;
+        }
         e.preventDefault();
         setIsLoading(true);
         setError("");

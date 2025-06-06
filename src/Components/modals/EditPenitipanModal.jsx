@@ -126,6 +126,11 @@ const EditPenitipanModal = ({ show, onClose, data }) => {
     }
 
     const handleSubmit = async(e) =>{
+        const confirmed = window.confirm("Apakah anda yakin ingin merubah penitipan ?");
+        if (!confirmed) {
+            return;
+        }
+        
         e.preventDefault();
         setIsLoading(true);
         setError("");
