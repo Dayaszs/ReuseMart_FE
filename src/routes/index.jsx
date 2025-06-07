@@ -44,6 +44,10 @@ import PembayaranPage from "@/Transaction/PembayaranPage.jsx";
 import ListKlaimMerchandise from "@/DashboardCS/ListKlaimMerchandise.jsx"
 import ListPenitip from "@/DashboardOwner/ListPenitip.jsx";
 
+import DaftarLaporan from "@/DashboardOwner/DaftarLaporan.jsx";
+import LaporanBarangHabisMasaTitip from "@/DashboardOwner/LaporanBarangHabisMasaTitip.jsx";
+import LaporanPerKategori from "@/DashboardOwner/LaporanPerKategori.jsx";
+
 const router = createBrowserRouter([
     {
         path: "*",
@@ -265,6 +269,24 @@ const router = createBrowserRouter([
                     <ProtectedRoute allowedRoles={["Gudang"]}>
                         <ListBarangKirim />
                     </ProtectedRoute>
+                )
+            },
+            {
+                path: "owner/daftar-laporan",
+                element: (
+                        <DaftarLaporan></DaftarLaporan>
+                )
+            },
+            {
+                path: "/laporan-barang-habis-masa-titip",
+                element: (
+                    <LaporanBarangHabisMasaTitip/>
+                )
+            },
+            {
+                path: "/laporan-per-kategori",
+                element: (
+                    <LaporanPerKategori/>
                 )
             }
         ],
