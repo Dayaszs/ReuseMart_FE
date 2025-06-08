@@ -254,6 +254,14 @@ function NavigationBar() {
                   <Users size={18} />
                   List Penitip
                 </Link>
+                <Link
+                  to="owner/daftar-laporan"
+                  className={`flex items-center gap-2 py-2 px-4 rounded ${isActive("owner/daftar-laporan") ? "bg-green-700 text-gray-300" : "hover:bg-green-700"
+                    }`}
+                >
+                  <Users size={18} />
+                  Daftar Laporan
+                </Link>
               </>
             )}
 
