@@ -6,9 +6,10 @@ import { PulseLoader } from 'react-spinners';
 import EditPenitipModal from '@/Components/modals/EditPenitipModal';
 import HapusPenitipModal from '@/Components/modals/HapusPenitipModal';
 import TambahPenitipModal from '@/Components/modals/TambahPenitipModal';
-import PDFPenitip from '@/api/pdf/NotaPenitip';
+import PDFPenitip from '@/api/pdf/LaporanPenitip';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { ArrowDownToLine } from 'lucide-react';
+import LaporanPenitipModal from '@/Components/modals/LaporanPenitipModal';
 
 const ListPenitip = () => {
     const [penitip, setPenitip] = useState([]);
@@ -19,7 +20,20 @@ const ListPenitip = () => {
     const [lastPage, setLastPage] = useState(null);
     const [search, setSearch] = useState("");
 
+    const [showLaporanModal, setShowLaporanModal] = useState(false);
+    const [penitipData, setPenitipData] = useState(null);
+
     const onPageChange = (page) => setCurrentPage(page);
+
+    const openLaporanModal = (data) => {
+        setPenitipData(data);
+        setShowLaporanModal(true);
+    };
+
+    const closeLaporanModal = () => {
+        setPenitipData(null);
+        setShowLaporanModal(false);
+    };
 
     useEffect(() => {
         const fetchPenitip = async () => {
@@ -74,7 +88,6 @@ const ListPenitip = () => {
                     :
 
                     (
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {penitip?.map((item, index) => (
                                 <Card
@@ -101,33 +114,39 @@ const ListPenitip = () => {
                                                 <span>: Rp {parseInt(item.saldo).toLocaleString('id-ID')}</span>
                                             </div>
                                         </div>
-
                                         <div className="absolute top-2 right-2">
-                                            <PDFDownloadLink
-                                                document={<PDFPenitip data={item} />}
-                                                fileName={`nota-penitip-${item.id_penitip}.pdf`}
+                                            {/* <PDFDownloadLink
+                                                        document={<PDFPenitip data={item} />}
+                                                        fileName={`nota-penitip-${item.id_penitip}.pdf`}
+                                                    >
+                                                        {({ loading }) =>
+                                                            loading ? (
+                                                                <div className="flex items-center justify-center gap-2">
+                                                                    <PulseLoader size={8} color="#ffffff" />
+                                                                </div>
+                                                            ) : ( */}
+                                            <button
+                                                className="p-2 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
+                                                type="button"
+                                                onClick={() => openLaporanModal(item)}
                                             >
-                                                {({ loading }) =>
-                                                    loading ? (
-                                                        <div className="flex items-center justify-center gap-2">
-                                                            <PulseLoader size={8} color="#ffffff" />
-                                                        </div>
-                                                    ) : (
-                                                        <button
-                                                            className="p-2 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
-                                                            type="button"
-                                                        >
-                                                            <ArrowDownToLine size={20} color="black" />
-                                                        </button>
-                                                    )
-                                                }
-                                            </PDFDownloadLink>
+                                                <ArrowDownToLine size={20} color="black" />
+                                            </button>
+                                            {/* )
+                                                        }
+                                                    </PDFDownloadLink> */}
                                         </div>
                                     </div>
                                 </Card>
                             ))}
                         </div>
                     )}
+                <LaporanPenitipModal
+                    show={showLaporanModal}
+                    onClose={closeLaporanModal}
+                    penitipData={penitipData}
+                />
+
                 <div className="flex justify-center mt-6">
                     <Pagination
                         currentPage={currentPage}

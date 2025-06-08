@@ -8,8 +8,10 @@ import { Button } from "flowbite-react";
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import LaporanDonasi from '@/api/pdf/LaporanDonasi';
 import { ArrowDownToLine } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const HistoriBarangDonasi = () => {
+    const navigate = useNavigate();
     const [historiDonasi, setHistoriDonasi] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +80,7 @@ const HistoriBarangDonasi = () => {
                         />
                     </div>
                     <div className='flex items-center justify-center ms-auto me-4'>
-                        <PDFDownloadLink
+                        {/* <PDFDownloadLink
                             document={<LaporanDonasi data={historiDonasi} />}
                             fileName={`nota-donasi-${new Date().toLocaleDateString('en-GB').replace(/\//g, '')}.pdf`}
                         >
@@ -87,17 +89,18 @@ const HistoriBarangDonasi = () => {
                                     <div className="flex items-center justify-center gap-2">
                                         <PulseLoader size={8} color="#ffffff" />
                                     </div>
-                                ) : (
-                                    <button
-                                        className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
-                                        type="button"
-                                    >
-                                        <ArrowDownToLine size={18} color="white" className='me-2' />
-                                        Cetak Laporan
-                                    </button>
-                                )
-                            }
-                        </PDFDownloadLink>
+                                ) : ( */}
+                        <button
+                            className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-sm flex items-center justify-center hover:cursor-pointer"
+                            type="button"
+                            onClick={() => navigate('/laporan-donasi', { state: { data: historiDonasi } })}
+                        >
+                            <ArrowDownToLine size={18} color="white" className='me-2' />
+                            Cetak Laporan
+                        </button>
+                        {/* )
+                           }
+                        </PDFDownloadLink> */}
                     </div>
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">

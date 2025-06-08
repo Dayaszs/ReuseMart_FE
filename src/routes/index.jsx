@@ -47,6 +47,9 @@ import ListPenitip from "@/DashboardOwner/ListPenitip.jsx";
 import DaftarLaporan from "@/DashboardOwner/DaftarLaporan.jsx";
 import LaporanBarangHabisMasaTitip from "@/DashboardOwner/LaporanBarangHabisMasaTitip.jsx";
 import LaporanPerKategori from "@/DashboardOwner/LaporanPerKategori.jsx";
+import LaporanDonasi from "@/api/pdf/LaporanDonasi.jsx";
+import LaporanRequestDonasi from "@/api/pdf/LaporanRequestDonasi.jsx";
+import LaporanPenitip from "@/api/pdf/LaporanPenitip.jsx";
 
 const router = createBrowserRouter([
     {
@@ -158,7 +161,7 @@ const router = createBrowserRouter([
                 path: "/products/detail/:id",
                 element: (
                     // <ProtectedRoute allowedRoles={["Pembeli"]}>
-                        <DetailProduct />
+                    <DetailProduct />
                     // </ProtectedRoute>
                 ),
             },
@@ -195,7 +198,7 @@ const router = createBrowserRouter([
                 path: "/gudang/dashboard/rincian-penitipan",
                 element: (
                     <ProtectedRoute allowedRoles={["Gudang"]}>
-                        <RincianPenitipan/>
+                        <RincianPenitipan />
                     </ProtectedRoute>
                 )
             },
@@ -203,7 +206,7 @@ const router = createBrowserRouter([
                 path: "/gudang/dashboard/penitipan",
                 element: (
                     <ProtectedRoute allowedRoles={["Gudang"]}>
-                        <ListPenitipan/>
+                        <ListPenitipan />
                     </ProtectedRoute>
                 )
             },
@@ -274,19 +277,37 @@ const router = createBrowserRouter([
             {
                 path: "owner/daftar-laporan",
                 element: (
-                        <DaftarLaporan></DaftarLaporan>
+                    <DaftarLaporan></DaftarLaporan>
                 )
             },
             {
                 path: "/laporan-barang-habis-masa-titip",
                 element: (
-                    <LaporanBarangHabisMasaTitip/>
+                    <LaporanBarangHabisMasaTitip />
                 )
             },
             {
                 path: "/laporan-per-kategori",
                 element: (
-                    <LaporanPerKategori/>
+                    <LaporanPerKategori />
+                )
+            },
+            {
+                path: "/laporan-donasi",
+                element: (
+                    <LaporanDonasi />
+                )
+            },
+            {
+                path: "/laporan-request-donasi",
+                element: (
+                    <LaporanRequestDonasi />
+                )
+            },
+            {
+                path: "/laporan-penitip",
+                element: (
+                    <LaporanPenitip />
                 )
             }
         ],

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { useLocation } from 'react-router-dom';
 
-
-const LaporanRequestDonasi = ({ data }) => {
+const LaporanRequestDonasi = () => {
+    const location = useLocation();
+    const data = location.state?.data || [];
 
     const styles = StyleSheet.create({
         page: {
@@ -27,7 +29,6 @@ const LaporanRequestDonasi = ({ data }) => {
             flexDirection: 'row',
             display: 'flex',
             justifyContent: 'flex-start',
-            // width: '100%',
         },
         text: {
             fontSize: 12,
@@ -77,45 +78,49 @@ const LaporanRequestDonasi = ({ data }) => {
     });
 
     return (
-        <Document>
-            <Page size="A4" style={styles.page}>
-                <View style={styles.section}>
-                    <Text style={styles.bold}>ReUse Mart</Text>
-                    <Text style={styles.text}>Jl. Green Eco Park No. 456 Yogyakarta</Text>
-                </View>
+        <div style={{ height: '100vh' }}>
+            <PDFViewer style={{ width: '100%', height: '100%' }}>
+                <Document>
+                    <Page size="A4" style={styles.page}>
+                        <View style={styles.section}>
+                            <Text style={styles.bold}>ReUse Mart</Text>
+                            <Text style={styles.text}>Jl. Green Eco Park No. 456 Yogyakarta</Text>
+                        </View>
 
-                <View style={styles.section}>
-                    <Text style={styles.headerLaporan}>LAPORAN REQUEST DONASI</Text>
-                    <Text style={styles.text}>Tanggal Cetak : {new Date().toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</Text>
-                </View>
+                        <View style={styles.section}>
+                            <Text style={styles.headerLaporan}>LAPORAN REQUEST DONASI</Text>
+                            <Text style={styles.text}>Tanggal Cetak : {new Date().toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</Text>
+                        </View>
 
-                <View style={styles.table}>
-                    <View style={styles.tableRow}>
-                        {[
-                            { text: 'ID Organisasi', style: styles.cellId },
-                            { text: 'Nama', style: styles.cellNama },
-                            { text: 'Alamat', style: styles.cellAlamat },
-                            { text: 'Request', style: styles.cellRequest },
-                        ].map((item, i) => (
-                            <Text key={i} style={[styles.tableCell, styles.headerCell, item.style]}>
-                                {item.text}
-                            </Text>
-                        ))}
-                    </View>
-
-                    {data?.flatMap((donasi) =>
-                        donasi.barang?.map((item, index) => (
-                            <View style={styles.tableRow} key={`${donasi.id_request_donasi}-${index}`}>
-                                <Text style={[styles.tableCell, styles.cellId]}>ORG{item.id_organisasi}</Text>
-                                <Text style={[styles.tableCell, styles.cellNama]}>{item.organisasi}</Text>
-                                <Text style={[styles.tableCell, styles.cellAlamat]}>{item.alamat_organisasi}</Text>
-                                <Text style={[styles.tableCell, styles.cellRequest]}>{item.request}</Text>
+                        <View style={styles.table}>
+                            <View style={styles.tableRow}>
+                                {[
+                                    { text: 'ID Organisasi', style: styles.cellId },
+                                    { text: 'Nama', style: styles.cellNama },
+                                    { text: 'Alamat', style: styles.cellAlamat },
+                                    { text: 'Request', style: styles.cellRequest },
+                                ].map((item, i) => (
+                                    <Text key={i} style={[styles.tableCell, styles.headerCell, item.style]}>
+                                        {item.text}
+                                    </Text>
+                                ))}
                             </View>
-                        ))
-                    )}
-                </View>
-            </Page>
-        </Document>
+
+                            {data?.flatMap((donasi) =>
+                                donasi.barang?.map((item, index) => (
+                                    <View style={styles.tableRow} key={`${donasi.id_request_donasi}-${index}`}>
+                                        <Text style={[styles.tableCell, styles.cellId]}>ORG{item.id_organisasi}</Text>
+                                        <Text style={[styles.tableCell, styles.cellNama]}>{item.organisasi}</Text>
+                                        <Text style={[styles.tableCell, styles.cellAlamat]}>{item.alamat_organisasi}</Text>
+                                        <Text style={[styles.tableCell, styles.cellRequest]}>{item.request}</Text>
+                                    </View>
+                                ))
+                            )}
+                        </View>
+                    </Page>
+                </Document>
+            </PDFViewer>
+        </div>
     )
 }
 
