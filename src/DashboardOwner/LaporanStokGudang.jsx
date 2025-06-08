@@ -1,9 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
-import axios from 'axios';
+import { laporanStokGudang } from '@/api/services/apiOwner';
 import { PulseLoader } from 'react-spinners';
 import { Card } from "flowbite-react";
-import api from '@/routes/api';
+
+const LaporanStokGudang = () => {
+    const [ data, setData ] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchData = async() => {
+        setLoading(true);
+
+        laporanStokGudang()
+        .then((res) => {
+            console.log(res.data);
+            setData(res.data);
+            // console.log(res.data.data);
+            // setData(res.data.data);
+        })
+        .catch((err) => {
+            setError(err.message || "Gagal mengambil data.");
+        })
+        .finally(() => setLoading(false));
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return (
+            <Card className="w-full min-h-screen bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
+                <PulseLoader size={15} color="#61d52c" />
+            </Card>
+        );
+    }
+
+
+    return(
+        <div style={{ height: '100vh' }}>
+            <PDFViewer style={{ width: '100%', height: '100%' }}>
+                <PDFDocument data={data} />
+            </PDFViewer>
+        </div>
+    )
+}
 
 const styles = StyleSheet.create({
     page: {
@@ -55,7 +96,6 @@ const styles = StyleSheet.create({
 });
 
 const PDFDocument = ({ data }) => {
-    // Get current date and format it
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('id-ID', {
         day: 'numeric',
@@ -68,14 +108,17 @@ const PDFDocument = ({ data }) => {
         return `${firstWord}${id_barang}`;
     };
 
+    const formatNumber = (number) => {
+        return number.toLocaleString('id-ID');
+    };
+
     return (
         <Document>
             <Page size="A4" orientation="landscape" style={styles.page}>
                 <View style={styles.header}>
                     <Text style={styles.companyName}>ReUse Mart</Text>
                     <Text style={styles.companyAddress}>Jl. Green Eco Park No. 456 Yogyakarta</Text>
-                    <Text style={styles.reportTitle}>LAPORAN Barang yang Masa Penitipannya Sudah Habis</Text>
-                    <Text style={styles.reportInfo}>Tahun: {currentDate.getFullYear()}</Text>
+                    <Text style={styles.reportTitle}>Laporan Stok Gudang</Text>
                     <Text style={styles.reportInfo}>Tanggal cetak: {formattedDate}</Text>
                 </View>
                 <View style={styles.table}>
@@ -85,8 +128,10 @@ const PDFDocument = ({ data }) => {
                         <Text style={styles.tableCell}>Id Penitip</Text>
                         <Text style={styles.tableCell}>Nama Penitip</Text>
                         <Text style={styles.tableCell}>Tanggal Masuk</Text>
-                        <Text style={styles.tableCell}>Tanggal Akhir Batas</Text>
-                        <Text style={styles.tableCell}>Batas Ambil</Text>
+                        <Text style={styles.tableCell}>Perpanjangan</Text>
+                        <Text style={styles.tableCell}>ID Hunter</Text>
+                        <Text style={styles.tableCell}>Nama Hunter</Text>
+                        <Text style={styles.tableCell}>Harga</Text>
                     </View>
                     {data.map((item, index) => (
                         <View key={index} style={styles.tableRow}>
@@ -94,15 +139,28 @@ const PDFDocument = ({ data }) => {
                             <Text style={styles.tableCell}>{item.nama_barang}</Text>
                             <Text style={styles.tableCell}>T{item.rincian_penitipan.penitipan.id_penitip}</Text>
                             <Text style={styles.tableCell}>{item.rincian_penitipan.penitipan.penitip.nama_penitip}</Text>
-                            <Text style={styles.tableCell}>
-                                {new Date(item.rincian_penitipan.penitipan.tanggal_masuk).toLocaleDateString('id-ID')}
-                            </Text>
-                            <Text style={styles.tableCell}>
-                                {new Date(item.rincian_penitipan.tanggal_selesai).toLocaleDateString('id-ID')}
-                            </Text>
-                            <Text style={styles.tableCell}>
-                                {new Date(item.rincian_penitipan.batas_ambil).toLocaleDateString('id-ID')}
-                            </Text>
+                            <Text style={styles.tableCell}>{new Date(item.rincian_penitipan.penitipan.tanggal_masuk).toLocaleDateString('id-ID')}</Text>
+                            {item.rincian_penitipan.sudah_diperpanjang == true ?
+                                (<Text style={styles.tableCell}>Ya</Text>)
+                            :
+                                (<Text style={styles.tableCell}>Tidak</Text>)
+                            }
+                            {item.pegawai?
+                                (
+                                    <>
+                                        <Text style={styles.tableCell}>P{item.pegawai.id_pegawai}</Text>
+                                        <Text style={styles.tableCell}>{item.pegawai.nama}</Text>
+                                    </>
+                                )
+                            :
+                                (
+                                    <>
+                                        <Text style={styles.tableCell}>-</Text>
+                                        <Text style={styles.tableCell}>-</Text>
+                                    </>
+                                )
+                            }
+                            <Text style={styles.tableCell}>{formatNumber(parseInt(item.harga))}</Text>
                         </View>
                     ))}
                 </View>
@@ -112,47 +170,4 @@ const PDFDocument = ({ data }) => {
 };
 
 
-const LaporanBarangHabisMasaTitip = () => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(`${api}/owner/barang/titipan-habis`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                if (response.data.status) {
-                    setData(response.data.data);
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    if (loading) {
-        return (
-            <Card className="w-full min-h-screen bg-white/90 backdrop-blur-md p-6 items-center flex justify-center">
-                <PulseLoader size={15} color="#61d52c" />
-            </Card>
-        );
-    }
-
-    return (
-        <div style={{ height: '100vh' }}>
-            <PDFViewer style={{ width: '100%', height: '100%' }}>
-                <PDFDocument data={data} />
-            </PDFViewer>
-        </div>
-    );
-};
-
-export default LaporanBarangHabisMasaTitip;
+export default LaporanStokGudang;

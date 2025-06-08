@@ -47,6 +47,8 @@ import ListPenitip from "@/DashboardOwner/ListPenitip.jsx";
 import DaftarLaporan from "@/DashboardOwner/DaftarLaporan.jsx";
 import LaporanBarangHabisMasaTitip from "@/DashboardOwner/LaporanBarangHabisMasaTitip.jsx";
 import LaporanPerKategori from "@/DashboardOwner/LaporanPerKategori.jsx";
+import LaporanStokGudang from "@/DashboardOwner/LaporanStokGudang.jsx";
+import LaporanKomisiBulanan from "@/DashboardOwner/LaporanKomisiBulanan.jsx";
 
 const router = createBrowserRouter([
     {
@@ -275,6 +277,18 @@ const router = createBrowserRouter([
                 path: "owner/daftar-laporan",
                 element: (
                         <DaftarLaporan></DaftarLaporan>
+                )
+            },
+            {
+                path: "/laporan-stok-gudang",
+                element: (
+                        <LaporanStokGudang/>
+                )
+            },
+            {
+                path: "/laporan-komisi-bulanan",
+                element: (
+                        <LaporanKomisiBulanan/>
                 )
             },
             {

@@ -80,4 +80,20 @@ const tolakRequestDonasi = async(id) =>{
     }
 }
 
-export { showReqDonasi, showHistoriDonasi, showBarangDonasi , tambahDonasiBarang, tolakRequestDonasi };
+const laporanStokGudang = async () => {
+    try{
+        const token = localStorage.getItem("token");
+        const response = await useAxios.get(`/owner/barang/laporan-stok-gudang`, {
+            headers:{
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+        });
+
+        return response;
+    }catch(error){
+        throw error.response;
+    }
+}
+
+export { showReqDonasi, showHistoriDonasi, showBarangDonasi , tambahDonasiBarang, tolakRequestDonasi, laporanStokGudang};
