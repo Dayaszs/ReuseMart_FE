@@ -49,6 +49,7 @@ import LaporanBarangHabisMasaTitip from "@/DashboardOwner/LaporanBarangHabisMasa
 import LaporanPerKategori from "@/DashboardOwner/LaporanPerKategori.jsx";
 import LaporanStokGudang from "@/DashboardOwner/LaporanStokGudang.jsx";
 import LaporanKomisiBulanan from "@/DashboardOwner/LaporanKomisiBulanan.jsx";
+import LaporanPenjualanBulanan from "@/DashboardOwner/LaporanPenjualanBulanan.jsx";
 import LaporanDonasi from "@/api/pdf/LaporanDonasi.jsx";
 import LaporanRequestDonasi from "@/api/pdf/LaporanRequestDonasi.jsx";
 import LaporanPenitip from "@/api/pdf/LaporanPenitip.jsx";
@@ -292,6 +293,12 @@ const router = createBrowserRouter([
                 path: "/laporan-komisi-bulanan",
                 element: (
                         <LaporanKomisiBulanan/>
+                )
+            },
+            {
+                path: "/laporan-penjualan-bulanan",
+                element: (
+                        <LaporanPenjualanBulanan/>
                 )
             },
             {

@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 const DaftarLaporan = () => {
     const navigate = useNavigate();
     const [ tanggalKomisi, setTanggalKomisi ] = useState(null);
+    const [ tahunPenjualan, setTahunPenjualan ] = useState(new Date().getFullYear());
 
     const formatDate = (date) => {
         const year = date.getFullYear();
@@ -44,8 +45,30 @@ const DaftarLaporan = () => {
         navigate('/laporan-stok-gudang');
     };
 
+    const handleClickLaporanPenjualanBulanan = () => {
+        navigate('/laporan-penjualan-bulanan', { state: { tahun: tahunPenjualan } });
+    };
+
     return (
         <div className='space-y-4'>
+            <div className='flex items-center gap-2 mb-4'>
+                <Button color="success" onClick={handleClickLaporanPenjualanBulanan}>
+                    Laporan Penjualan Bulanan
+                </Button>
+                <Label htmlFor="tahun" className="ml-4">Pilih Tahun:</Label>
+                <select
+                    id="tahun"
+                    value={tahunPenjualan}
+                    onChange={(e) => setTahunPenjualan(parseInt(e.target.value))}
+                    className="border border-gray-300 rounded-md p-2"
+                >
+                    {Array.from({ length: new Date().getFullYear() - 1999 }, (_, i) => 2000 + i).map(year => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <Button color="success" className='mb-4' onClick={handleClickLaporanStokGudang}>
                 Laporan Stok Gudang
             </Button>
