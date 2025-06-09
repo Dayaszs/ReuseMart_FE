@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const LaporanPenitipModal = ({ show, onClose, penitipData }) => {
     const navigate = useNavigate();
     const [bulan, setBulan] = useState("");
+    const [tahun, setTahun] = useState("");
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -15,6 +16,7 @@ const LaporanPenitipModal = ({ show, onClose, penitipData }) => {
         if (!show) {
             setError("");
             setBulan("");
+            setTahun("");
         }
     }, [show]);
 
@@ -24,11 +26,15 @@ const LaporanPenitipModal = ({ show, onClose, penitipData }) => {
             setError("Pilih bulan terlebih dahulu");
             return;
         }
+        if (!tahun) {
+            setError("Pilih tahun terlebih dahulu");
+            return;
+        }
         setLoading(true);
         setError("");
 
         try {
-            navigate('/laporan-penitip', { state: { data: penitipData, bulan: bulan } });
+            navigate('/laporan-penitip', { state: { data: penitipData, bulan: bulan, tahun: tahun } });
         } catch (err) {
             setError("Gagal navigasi ke laporan. Coba lagi.");
         } finally {
@@ -47,7 +53,7 @@ const LaporanPenitipModal = ({ show, onClose, penitipData }) => {
             <ModalBody>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     <div>
-                        <Label htmlFor="bulan">Pilih Bulan Transaksi Laku</Label>
+                        <Label htmlFor="bulan">Pilih Bulan</Label>
                         <select
                             id="bulan"
                             value={bulan}
@@ -73,6 +79,25 @@ const LaporanPenitipModal = ({ show, onClose, penitipData }) => {
                         </select>
                     </div>
 
+                    <div>
+                        <Label htmlFor="tahun">Pilih Tahun</Label>
+                        <select
+                            id="tahun"
+                            value={tahun}
+                            onChange={(e) => {
+                                setTahun(e.target.value);
+                            }}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                            required
+                        >
+                            <option value="">Pilih Tahun</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                        </select>
+                    </div>
+
                     {error && <Alert color="failure">{error}</Alert>}
 
                     <div className="flex justify-end gap-2 mt-4">
@@ -82,7 +107,7 @@ const LaporanPenitipModal = ({ show, onClose, penitipData }) => {
                             disabled={loading}
                             className="bg-green-500 hover:bg-green-600 hover:cursor-pointer text-white"
                         >
-                            {loading ? <PulseLoader size={8} color="#ffffff" /> : 'Cetak Laporan'}
+                            {loading ? <PulseLoader size={8} color="#ffffff" /> : 'Lihat Laporan'}
                         </Button>
 
                         <Button
