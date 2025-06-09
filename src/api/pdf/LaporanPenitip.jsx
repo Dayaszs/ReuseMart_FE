@@ -7,11 +7,13 @@ const LaporanPenitip = () => {
     const location = useLocation();
     const data = location.state?.data || [];
     const bulan = location.state?.bulan || "";
+    const tahun = location.state?.tahun || "";
 
     const filteredBarang = data.barang.filter(item => {
         const tanggalLaku = new Date(item.tanggal_laku);
         const bulanLaku = tanggalLaku.getMonth() + 1;
-        return bulanLaku === parseInt(bulan);
+        const tahunLaku = tanggalLaku.getFullYear();
+        return bulanLaku === parseInt(bulan) && tahunLaku === parseInt(tahun);
     });
 
     data.barang = filteredBarang;
@@ -162,7 +164,7 @@ const LaporanPenitip = () => {
                             <Text style={styles.text}>ID Penitip : T{data.id_penitip}</Text>
                             <Text style={styles.text}>Nama Penitip : {data.nama_penitip}</Text>
                             <Text style={styles.text}>Bulan : {getNamaBulan(parseInt(bulan))}</Text>
-                            <Text style={styles.text}>Tahun : {new Date().getFullYear()}</Text>
+                            <Text style={styles.text}>Tahun : {tahun}</Text>
                             <Text style={styles.text}>Tanggal Cetak : {new Date().toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</Text>
                         </View>
 
