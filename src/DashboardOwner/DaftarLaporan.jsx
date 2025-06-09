@@ -1,14 +1,39 @@
 import React, { useState } from 'react';
-import { Button } from 'flowbite-react';
+import { Button, Label, TextInput } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
-import {} from '@/api/';
+import { Calendar } from "@/components/ui/calendar"
+import { CalendarIcon } from "lucide-react"
+import { format } from "date-fns"
+import { id } from "date-fns/locale"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 const DaftarLaporan = () => {
     const navigate = useNavigate();
-    const [ dataStokGudang, setDataStokGudang ] = useState([]);
+    const [ tanggalKomisi, setTanggalKomisi ] = useState(null);
+
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleDateSelect = (date) => {
+        if (date) {
+            const formattedDate = formatDate(date);
+            setTanggalKomisi(formattedDate);
+            console.log("tanggal", formattedDate);
+        } else {
+            setTanggalKomisi(null);
+        }
+    };
 
     const handleClickBarangHabisMasaTitip = () => {
         navigate('/laporan-barang-habis-masa-titip');
+    };
+
+    const handleClickLaporanKomisiBulanan = () => {
+        navigate('/laporan-komisi-bulanan', { state: { tanggal: tanggalKomisi} });
     };
 
     const handleClickLaporanPerKategori = () => {
@@ -24,6 +49,43 @@ const DaftarLaporan = () => {
             <Button color="success" className='mb-4' onClick={handleClickLaporanStokGudang}>
                 Laporan Stok Gudang
             </Button>
+            <div className='flex'>
+                <div className='flex items-center gap-2'>
+                    <p className='px-4'>Pilih tanggal Komisi Bulanan</p>
+                    <TextInput
+                        type="text"
+                        value={tanggalKomisi ? format(tanggalKomisi, "yyyy-MM-dd", { locale: id }) : ""}
+                        placeholder="Pilih tanggal"
+                        readOnly
+                        className="w-48"
+                    />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <button
+                                type="button"
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <CalendarIcon className="h-5 w-5" />
+                            </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                                mode="single"
+                                selected={tanggalKomisi ? new Date(tanggalKomisi) : undefined}
+                                onSelect={handleDateSelect}
+                                initialFocus
+                                className="bg-white"
+                            />
+                        </PopoverContent>
+                    </Popover>
+                    <Button 
+                        color="success" 
+                        onClick={handleClickLaporanKomisiBulanan}
+                    >
+                        Lihat Laporan
+                    </Button>
+                </div>
+            </div>
             <Button color="success" className='mb-4' onClick={handleClickBarangHabisMasaTitip}>
                 Laporan Barang Habis Masa Titip
             </Button>

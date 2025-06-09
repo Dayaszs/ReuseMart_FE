@@ -96,4 +96,20 @@ const laporanStokGudang = async () => {
     }
 }
 
-export { showReqDonasi, showHistoriDonasi, showBarangDonasi , tambahDonasiBarang, tolakRequestDonasi, laporanStokGudang};
+const laporanKomisiBulanan = async (tanggal) => {
+    try{
+        const token = localStorage.getItem("token");
+        const response = await useAxios.get(`/owner/barang/laporan-komisi-bulanan?tanggal=${tanggal}`, {
+            headers:{
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+        });
+
+        return response;
+    }catch(error){
+        throw error.response;
+    }
+}
+
+export { showReqDonasi, showHistoriDonasi, showBarangDonasi , tambahDonasiBarang, tolakRequestDonasi, laporanStokGudang, laporanKomisiBulanan};
