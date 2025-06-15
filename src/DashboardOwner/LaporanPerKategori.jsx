@@ -4,6 +4,7 @@ import axios from 'axios';
 import { PulseLoader } from 'react-spinners';
 import { Card } from "flowbite-react";
 import api from '@/routes/api';
+import { useLocation } from 'react-router-dom';
 
 const styles = StyleSheet.create({
     page: {
@@ -75,7 +76,7 @@ const allCategories = [
     "Kosmetik & Perawatan Diri"
 ];
 
-const PDFDocument = ({ data }) => {
+const PDFDocument = ({ data, tahun }) => {
     // Create a map of existing data
     const dataMap = data.reduce((acc, item) => {
         acc[item.nama_kategori] = item;
@@ -104,7 +105,7 @@ const PDFDocument = ({ data }) => {
                     <Text style={styles.companyName}>ReUse Mart</Text>
                     <Text style={styles.companyAddress}>Jl. Green Eco Park No. 456 Yogyakarta</Text>
                     <Text style={styles.reportTitle}>LAPORAN PENJUALAN PER KATEGORI BARANG</Text>
-                    <Text style={styles.reportInfo}>Tahun: {currentDate.getFullYear()}</Text>
+                    <Text style={styles.reportInfo}>Tahun: {tahun}</Text>
                     <Text style={styles.reportInfo}>Tanggal cetak: {formattedDate}</Text>
                 </View>
                 <View style={styles.table}>
@@ -134,11 +135,11 @@ const PDFDocument = ({ data }) => {
     );
 };
 
-
-
 const LaporanPerKategori = () => {
+    const location = useLocation();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const tahun = location.state?.tahun || new Date().getFullYear();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -148,6 +149,9 @@ const LaporanPerKategori = () => {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
+                    params: {
+                        tahun: tahun
+                    }
                 });
                 if (response.data.status) {
                     setData(response.data.data);
@@ -160,7 +164,7 @@ const LaporanPerKategori = () => {
         };
 
         fetchData();
-    }, []);
+    }, [tahun]);
 
     if (loading) {
         return (
@@ -173,7 +177,7 @@ const LaporanPerKategori = () => {
     return (
         <div style={{ height: '100vh' }}>
             <PDFViewer style={{ width: '100%', height: '100%' }}>
-                <PDFDocument data={data} />
+                <PDFDocument data={data} tahun={tahun} />
             </PDFViewer>
         </div>
     );

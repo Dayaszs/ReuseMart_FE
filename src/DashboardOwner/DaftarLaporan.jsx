@@ -9,8 +9,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 const DaftarLaporan = () => {
     const navigate = useNavigate();
-    const [tanggalKomisi, setTanggalKomisi] = useState(null);
-    const [tahunPenjualan, setTahunPenjualan] = useState(new Date().getFullYear());
+    const [ tanggalKomisi, setTanggalKomisi ] = useState(null);
+    const [ tahunPenjualan, setTahunPenjualan ] = useState(new Date().getFullYear());
+    const [ tahunKategori, setTahunKategori ] = useState(new Date().getFullYear());
 
     const formatDate = (date) => {
         const year = date.getFullYear();
@@ -38,7 +39,8 @@ const DaftarLaporan = () => {
     };
 
     const handleClickLaporanPerKategori = () => {
-        navigate('/laporan-per-kategori');
+        console.log('Navigating with tahun:', tahunKategori);
+        navigate('/laporan-per-kategori', { state: { tahun: tahunKategori } });
     };
 
     const handleClickLaporanStokGudang = () => {
@@ -166,6 +168,27 @@ const DaftarLaporan = () => {
                         </Button>
                     </div>
                 </Card>
+            </div>
+            <Button color="success" className='mb-4' onClick={handleClickBarangHabisMasaTitip}>
+                Laporan Barang Habis Masa Titip
+            </Button>
+            <div className='flex items-center gap-2 mb-4'>
+                <Button color="success" className='mb-4' onClick={handleClickLaporanPerKategori}>
+                    Laporan Per Kategori
+                </Button>
+                <Label htmlFor="tahunKategori" className="ml-4">Pilih Tahun:</Label>
+                <select
+                    id="tahunKategori"
+                    value={tahunKategori}
+                    onChange={(e) => setTahunKategori(parseInt(e.target.value))}
+                    className="border border-gray-300 rounded-md p-2"
+                >
+                    {Array.from({ length: new Date().getFullYear() - 1999 }, (_, i) => 2000 + i).map(year => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                    ))}
+                </select>
             </div>
         </div>
     );
