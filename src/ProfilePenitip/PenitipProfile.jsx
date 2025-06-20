@@ -10,6 +10,7 @@ import { PulseLoader } from 'react-spinners';
 import ProfileInfoCard from '@/Components/ProfileInfoCard';
 import StatistikPenitipCard from '@/Components/StatistikPenitipCard';
 import ListPenjualanCard from '@/Components/ListPenjualanCard';
+import TitipLanjutan from './TitipLanjutan';
 
 const PenitipProfile = () => {
     const [penitip, setPenitip] = useState(null);
@@ -79,6 +80,10 @@ const PenitipProfile = () => {
                                         <span className='text-sm'>Top Seller</span>
                                     </Badge>
                                 ) : (<></>)}
+                                
+                            </div>
+                            <div>
+                            <h2 className="text-xl">Rp {parseInt(penitip.saldo).toLocaleString('id-ID')}</h2>
                             </div>
                         </div>
                     </div>
@@ -107,6 +112,10 @@ const PenitipProfile = () => {
                     </TabItem>
                     <TabItem title="Daftar Barang">
                         <BarangPenitip />
+                    </TabItem>
+
+                    <TabItem title="Perpanjangan Penitipan Lanjutan">
+                            <TitipLanjutan/>
                     </TabItem>
                 </Tabs>
             </div>
