@@ -84,6 +84,7 @@ const ListPenitipan = () =>{
 
     const closeShowTambahPenitipanModal = () =>{
         setShowTambahanPenitipanModal(false);
+        fetchPenitipan(currentPage, debouncedSearch);
     }
 
     const openShowDetailPenitipanModal = (data) =>{

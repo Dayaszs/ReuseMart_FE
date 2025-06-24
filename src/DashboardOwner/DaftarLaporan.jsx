@@ -169,27 +169,7 @@ const DaftarLaporan = () => {
                     </div>
                 </Card>
             </div>
-            <Button color="success" className='mb-4' onClick={handleClickBarangHabisMasaTitip}>
-                Laporan Barang Habis Masa Titip
-            </Button>
-            <div className='flex items-center gap-2 mb-4'>
-                <Button color="success" className='mb-4' onClick={handleClickLaporanPerKategori}>
-                    Laporan Per Kategori
-                </Button>
-                <Label htmlFor="tahunKategori" className="ml-4">Pilih Tahun:</Label>
-                <select
-                    id="tahunKategori"
-                    value={tahunKategori}
-                    onChange={(e) => setTahunKategori(parseInt(e.target.value))}
-                    className="border border-gray-300 rounded-md p-2"
-                >
-                    {Array.from({ length: new Date().getFullYear() - 1999 }, (_, i) => 2000 + i).map(year => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            
         </div>
     );
 };

@@ -54,6 +54,9 @@ import LaporanDonasi from "@/api/pdf/LaporanDonasi.jsx";
 import LaporanRequestDonasi from "@/api/pdf/LaporanRequestDonasi.jsx";
 import LaporanPenitip from "@/api/pdf/LaporanPenitip.jsx";
 
+import PenarikanSaldo from "@/ProfilePenitip/PenarikanSaldoPage.jsx";
+
+
 const router = createBrowserRouter([
     {
         path: "*",
@@ -157,6 +160,14 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute allowedRoles={["Penitip"]}>
                         <PenitipProfile />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/penitip/penarikan-saldo",
+                element: (
+                    <ProtectedRoute allowedRoles={["Penitip"]}>
+                        <PenarikanSaldo />
                     </ProtectedRoute>
                 ),
             },

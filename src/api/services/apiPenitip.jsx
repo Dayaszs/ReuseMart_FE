@@ -90,5 +90,21 @@ const hitungAvgRatingProfile = async(id) =>{
     }
 }
 
+const tarikSaldoPenitip = async(id, saldo) =>{
+    try{
+        const response = await useAxios.get(`/penitip/tarik-saldo?id=${id}&saldo=${saldo}`,{
+            headers:{
+                "Accept": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
 
-export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual, showAllPenitip, tambahPenitipanBarang, hitungAvgRatingProfile };
+        console.log(response.data);
+        return response;
+    }catch(error){
+        throw error.response.data;
+    }
+}
+
+
+export { GetPenitip, GetBarangTerjual, GetDetailBarangTerjual, showAllPenitip, tambahPenitipanBarang, hitungAvgRatingProfile, tarikSaldoPenitip };

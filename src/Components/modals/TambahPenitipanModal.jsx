@@ -295,7 +295,7 @@ const TambahPenitipanModal = ({show, onClose}) => {
                                     deskripsiBarang: '',
                                     urlGambarBarang: '',
                                     harga:'',
-                                    berat:'',
+                                    berat:0.0,
                                     namaKategori:'',
                                     id_kategori: 0,
                                     tanggal_garansi:''
@@ -376,7 +376,8 @@ const TambahPenitipanModal = ({show, onClose}) => {
                                     <p className='py-1'>Berat Barang : </p>
                                     <div className='flex justify-start items-center'>
                                         <input
-                                            type="text"
+                                            type="number"
+                                            step="any"
                                             className="block w-48 ps-2 text-start py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
                                             value={item.berat}
                                             onChange={(e) => {

@@ -391,11 +391,19 @@ function NavigationBar() {
                 </>
               )}
               {userRole === 'Penitip' && (
-                <Link to="/penitip/profile" className="mr-2">
-                  <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
-                    Profile
-                  </button>
-                </Link>
+                <>
+                  <Link to="/penitip/profile" className="mr-2">
+                    <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
+                      Profile
+                    </button>
+                  </Link>
+                  
+                  <Link to="/penitip/penarikan-saldo" className="mr-2">
+                    <button className="bg-transparent hover:bg-white/10 text-white font-semibold hover:text-white py-2 px-4 border border-white rounded transition-colors">
+                      Pengajuan Tarik Saldo
+                    </button>
+                  </Link>
+                </>
               )}
               {userRole === 'Customer Service' && (
                 <>

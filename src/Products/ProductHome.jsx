@@ -141,9 +141,9 @@ function ProductHome() {
         </div>
 
         <div className="@container relative">
-            <div className='w-full h-auto flex flex-col items-center p-16 bg-white'>
-                <div className="flex justify-start w-full ">
-                    <Dropdown dismissOnClick={false} label="Select Kategori" size="md" className="ms-20 mt-4" color="green">
+            <div className='w-full h-auto flex flex-col items-center px-2 py-4 sm:px-4 md:px-8 lg:px-16 bg-white'>
+                <div className="flex flex-col md:flex-row md:justify-start w-full gap-4 md:gap-0">
+                    <Dropdown dismissOnClick={false} label="Select Kategori" size="md" className="w-full md:w-auto md:ms-8 mt-2 md:mt-4" color="green">
                         {list_kategori?.map((kategori, index) =>(
                             <DropdownItem 
                                 key={index}
@@ -154,112 +154,112 @@ function ProductHome() {
                             </DropdownItem>
                         ))}
                     </Dropdown>
-                    <div className="flex md:flex-row items-center justify-start flex-wrap gap-4 py-4 ps-6 bg-white">
+                    <div className="flex flex-col sm:flex-row items-center justify-start flex-wrap gap-2 sm:gap-4 py-2 sm:py-4 sm:ps-6 w-full bg-white">
                         <label htmlFor="table-search-users" className="sr-only">Search</label>
-                        <div className="relative">
+                        <div className="relative w-full sm:w-auto">
                             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <IoIosSearch />
                             </div>
                             <input
                                 type="text"
                                 id="table-search-users"
-                                className="block w-80 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
-                                placeholder="Cari Pegawai"
+                                className="block w-full sm:w-80 ps-10 pt-2 pb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-green-500"
+                                placeholder="Cari Barang"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
                         <Button color="green" 
-                        className='ms-auto me-10'
+                        className='w-full sm:w-auto ms-0 sm:ms-auto me-0 sm:me-10'
                         onClick={() => openCreateModal()}>
                             + Create
                         </Button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-5 auto-rows-auto gap-x-4 gap-y-8 p-20" >
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-auto gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-8 py-4 sm:p-8 md:p-12 lg:p-16" >
                     {isLoading
                         ? (
-                            <div className="flex justify-center items-center py-8">
+                            <div className="col-span-full flex justify-center items-center py-8">
                                 <PulseLoader size={8} color="#057A55" />
                             </div>
                         ) : (
                             <>
                                 {barang?.map((item, index) => (
-                                    <Card key={item.id_barang} className="border-2" onClick={() => detailProductClick(item.id_barang)}>
-                                        <img src={item.url_gambar_barang ? getGambarBarang(item.url_gambar_barang.split(';')[0]) : '/logo.png'} alt="" />
-                                        <p>{item.nama_barang}</p>
+                                    <Card key={item.id_barang} className="border-2 cursor-pointer hover:shadow-lg transition" onClick={() => detailProductClick(item.id_barang)}>
+                                        <img src={item.url_gambar_barang ? getGambarBarang(item.url_gambar_barang.split(';')[0]) : '/logo.png'} alt="" className="w-full h-40 object-contain mb-2" />
+                                        <p className="truncate font-semibold">{item.nama_barang}</p>
                                         <NumericFormat 
                                             value={item.harga} 
                                             prefix = "Rp. "
                                             displayType = "text"
                                             thousandSeparator = "."
-                                            decimalSeparator=","
+                                            decimalSeparator="," 
                                             className="font-bold -mt-3"
                                         />
                                         {item.tanggal_garansi_habis?(
                                             <Badge color="success" className="w-fit h-8">Bergaransi</Badge>
                                         ) : ( 
-                                            <Badge  className="w-auto h-8 text-transparent bg-transparen hover:bg-transparent"></Badge>
+                                            <Badge  className="w-auto h-8 text-transparent bg-transparent hover:bg-transparent"></Badge>
                                         )}
                                     </Card>
                                 ))}
                             </>
                         ) }
                 </div>
-                        <nav className="flex flex-col md:flex-row items-center justify-between py-4 px-6">
-                            <span className="text-sm text-gray-500">
-                                Showing{" "}
-                                <span className="font-semibold text-gray-900">
-                                    {(currentPage - 1) * perPage + 1}
-                                </span>{" "}
-                                to{" "}
-                                <span className="font-semibold text-gray-900">
-                                    {Math.min(currentPage * perPage, total)}
-                                </span>{" "}
-                                of{" "}
-                                <span className="font-semibold text-gray-900">
-                                    {total}
-                                </span>
-                            </span>
+                <nav className="flex flex-col md:flex-row flex-wrap items-center justify-between py-4 px-2 sm:px-6 w-full">
+                    <span className="text-sm text-gray-500 mb-2 md:mb-0">
+                        Showing{" "}
+                        <span className="font-semibold text-gray-900">
+                            {(currentPage - 1) * perPage + 1}
+                        </span>{" "}
+                        to{" "}
+                        <span className="font-semibold text-gray-900">
+                            {Math.min(currentPage * perPage, total)}
+                        </span>{" "}
+                        of{" "}
+                        <span className="font-semibold text-gray-900">
+                            {total}
+                        </span>
+                    </span>
 
-                            <ul className="inline-flex -space-x-px text-sm h-8 mt-2 md:mt-0">
-                                <li>
+                    <ul className="inline-flex flex-wrap -space-x-px text-sm h-8 mt-2 md:mt-0">
+                        <li>
+                            <button
+                                className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 disabled:bg-gray-100"
+                                onClick={() => handlePageClick(currentPage - 1)}
+                                disabled={currentPage === 1}
+                            >
+                                Previous
+                            </button>
+                        </li>
+                        {[...Array(lastPage)].map((_, i) => {
+                            const page = i + 1;
+                            return (
+                                <li key={page}>
                                     <button
-                                        className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 disabled:bg-gray-100"
-                                        onClick={() => handlePageClick(currentPage - 1)}
-                                        disabled={currentPage === 1}
+                                        className={`px-3 h-8 border border-gray-300 ${page === currentPage
+                                            ? "bg-green-500 text-white"
+                                            : "bg-white text-gray-500 hover:bg-gray-100"
+                                            }`}
+                                        onClick={() => handlePageClick(page)}
                                     >
-                                        Previous
+                                        {page}
                                     </button>
                                 </li>
-                                {[...Array(lastPage)].map((_, i) => {
-                                    const page = i + 1;
-                                    return (
-                                        <li key={page}>
-                                            <button
-                                                className={`px-3 h-8 border border-gray-300 ${page === currentPage
-                                                    ? "bg-green-500 text-white"
-                                                    : "bg-white text-gray-500 hover:bg-gray-100"
-                                                    }`}
-                                                onClick={() => handlePageClick(page)}
-                                            >
-                                                {page}
-                                            </button>
-                                        </li>
-                                    );
-                                })}
-                                <li>
-                                    <button
-                                        className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 disabled:bg-gray-100"
-                                        onClick={() => handlePageClick(currentPage + 1)}
-                                        disabled={currentPage === lastPage}
-                                    >
-                                        Next
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
+                            );
+                        })}
+                        <li>
+                            <button
+                                className="px-3 h-8 text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 disabled:bg-gray-100"
+                                onClick={() => handlePageClick(currentPage + 1)}
+                                disabled={currentPage === lastPage}
+                            >
+                                Next
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
         </>
