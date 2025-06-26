@@ -1,5 +1,5 @@
 import axios from "axios";
-export const BASE_URL = "http://127.0.0.1:8000"
+export const BASE_URL = "https://laraveldayas.barioth.web.id"
 
 export const getProfilePictureOrganisasi = (url_gambar) => {
     return `${BASE_URL}/storage/profile/organisasi/${url_gambar}`;

@@ -1,4 +1,4 @@
-export const api = 'http://localhost:8000/api';
+export const api = 'https://laraveldayas.barioth.web.id/api';
 
 
 export default api;

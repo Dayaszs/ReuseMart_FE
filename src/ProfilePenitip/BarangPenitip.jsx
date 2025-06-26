@@ -236,8 +236,8 @@
                                                 </div>
                                                 <div>
                                                     <span className="font-medium">Status Perpanjangan:</span>{' '}
-                                                    <span className={item.rincian_penitipan.sudah_diperpanjang ? 'text-green-600' : 'text-orange-600'}>
-                                                        {item.rincian_penitipan.sudah_diperpanjang ? 'Sudah Diperpanjang' : 'Belum Diperpanjang'}
+                                                    <span className={parseInt(item.rincian_penitipan.sudah_diperpanjang) ? 'text-green-600' : 'text-orange-600'}>
+                                                        {parseInt(item.rincian_penitipan.sudah_diperpanjang) ? 'Sudah Diperpanjang' : 'Belum Diperpanjang'}
                                                     </span>
                                                 </div>
                                                 {item.status === 'Terjual' && item.rating !== null && (
